@@ -107,7 +107,7 @@ module CassandraObject
     # @return [CassandraObject::Base] the newly created object
     #
     def create(attributes)
-      returning @association.target_class.create(attributes) do |record|
+      @association.target_class.create(attributes).tap do |record|
         if record.valid?
           self << record
         end
@@ -115,7 +115,7 @@ module CassandraObject
     end
     
     def create!(attributes)
-      returning @association.target_class.create!(attributes) do |record|
+      @association.target_class.create!(attributes).tap do |record|
         self << record
       end
     end

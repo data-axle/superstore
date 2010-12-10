@@ -63,7 +63,7 @@ module CassandraObject
           attrs
         end
         
-        returning super(key, attributes) do |record|
+        super(key, attributes).tap do |record|
           record.attributes_changed!(original_attributes.diff(attributes).keys)
         end
       end

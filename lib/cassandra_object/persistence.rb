@@ -71,13 +71,13 @@ module CassandraObject
       end
 
       def create(attributes)
-        returning new(attributes) do |object|
+        new(attributes).tap do |object|
           object.save
         end
       end
 
       def write(key, attributes, schema_version)
-        returning(key) do |key|
+        key.tap do |key|
           connection.insert(column_family, key.to_s, encode_columns_hash(attributes, schema_version), :consistency => write_consistency_for_thrift)
         end
       end
@@ -86,7 +86,7 @@ module CassandraObject
         # remove any attributes we don't know about. we would do this earlier, but we want to make such
         #  attributes available to migrations
         attributes.delete_if{|k,_| !model_attributes.keys.include?(k)}
-        returning allocate do |object|
+        allocate.tap do |object|
           object.instance_variable_set("@schema_version", attributes.delete('schema_version'))
           object.instance_variable_set("@key", parse_key(key))
           object.instance_variable_set("@attributes", decode_columns_hash(attributes).with_indifferent_access)

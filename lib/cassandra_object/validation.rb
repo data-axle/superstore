@@ -16,16 +16,12 @@ module CassandraObject
     
     included do
       define_model_callbacks :validation
-      if CassandraObject.old_active_support
-        define_callbacks :validate
-      else
-        define_callbacks :validate, :scope => :name
-      end
+      define_callbacks :validate, :scope => :name
     end
     
     module ClassMethods
       def create!(attributes)
-        returning new(attributes), &:save!
+        new(attributes).tap &:save!
       end
     end
     
@@ -48,11 +44,6 @@ module CassandraObject
         save || RecordInvalidError.raise_error(self)
       end
       
-      if CassandraObject.old_active_support
-        def _run_validate_callbacks
-          run_callbacks :validate
-        end
-      end
     end
   end
 end
