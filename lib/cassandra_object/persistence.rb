@@ -44,7 +44,9 @@ module CassandraObject
           raise ArgumentError, "Invalid read consistency level: '#{options[:consistency]}'. Valid options are [:quorum, :one]"
         end
 
-        attribute_results = connection.multi_get(column_family, keys.map(&:to_s), :count=>options[:limit], :consistency=>consistency_for_thrift(options[:consistency]))
+        attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", :keys => keys) do
+          connection.multi_get(column_family, keys.map(&:to_s), :count=>options[:limit], :consistency=>consistency_for_thrift(options[:consistency]))
+        end
 
         attribute_results.inject(ActiveSupport::OrderedHash.new) do |memo, (key, attributes)|
           if attributes.empty?

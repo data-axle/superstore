@@ -17,6 +17,8 @@ require 'cassandra_object/collection'
 require 'cassandra_object/types'
 require 'cassandra_object/mocking'
 
+require 'cassandra_object/log_subscriber'
+
 module CassandraObject
   class Base
     class_inheritable_accessor :connection
