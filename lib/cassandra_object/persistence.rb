@@ -59,11 +59,16 @@ module CassandraObject
       end
 
       def remove(key)
-        connection.remove(column_family, key.to_s, :consistency => write_consistency_for_thrift)
+        ActiveSupport::Notifications.instrument("remove.cassandra_object", :key => key) do
+          connection.remove(column_family, key.to_s, :consistency => write_consistency_for_thrift)
+        end
       end
 
       def all(keyrange = ''..'', options = {})
-        results = connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :count=>(options[:limit] || 100))
+        count = options[:limit] || 100
+        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :start => keyrange.first, :finish => keyrange.last, :count => count) do
+          connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :count => count)
+        end
         keys = results.map(&:key)
         keys.map {|key| get(key) }
       end
@@ -80,7 +85,10 @@ module CassandraObject
 
       def write(key, attributes, schema_version)
         key.tap do |key|
-          connection.insert(column_family, key.to_s, encode_columns_hash(attributes, schema_version), :consistency => write_consistency_for_thrift)
+          attributes = encode_columns_hash(attributes, schema_version)
+          ActiveSupport::Notifications.instrument("remove.cassandra_object", :key => key, :attributes => attributes) do
+            connection.insert(column_family, key.to_s, attributes, :consistency => write_consistency_for_thrift)
+          end
         end
       end
 
