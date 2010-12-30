@@ -56,6 +56,10 @@ module CassandraObject
       def to_param
         key.to_param
       end
+
+      def to_key
+        [key] if key
+      end
     end
   end
 end

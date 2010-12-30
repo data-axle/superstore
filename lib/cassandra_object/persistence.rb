@@ -150,31 +150,27 @@ module CassandraObject
 
     module InstanceMethods
       def save
-        run_callbacks :save do
+        _run_save_callbacks do
           create_or_update
         end
       end
       
       def create_or_update
-        if new_record?
-          create
-        else
-          update
-        end
-        true
+        result = persisted? ? update : create
+        result != false
       end
       
       def create
-        run_callbacks :create do
+        _run_create_callbacks do
           @key ||= self.class.next_key(self)
           _write
-          @new_record = false
-          true
+          @persisted = true
+          @key
         end
       end
       
       def update
-        run_callbacks :update do
+        _run_update_callbacks do
           _write
         end
       end
@@ -185,12 +181,22 @@ module CassandraObject
       end
 
       def new_record?
-        @new_record || false
+        !@persisted
+      end
+
+      def destroyed?
+        @destroyed
+      end
+
+      def persisted?
+        @persisted && !destroyed?
       end
 
       def destroy
-        run_callbacks :destroy do 
+        _run_destroy_callbacks do 
           self.class.remove(key)
+          @destroyed = true
+          freeze
         end
       end
       

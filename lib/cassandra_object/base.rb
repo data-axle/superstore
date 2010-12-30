@@ -85,11 +85,17 @@ module CassandraObject
 
     def initialize(attributes={})
       @key = attributes.delete(:key)
-      @new_record = true
+      @persisted = false
+      @destroyed = false
       @attributes = {}.with_indifferent_access
       self.attributes = attributes
       @schema_version = self.class.current_schema_version
     end
+
+    def to_model
+      self
+    end
+    
   end
 end
 
