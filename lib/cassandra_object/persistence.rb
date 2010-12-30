@@ -86,7 +86,7 @@ module CassandraObject
       def write(key, attributes, schema_version)
         key.tap do |key|
           attributes = encode_columns_hash(attributes, schema_version)
-          ActiveSupport::Notifications.instrument("remove.cassandra_object", :key => key, :attributes => attributes) do
+          ActiveSupport::Notifications.instrument("insert.cassandra_object", :key => key, :attributes => attributes) do
             connection.insert(column_family, key.to_s, attributes, :consistency => write_consistency_for_thrift)
           end
         end
