@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael Koziarski", "grantr"]
-  s.date = %q{2010-12-10}
+  s.date = %q{2010-12-29}
   s.description = %q{Cassandra ActiveModel}
   s.email = %q{grantr@gmail.com}
   s.extra_rdoc_files = [
@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "TODO",
     "VERSION",
-    "cassandra_object.gemspec",
+    "gotime-cassandra_object.gemspec",
     "lib/cassandra_object.rb",
     "lib/cassandra_object/associations.rb",
     "lib/cassandra_object/associations/one_to_many.rb",
@@ -51,6 +51,7 @@ Gem::Specification.new do |s|
     "lib/cassandra_object/type_registration.rb",
     "lib/cassandra_object/types.rb",
     "lib/cassandra_object/validation.rb",
+    "test/active_model_test.rb",
     "test/basic_scenarios_test.rb",
     "test/callbacks_test.rb",
     "test/config/cassandra.in.sh",
@@ -78,6 +79,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Cassandra ActiveModel}
   s.test_files = [
+    "test/active_model_test.rb",
     "test/basic_scenarios_test.rb",
     "test/callbacks_test.rb",
     "test/connection.rb",
