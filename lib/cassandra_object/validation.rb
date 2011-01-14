@@ -1,16 +1,17 @@
 module CassandraObject
-  module Validation
-    class RecordInvalidError < StandardError
-      attr_reader :record
-      def initialize(record)
-        @record = record
-        super("Invalid record: #{@record.errors.full_messages.to_sentence}")
-      end
-      
-      def self.raise_error(record)
-        raise new(record)
-      end
+  class RecordInvalid < StandardError
+    attr_reader :record
+    def initialize(record)
+      @record = record
+      super("Invalid record: #{@record.errors.full_messages.to_sentence}")
     end
+    
+    def self.raise_error(record)
+      raise new(record)
+    end
+  end
+
+  module Validation
     extend ActiveSupport::Concern
     include ActiveModel::Validations
     
@@ -41,7 +42,7 @@ module CassandraObject
       end
       
       def save!
-        save || RecordInvalidError.raise_error(self)
+        save || RecordInvalid.raise_error(self)
       end
       
     end
