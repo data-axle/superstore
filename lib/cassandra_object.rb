@@ -10,7 +10,19 @@ module CassandraObject
 
   autoload :Base
 
-require 'active_support/all'
-require 'active_model'
+  require 'cassandra_object/migrator'
+  require 'cassandra_object/migration'
 
-require 'cassandra_object/base'
+  module Tasks
+    extend ActiveSupport::Autoload
+    autoload :Keyspace
+    autoload :ColumnFamily
+
+    require 'cassandra_object/tasks/ks'
+  end
+
+  module Generators
+    require 'cassandra_object/generators/migration_generator'
+  end
+
+end
