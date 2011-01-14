@@ -184,21 +184,21 @@ class TypesTest < CassandraObjectTestCase
     context "encode" do
       should "handle an empty Hash" do
         assert_nothing_raised {
-          assert_equal({}.to_json, CassandraObject::HashType.encode({}))
+          assert_equal(ActiveSupport::JSON.encode({}), CassandraObject::HashType.encode({}))
         }
       end
 
       should "handle string keys" do
         assert_nothing_raised {
           h = {'foo' => 'bar'}
-          assert_equal(h.to_json, CassandraObject::HashType.encode(h))
+          assert_equal(ActiveSupport::JSON.encode(h), CassandraObject::HashType.encode(h))
         }
       end
 
       should "handle symbol keys" do
         assert_nothing_raised {
           h = {:foo => 'bar'}
-          assert_equal(h.to_json, CassandraObject::HashType.encode(h))
+          assert_equal(ActiveSupport::JSON.encode(h), CassandraObject::HashType.encode(h))
         }
       end
     end
