@@ -64,6 +64,10 @@ module CassandraObject
         end
       end
 
+      def delete_all
+        connection.truncate!(column_family)
+      end
+
       def all(keyrange = ''..'', options = {})
         count = options[:limit] || 100
         results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :start => keyrange.first, :finish => keyrange.last, :count => count) do
