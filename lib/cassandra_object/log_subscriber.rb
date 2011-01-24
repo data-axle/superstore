@@ -2,9 +2,8 @@ module CassandraObject
   class LogSubscriber < ActiveSupport::LogSubscriber
     def multi_get(event)
       name = 'CassandraObject multi_get (%.1fms)' % event.duration
-      keys = event.payload[:keys].join(" ")
 
-      debug "  #{name}  (#{keys.size}) #{keys}"
+      debug "  #{name}  (#{event.payload[:keys].size}) #{event.payload[:keys].join(" ")}"
     end
 
     def remove(event)
