@@ -17,87 +17,22 @@ Gem::Specification.new do |s|
     "README.markdown",
     "TODO"
   ]
-  s.files = [
-    "CHANGELOG",
-    "Gemfile",
-    "Gemfile.lock",
-    "LICENSE",
-    "README.markdown",
-    "Rakefile",
-    "TODO",
-    "VERSION",
-    "gotime-cassandra_object.gemspec",
-    "lib/cassandra_object.rb",
-    "lib/cassandra_object/associations.rb",
-    "lib/cassandra_object/associations/one_to_many.rb",
-    "lib/cassandra_object/associations/one_to_one.rb",
-    "lib/cassandra_object/attributes.rb",
-    "lib/cassandra_object/base.rb",
-    "lib/cassandra_object/callbacks.rb",
-    "lib/cassandra_object/collection.rb",
-    "lib/cassandra_object/cursor.rb",
-    "lib/cassandra_object/dirty.rb",
-    "lib/cassandra_object/identity.rb",
-    "lib/cassandra_object/identity/abstract_key_factory.rb",
-    "lib/cassandra_object/identity/key.rb",
-    "lib/cassandra_object/identity/natural_key_factory.rb",
-    "lib/cassandra_object/identity/uuid_key_factory.rb",
-    "lib/cassandra_object/indexes.rb",
-    "lib/cassandra_object/log_subscriber.rb",
-    "lib/cassandra_object/migrations.rb",
-    "lib/cassandra_object/mocking.rb",
-    "lib/cassandra_object/persistence.rb",
-    "lib/cassandra_object/serialization.rb",
-    "lib/cassandra_object/type_registration.rb",
-    "lib/cassandra_object/types.rb",
-    "lib/cassandra_object/validation.rb",
-    "test/active_model_test.rb",
-    "test/basic_scenarios_test.rb",
-    "test/callbacks_test.rb",
-    "test/config/cassandra.in.sh",
-    "test/config/log4j.properties",
-    "test/config/storage-conf.xml",
-    "test/connection.rb",
-    "test/cursor_test.rb",
-    "test/dirty_test.rb",
-    "test/fixture_models.rb",
-    "test/identity/natural_key_factory_test.rb",
-    "test/index_test.rb",
-    "test/legacy/test_helper.rb",
-    "test/migration_test.rb",
-    "test/one_to_many_associations_test.rb",
-    "test/test_case.rb",
-    "test/test_helper.rb",
-    "test/time_test.rb",
-    "test/types_test.rb",
-    "test/validation_test.rb",
-    "test/z_mock_test.rb"
-  ]
+  s.files = Dir['{lib,test}/**/*.rb'] + %w(
+    CHANGELOG
+    Gemfile
+    Gemfile.lock
+    LICENSE
+    README.markdown
+    Rakefile
+    TODO
+    VERSION)
+
   s.homepage = %q{http://github.com/gotime/cassandra_object}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Cassandra ActiveModel}
-  s.test_files = [
-    "test/active_model_test.rb",
-    "test/basic_scenarios_test.rb",
-    "test/callbacks_test.rb",
-    "test/connection.rb",
-    "test/cursor_test.rb",
-    "test/dirty_test.rb",
-    "test/fixture_models.rb",
-    "test/identity/natural_key_factory_test.rb",
-    "test/index_test.rb",
-    "test/legacy/test_helper.rb",
-    "test/migration_test.rb",
-    "test/one_to_many_associations_test.rb",
-    "test/test_case.rb",
-    "test/test_helper.rb",
-    "test/time_test.rb",
-    "test/types_test.rb",
-    "test/validation_test.rb",
-    "test/z_mock_test.rb"
-  ]
+  s.test_files = Dir['test/**/*.rb']
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
