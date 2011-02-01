@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{gotime-cassandra_object}
-  s.version = "0.6.1"
+  s.version = "0.7.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael Koziarski", "grantr"]
-  s.date = %q{2010-12-29}
+  s.date = %q{2011-01-31}
   s.description = %q{Cassandra ActiveModel}
   s.email = %q{grantr@gmail.com}
   s.extra_rdoc_files = [
@@ -37,6 +37,8 @@ Gem::Specification.new do |s|
     "lib/cassandra_object/collection.rb",
     "lib/cassandra_object/cursor.rb",
     "lib/cassandra_object/dirty.rb",
+    "lib/cassandra_object/generators/migration_generator.rb",
+    "lib/cassandra_object/generators/templates/migration.rb.erb",
     "lib/cassandra_object/identity.rb",
     "lib/cassandra_object/identity/abstract_key_factory.rb",
     "lib/cassandra_object/identity/key.rb",
@@ -44,10 +46,15 @@ Gem::Specification.new do |s|
     "lib/cassandra_object/identity/uuid_key_factory.rb",
     "lib/cassandra_object/indexes.rb",
     "lib/cassandra_object/log_subscriber.rb",
+    "lib/cassandra_object/migration.rb",
     "lib/cassandra_object/migrations.rb",
+    "lib/cassandra_object/migrator.rb",
     "lib/cassandra_object/mocking.rb",
     "lib/cassandra_object/persistence.rb",
     "lib/cassandra_object/serialization.rb",
+    "lib/cassandra_object/tasks/column_family.rb",
+    "lib/cassandra_object/tasks/keyspace.rb",
+    "lib/cassandra_object/tasks/ks.rb",
     "lib/cassandra_object/type_registration.rb",
     "lib/cassandra_object/types.rb",
     "lib/cassandra_object/validation.rb",
