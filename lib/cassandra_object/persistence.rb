@@ -73,8 +73,18 @@ module CassandraObject
         results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :start => keyrange.first, :finish => keyrange.last, :count => count) do
           connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :count => count)
         end
-        keys = results.map(&:key)
-        keys.map {|key| get(key) }
+
+        results.map do |result|
+          if result.columns.empty?
+            nil
+          else
+            attributes = result.columns.inject(ActiveSupport::OrderedHash.new) do |memo, column|
+              memo[column.column.name] = column.column.value
+              memo
+            end
+            instantiate(result.key, attributes)
+          end
+        end.compact
       end
 
       def first(keyrange = ''..'', options = {})
