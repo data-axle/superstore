@@ -2,36 +2,29 @@ module CassandraObject
   module Persistence
     extend ActiveSupport::Concern
     included do
-      class_inheritable_writer :write_consistency
-      class_inheritable_writer :read_consistency
+      extend Consistency
+
+      class_attribute :write_consistency
+      class_attribute :read_consistency
+      self.write_consistency = self.read_consistency = :quorum
     end
 
-    VALID_READ_CONSISTENCY_LEVELS = [:one, :quorum, :all]
-    VALID_WRITE_CONSISTENCY_LEVELS = VALID_READ_CONSISTENCY_LEVELS
 
     module ClassMethods
       def consistency_levels(levels)
         if levels.has_key?(:write)
           unless valid_write_consistency_level?(levels[:write])
-            raise ArgumentError, "Invalid write consistency level. Valid levels are: #{VALID_WRITE_CONSISTENCY_LEVELS.inspect}. You gave me #{levels[:write].inspect}"
+            raise ArgumentError, "Invalid write consistency level. Valid levels are: #{Consistency::VALID_WRITE_CONSISTENCY_LEVELS.inspect}. You gave me #{levels[:write].inspect}"
           end
           self.write_consistency = levels[:write]
         end
 
         if levels.has_key?(:read)
           unless valid_read_consistency_level?(levels[:read])
-            raise ArgumentError, "Invalid read consistency level. Valid levels are #{VALID_READ_CONSISTENCY_LEVELS.inspect}. You gave me #{levels[:write].inspect}"
+            raise ArgumentError, "Invalid read consistency level. Valid levels are #{Consistency::VALID_READ_CONSISTENCY_LEVELS.inspect}. You gave me #{levels[:write].inspect}"
           end
           self.read_consistency = levels[:read]
         end
-      end
-
-      def write_consistency
-        read_inheritable_attribute(:write_consistency) || :quorum
-      end
-
-      def read_consistency
-        read_inheritable_attribute(:read_consistency) || :quorum
       end
 
       def get(key, options = {})
@@ -140,30 +133,6 @@ module CassandraObject
         [{:Name=>column_family, :CompareWith=>"UTF8Type"}]
       end
 
-      protected
-      def valid_read_consistency_level?(level)
-        !!VALID_READ_CONSISTENCY_LEVELS.include?(level)
-      end
-
-      def valid_write_consistency_level?(level)
-        !!VALID_WRITE_CONSISTENCY_LEVELS.include?(level)
-      end
-
-      def write_consistency_for_thrift
-        consistency_for_thrift(write_consistency)
-      end
-
-      def read_consistency_for_thrift
-        consistency_for_thrift(read_consistency)
-      end
-
-      def consistency_for_thrift(consistency)
-        {
-          :one    => Cassandra::Consistency::ONE, 
-          :quorum => Cassandra::Consistency::QUORUM,
-          :all    => Cassandra::Consistency::ALL
-        }[consistency]
-      end
     end
 
     module InstanceMethods

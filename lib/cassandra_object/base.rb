@@ -2,6 +2,7 @@ require 'cassandra/0.7'
 require 'set'
 require 'cassandra_object/attributes'
 require 'cassandra_object/dirty'
+require 'cassandra_object/consistency'
 require 'cassandra_object/persistence'
 
 require 'cassandra_object/callbacks'

@@ -12,6 +12,12 @@ module CassandraObject
       debug "  #{name}  #{event.payload[:key]}"
     end
 
+    def truncate(event)
+      name = 'CassandraObject truncate (%.1fms)' % event.duration
+
+      debug "  #{name}  #{event.payload[:column_family]}"
+    end
+
     def insert(event)
       name = 'CassandraObject insert (%.1fms)' % event.duration
 
@@ -21,7 +27,7 @@ module CassandraObject
     def get_range(event)
       name = 'CassandraObject get_range (%.1fms)' % event.duration
       
-      debug "  #{name}  (#{event.payload[:count]}) #{event.payload[:start]} => #{event.payload[:finish]}"
+      debug "  #{name}  (#{event.payload[:count]}) '#{event.payload[:start]}' => '#{event.payload[:finish]}'"
     end
   end
 end
