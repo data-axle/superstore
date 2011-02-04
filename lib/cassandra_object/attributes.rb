@@ -11,7 +11,7 @@ module CassandraObject
     end
 
     def check_value!(value)
-      converter.encode(value) unless value.nil?
+      converter.encode(value) unless value.nil? && @options[:allow_nil]
       value
     end
 
