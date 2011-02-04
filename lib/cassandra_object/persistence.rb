@@ -65,13 +65,16 @@ module CassandraObject
       end
 
       def delete_all
-        connection.truncate!(column_family)
+        ActiveSupport::Notifications.instrument("truncate.cassandra_object", :column_family => column_family) do
+          connection.truncate!(column_family)
+        end
       end
 
       def all(keyrange = ''..'', options = {})
-        count = options[:limit] || 100
+        options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
+        count = options[:limit]
         results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :start => keyrange.first, :finish => keyrange.last, :count => count) do
-          connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :count => count)
+          connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :count => count, :consistency=>consistency_for_thrift(options[:consistency]))
         end
 
         results.map do |result|

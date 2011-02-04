@@ -25,7 +25,7 @@ module CassandraObject
       def remove(key)
         begin
           ActiveSupport::Notifications.instrument("remove.cassandra_object", :key => key) do
-            connection.remove("#{name}Relationships", key.to_s)
+            connection.remove("#{name}Relationships", key.to_s, :consistency => write_consistency_for_thrift)
           end
         rescue Cassandra::AccessError => e
           raise e unless e.message =~ /Invalid column family/
