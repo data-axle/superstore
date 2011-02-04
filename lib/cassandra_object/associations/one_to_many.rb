@@ -91,6 +91,10 @@ module CassandraObject
         yield i
       end
     end
+
+    def [](index)
+      to_a[index]
+    end
     
     def <<(record)
       @association.add(@owner, record)
