@@ -78,11 +78,13 @@ module CassandraObject
   
   module TimeWithZoneType
     def encode(time)
+      return '' if time.nil?
       TimeType.encode(time.utc)
     end
     module_function :encode
 
     def decode(str)
+      return nil if str.empty?
       TimeType.decode(str).in_time_zone
     end
     module_function :decode
