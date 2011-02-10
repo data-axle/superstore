@@ -5,7 +5,6 @@ require 'active_model'
 
 
 module CassandraObject
-  VERSION = "0.7.4"
   extend ActiveSupport::Autoload
 
   autoload :Base
