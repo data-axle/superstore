@@ -48,6 +48,7 @@ module CassandraObject
     extend Naming
     
     extend ActiveModel::Naming
+    extend ActiveSupport::DescendantsTracker
     
     include Callbacks
     include Identity
