@@ -138,7 +138,7 @@ module CassandraObject
     end
 
     module InstanceMethods
-      def save
+      def save(options={})
         _run_save_callbacks do
           create_or_update
         end
