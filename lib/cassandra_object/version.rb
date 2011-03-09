@@ -1,8 +1,8 @@
 module CassandraObject
   module Version
     MAJOR = 0
-    MINOR = 7
-    PATCH = 8
+    MINOR = 8
+    PATCH = 0
 
     STRING = [MAJOR, MINOR, PATCH].compact.join('.')
   end
