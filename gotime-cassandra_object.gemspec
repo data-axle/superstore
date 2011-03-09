@@ -8,10 +8,11 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 1.3.5'
   s.authors = ["Michael Koziarski", "grantr"]
   s.email = 'grantr@gmail.com'
-  s.extra_rdoc_files = ["README.markdown"]
-  s.files = %w(MIT-LICENSE Rakefile README.markdown) + Dir['{lib,test}/**/*.rb']
   s.homepage = 'http://github.com/gotime/cassandra_object'
-  s.require_path = 'lib'
+  s.extra_rdoc_files = ["README.markdown"]
+  s.files       = `git ls-files`.split("\n")
+  s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.require_paths = ['lib']
 
   s.add_runtime_dependency('activesupport', "~> 3")
   s.add_runtime_dependency('activemodel', "~> 3")
