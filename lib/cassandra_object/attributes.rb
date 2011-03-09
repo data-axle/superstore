@@ -11,8 +11,8 @@ module CassandraObject
     end
 
     def check_value!(value)
-      converter.encode(value) unless value.nil? && @options[:allow_nil]
-      value
+      return value if value.nil?
+      value.kind_of?(expected_type) ? value : converter.decode(value)
     end
 
     def define_methods!
