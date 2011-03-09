@@ -1,9 +1,8 @@
-# version = File.read(File.expand_path("../RAILS_VERSION", __FILE__)).strip
-# require 'cassandra_object/version'
+# -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
   s.name = 'gotime-cassandra_object'
-  s.version = '0.8.0'
+  s.version = '0.8.1'
   s.description = 'Cassandra ActiveModel'
   s.summary = 'Cassandra ActiveModel'
   s.required_rubygems_version = '>= 1.3.5'

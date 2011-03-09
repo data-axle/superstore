@@ -1,3 +1,5 @@
+require 'cassandra_object/types'
+
 CassandraObject::Base.register_attribute_type(:integer, Integer, CassandraObject::IntegerType)
 CassandraObject::Base.register_attribute_type(:float, Float, CassandraObject::FloatType)
 CassandraObject::Base.register_attribute_type(:date, Date, CassandraObject::DateType)

@@ -1,24 +1,5 @@
 require 'cassandra/0.7'
 require 'set'
-require 'cassandra_object/attributes'
-require 'cassandra_object/dirty'
-require 'cassandra_object/consistency'
-require 'cassandra_object/persistence'
-
-require 'cassandra_object/callbacks'
-
-require 'cassandra_object/validation'
-require 'cassandra_object/identity'
-require 'cassandra_object/indexes'
-require 'cassandra_object/serialization'
-require 'cassandra_object/associations'
-require 'cassandra_object/migrations'
-require 'cassandra_object/cursor'
-require 'cassandra_object/collection'
-require 'cassandra_object/types'
-require 'cassandra_object/mocking'
-require 'cassandra_object/find_each'
-require 'cassandra_object/find_with_ids'
 
 require 'cassandra_object/log_subscriber'
 
