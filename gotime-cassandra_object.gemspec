@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('activesupport', "~> 3")
   s.add_runtime_dependency('activemodel', "~> 3")
   s.add_runtime_dependency('cassandra')
-  s.add_runtime_dependency('nokogiri')
 
   s.add_development_dependency('shoulda')
   s.add_development_dependency('bundler', "~> 1.0.0")

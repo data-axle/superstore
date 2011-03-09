@@ -1,28 +1,5 @@
-require 'rubygems'
 require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
-require 'rake'
-
-require 'jeweler'
-require './lib/cassandra_object/version'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "gotime-cassandra_object"
-  gem.version = CassandraObject::Version::STRING
-  gem.homepage = "http://github.com/gotime/cassandra_object"
-  gem.license = "MIT"
-  gem.summary = %Q{Cassandra ActiveModel}
-  gem.description = %Q{Cassandra ActiveModel}
-  gem.email = "grantr@gmail.com"
-  gem.authors = ["Michael Koziarski", "grantr"]
-end
-Jeweler::RubygemsDotOrgTasks.new
+Bundler::GemHelper.install_tasks
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
