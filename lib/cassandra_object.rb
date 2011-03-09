@@ -1,5 +1,3 @@
-# raise 'wtf!!!'
-
 require 'rubygems'
 require 'i18n'
 require 'active_support'
