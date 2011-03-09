@@ -109,6 +109,8 @@ module CassandraObject
         allocate.tap do |object|
           object.instance_variable_set("@schema_version", attributes.delete('schema_version'))
           object.instance_variable_set("@key", parse_key(key))
+          object.instance_variable_set("@new_record", false)
+          object.instance_variable_set("@destroyed", false)
           object.instance_variable_set("@attributes", decode_columns_hash(attributes).with_indifferent_access)
         end
       end
@@ -136,7 +138,7 @@ module CassandraObject
     end
 
     module InstanceMethods
-      def save
+      def save(options={})
         _run_save_callbacks do
           create_or_update
         end
@@ -151,7 +153,7 @@ module CassandraObject
         _run_create_callbacks do
           @key ||= self.class.next_key(self)
           _write
-          @persisted = true
+          @new_record = false
           @key
         end
       end
@@ -168,7 +170,7 @@ module CassandraObject
       end
 
       def new_record?
-        !@persisted
+        @new_record
       end
 
       def destroyed?
@@ -176,7 +178,7 @@ module CassandraObject
       end
 
       def persisted?
-        @persisted && !destroyed?
+        !(new_record? || destroyed?)
       end
 
       def destroy

@@ -3,6 +3,7 @@ module CassandraObject
     REGEX = /\A[-+]?\d+\Z/
     def encode(int)
       return '' if int.nil?
+      int = int.to_i if int.kind_of?(String) && int.match(REGEX)
       raise ArgumentError.new("#{self} requires an Integer. You passed #{int.inspect}") unless int.kind_of?(Integer)
       int.to_s
     end
@@ -20,6 +21,7 @@ module CassandraObject
     REGEX = /\A[-+]?\d+(\.\d+)\Z/
     def encode(float)
       return '' if float.nil?
+      float = float.to_f if float.kind_of?(String) && float.match(REGEX)
       raise ArgumentError.new("#{self} requires a Float") unless float.kind_of?(Float)
       float.to_s
     end
@@ -38,6 +40,7 @@ module CassandraObject
     REGEX = /\A\d{4}-\d{2}-\d{2}\Z/
     def encode(date)
       return '' if date.nil?
+      date = Date.parse(date) if date.kind_of?(String) && date.match(REGEX)
       raise ArgumentError.new("#{self} requires a Date") unless date.kind_of?(Date)
       date.strftime(FORMAT)
     end
@@ -63,6 +66,7 @@ module CassandraObject
 
     def encode(time)
       return '' if time.nil?
+      time = Time.parse(time) if time.kind_of?(String) && time.match(REGEX)
       raise ArgumentError.new("#{self} requires a Time") unless time.kind_of?(Time)
       time.xmlschema(6)
     end
@@ -79,13 +83,16 @@ module CassandraObject
   module TimeWithZoneType
     def encode(time)
       return '' if time.nil?
-      TimeType.encode(time.utc)
+      time = Time.zone.parse(time) if time.kind_of?(String) && time.match(TimeType::REGEX)
+      raise ArgumentError.new("#{self} requires a Time") unless time.kind_of?(Time)
+      time.utc.xmlschema(6)
     end
     module_function :encode
 
     def decode(str)
       return nil if str.empty?
-      TimeType.decode(str).in_time_zone
+      raise ArgumentError.new("#{str} isn't a String that looks like a Time") unless str.kind_of?(String) && str.match(TimeType::REGEX)
+      Time.xmlschema(str).in_time_zone
     end
     module_function :decode
   end
@@ -136,12 +143,13 @@ module CassandraObject
   end
 
   module BooleanType
-    ALLOWED = [true, false, nil]
+    TRUE_VALS = [true, 'true', '1']
+    FALSE_VALS = [false, 'false', '0', nil]
     def encode(bool)
-      unless ALLOWED.any?{ |a| bool == a }
-          raise ArgumentError.new("#{self} requires a Boolean or nil")
+      unless TRUE_VALS.any? { |a| bool == a } || FALSE_VALS.any?{ |a| bool == a }
+        raise ArgumentError.new("#{self} requires a Boolean or nil")
       end
-      bool ? '1' : '0'
+      TRUE_VALS.include?(bool) ? '1' : '0'
     end
     module_function :encode
 

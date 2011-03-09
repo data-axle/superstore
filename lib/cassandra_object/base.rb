@@ -72,7 +72,7 @@ module CassandraObject
 
     def initialize(attributes={})
       @key = attributes.delete(:key)
-      @persisted = false
+      @new_record = true
       @destroyed = false
       @attributes = {}.with_indifferent_access
       self.attributes = attributes

@@ -10,7 +10,7 @@ module CassandraObject
         end
       end
 
-      def save
+      def save(options={})
         super.tap { changed_attributes.clear }
       end
 
