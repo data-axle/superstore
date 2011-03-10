@@ -1,9 +1,10 @@
-require 'cassandra_object/associations/one_to_many'
-require 'cassandra_object/associations/one_to_one'
-
 module CassandraObject
   module Associations
     extend ActiveSupport::Concern
+    extend ActiveSupport::Autoload
+
+    autoload :OneToMany
+    autoload :OneToOne
     
     included do
       class_inheritable_hash :associations
@@ -16,9 +17,9 @@ module CassandraObject
       
       def association(association_name, options= {})
         if options[:unique]
-          write_inheritable_hash(:associations, {association_name => OneToOneAssociation.new(association_name, self, options)})
+          write_inheritable_hash(:associations, {association_name => OneToOne.new(association_name, self, options)})
         else
-          write_inheritable_hash(:associations, {association_name => OneToManyAssociation.new(association_name, self, options)})
+          write_inheritable_hash(:associations, {association_name => OneToMany.new(association_name, self, options)})
         end
       end
       
