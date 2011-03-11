@@ -1,23 +1,15 @@
 module CassandraObject
   module Migrations
     extend ActiveSupport::Concern
+    extend ActiveSupport::Autoload
+
     included do
       class_inheritable_array :migrations
       class_inheritable_accessor :current_schema_version
       self.current_schema_version = 0
     end
-    
-    class Migration
-      attr_reader :version
-      def initialize(version, block)
-        @version = version
-        @block = block
-      end
-      
-      def run(attrs)
-        @block.call(attrs)
-      end
-    end
+
+    autoload :Migration
     
     class MigrationNotFoundError < StandardError
       def initialize(record_version, migrations)

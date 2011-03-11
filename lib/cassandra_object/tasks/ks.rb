@@ -50,21 +50,21 @@ namespace :ks do
   desc 'Migrate the keyspace (options: VERSION=x)'
   task :migrate => :configure do
     version = ( ENV['VERSION'] ? ENV['VERSION'].to_i : nil )
-    CassandraObject::Migrator.migrate CassandraObject::Migrator.migrations_path, version
+    CassandraObject::Schema::Migrator.migrate CassandraObject::Schema::Migrator.migrations_path, version
     schema_dump
   end
 
   desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n)'
   task :rollback => :set_keyspace do
     step = ENV['STEP'] ? ENV['STEP'].to_i : 1
-    CassandraObject::Migrator.rollback CassandraObject::Migrator.migrations_path, step
+    CassandraObject::Schema::Migrator.rollback CassandraObject::Schema::Migrator.migrations_path, step
     schema_dump
   end
 
   desc 'Pushes the schema to the next version (specify steps w/ STEP=n)'
   task :forward => :set_keyspace do
     step = ENV['STEP'] ? ENV['STEP'].to_i : 1
-    CassandraObject::Migrator.forward CassandraObject::Migrator.migrations_path, step
+    CassandraObject::Schema::Migrator.forward CassandraObject::Schema::Migrator.migrations_path, step
     schema_dump
   end
 
@@ -90,7 +90,7 @@ namespace :ks do
 
   desc 'Retrieves the current schema version number'
   task :version => :set_keyspace do
-    version = CassandraObject::Migrator.current_version
+    version = CassandraObject::Schema::Migrator.current_version
     puts "Current version: #{version}"
   end
 

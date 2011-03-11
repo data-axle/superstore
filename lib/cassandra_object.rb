@@ -26,8 +26,7 @@ module CassandraObject
   autoload :FindWithIds
   autoload :Timestamps
 
-  autoload :Migrator
-  autoload :Migration  
+  autoload :Schema
 
   module Tasks
     extend ActiveSupport::Autoload
