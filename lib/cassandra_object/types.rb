@@ -123,7 +123,6 @@ module CassandraObject
     module_function :encode
 
     def decode(str)
-      return nil if str.empty?
       ActiveSupport::JSON.decode(str)
     end
     module_function :decode
