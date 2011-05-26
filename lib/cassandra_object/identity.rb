@@ -10,6 +10,7 @@ module CassandraObject
     autoload :UUIDKeyFactory
     autoload :NaturalKeyFactory
     autoload :HashedNaturalKeyFactory
+    autoload :CustomKeyFactory
 
     module ClassMethods
       # Indicate what kind of key the model will have: uuid or natural
@@ -23,6 +24,8 @@ module CassandraObject
           UUIDKeyFactory.new
         when :natural
           NaturalKeyFactory.new(*options)
+        when :custom
+          CustomKeyFactory.new(*options)
         else
           name_or_factory
         end
