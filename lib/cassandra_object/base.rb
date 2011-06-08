@@ -29,7 +29,17 @@ module CassandraObject
       end
     end
     extend Naming
-    
+
+    class << self
+      def base_class
+        klass = self
+        while klass.superclass != Base
+          klass = klass.superclass
+        end
+        klass
+      end
+    end
+
     extend ActiveModel::Naming
     extend ActiveSupport::DescendantsTracker
     
@@ -63,7 +73,6 @@ module CassandraObject
     def to_model
       self
     end
-    
   end
 end
 
