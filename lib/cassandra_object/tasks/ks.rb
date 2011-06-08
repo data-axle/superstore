@@ -99,7 +99,10 @@ namespace :ks do
   def schema_dump(env = Rails.env)
     ks = set_keyspace env
     File.open "#{Rails.root}/ks/schema.json", 'w' do |file|
-      file.puts ks.schema_dump.to_json
+      schema = ActiveSupport::JSON.decode(ks.schema_dump.to_json)
+      JSON.pretty_generate(schema).split(/\n/).each do |line|
+        file.puts line
+      end
     end
   end
 
