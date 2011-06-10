@@ -24,7 +24,9 @@ module CassandraObject
       end
 
       def clear(owner)
-        connection.remove(column_family, owner.key.to_s, @association_name)
+        ActiveSupport::Notifications.instrument("remove.cassandra_object", :column_family => column_family, :key => owner.key, :columns => @association_name) do
+          connection.remove(column_family, owner.key.to_s, @association_name)
+        end
       end
 
       def find(owner)
@@ -37,7 +39,11 @@ module CassandraObject
 
       def set(owner, record, set_inverse = true)
         clear(owner)
-        connection.insert(column_family, owner.key.to_s, {@association_name=>{new_key => record.key.to_s}})
+        key = owner.key
+        attributes = {@association_name=>{new_key=>record.key.to_s}}
+        ActiveSupport::Notifications.instrument("insert.cassandra_object", :column_family => column_family, :key => key, :attributes => attributes) do
+          connection.insert(column_family, key.to_s, attributes, :consistency => write_consistency_for_thrift)
+        end
         if has_inverse? && set_inverse
           inverse.set_inverse(record, owner)
         end
