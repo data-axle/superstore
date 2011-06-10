@@ -11,8 +11,17 @@ module CassandraObject
     end
 
     module ClassMethods
+
+      def relationships_column_family=(column_family)
+        @relationships_column_family = column_family
+      end
+
+      def relationships_column_family
+        @relationships_column_family || "#{column_family}Relationships"
+      end
+
       def column_family_configuration
-        super << {:Name=>"#{name}Relationships", :CompareWith=>"UTF8Type", :CompareSubcolumnsWith=>"TimeUUIDType", :ColumnType=>"Super"}
+        super << {:Name=>relationships_column_family, :CompareWith=>"UTF8Type", :CompareSubcolumnsWith=>"TimeUUIDType", :ColumnType=>"Super"}
       end
       
       def association(association_name, options= {})

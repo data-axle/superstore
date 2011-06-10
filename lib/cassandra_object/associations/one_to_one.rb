@@ -60,7 +60,7 @@ module CassandraObject
       end
 
       def column_family
-        @owner_class.to_s + "Relationships"
+        @owner_class.relationships_column_family
       end
 
       def connection
