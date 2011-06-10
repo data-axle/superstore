@@ -37,7 +37,7 @@ module CassandraObject
           raise ArgumentError, "Invalid read consistency level: '#{options[:consistency]}'. Valid options are [:quorum, :one]"
         end
 
-        attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", :keys => keys) do
+        attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", :column_family => column_family, :keys => keys) do
           connection.multi_get(column_family, keys.map(&:to_s), :count=>options[:limit], :consistency=>consistency_for_thrift(options[:consistency]))
         end
 
@@ -52,7 +52,7 @@ module CassandraObject
       end
 
       def remove(key)
-        ActiveSupport::Notifications.instrument("remove.cassandra_object", :key => key) do
+        ActiveSupport::Notifications.instrument("remove.cassandra_object", :column_family => column_family, :key => key) do
           connection.remove(column_family, key.to_s, :consistency => write_consistency_for_thrift)
         end
       end
@@ -66,7 +66,7 @@ module CassandraObject
       def all(keyrange = ''..'', options = {})
         options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
         count = options[:limit]
-        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :start => keyrange.first, :finish => keyrange.last, :count => count) do
+        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :column_family => column_family, :start => keyrange.first, :finish => keyrange.last, :count => count) do
           connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :count => count, :consistency=>consistency_for_thrift(options[:consistency]))
         end
 
@@ -96,7 +96,7 @@ module CassandraObject
       def write(key, attributes, schema_version)
         key.tap do |key|
           attributes = encode_columns_hash(attributes, schema_version)
-          ActiveSupport::Notifications.instrument("insert.cassandra_object", :key => key, :attributes => attributes) do
+          ActiveSupport::Notifications.instrument("insert.cassandra_object", :column_family => column_family, :key => key, :attributes => attributes) do
             connection.insert(column_family, key.to_s, attributes, :consistency => write_consistency_for_thrift)
           end
         end
