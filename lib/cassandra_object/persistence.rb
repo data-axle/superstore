@@ -27,18 +27,18 @@ module CassandraObject
         end
       end
 
-      def get(key, options = {})
+      def get(key, options={})
         multi_get([key], options).values.first
       end
 
-      def multi_get(keys, options = {})
-        options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
+      def multi_get(keys, options={})
+        options = {:consistency => self.read_consistency}.merge(options)
         unless valid_read_consistency_level?(options[:consistency])
           raise ArgumentError, "Invalid read consistency level: '#{options[:consistency]}'. Valid options are [:quorum, :one]"
         end
 
         attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", :column_family => column_family, :keys => keys) do
-          connection.multi_get(column_family, keys.map(&:to_s), :count=>options[:limit], :consistency=>consistency_for_thrift(options[:consistency]))
+          connection.multi_get(column_family, keys.map(&:to_s), :consistency => consistency_for_thrift(options[:consistency]))
         end
 
         attribute_results.inject(ActiveSupport::OrderedHash.new) do |memo, (key, attributes)|
@@ -66,25 +66,22 @@ module CassandraObject
       def all(keyrange = ''..'', options = {})
         options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
         count = options[:limit]
-        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :column_family => column_family, :start => keyrange.first, :finish => keyrange.last, :count => count) do
-          connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :count => count, :consistency=>consistency_for_thrift(options[:consistency]))
+        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :column_family => column_family, :start => keyrange.first, :finish => keyrange.last, :key_count => count) do
+          connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :key_count => count, :consistency => consistency_for_thrift(options[:consistency]))
         end
 
-        results.map do |result|
-          if result.columns.empty?
+        #get_ranges response changed in cassandra gem 0.11.3 for cassandra 0.8.1, now similar to other method responses like multi_get
+        results.map do |k, v|
+          if v.empty?
             nil
           else
-            attributes = result.columns.inject(ActiveSupport::OrderedHash.new) do |memo, column|
-              memo[column.column.name] = column.column.value
-              memo
-            end
-            instantiate(result.key, attributes)
+            instantiate(k, v)
           end
         end.compact
       end
 
       def first(keyrange = ''..'', options = {})
-        all(keyrange, options.merge(:limit=>1)).first
+        all(keyrange, options.merge(:limit => 1)).first
       end
 
       def create(attributes)
@@ -133,7 +130,7 @@ module CassandraObject
       end
       
       def column_family_configuration
-        [{:Name=>column_family, :CompareWith=>"UTF8Type"}]
+        [{:Name => column_family, :CompareWith => "UTF8Type"}]
       end
 
     end

@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |s|
   s.name = 'gotime-cassandra_object'
-  s.version = '0.8.7'
+  s.version = '0.9.0'
   s.description = 'Cassandra ActiveModel'
   s.summary = 'Cassandra ActiveModel'
   s.required_rubygems_version = '>= 1.3.5'
-  s.authors = ["Michael Koziarski", "grantr"]
-  s.email = 'grantr@gmail.com'
+  s.authors = ["Michael Koziarski", "gotime"]
+  s.email = 'gems@gotime.com'
   s.homepage = 'http://github.com/gotime/cassandra_object'
   s.extra_rdoc_files = ["README.markdown"]
   s.files       = `git ls-files`.split("\n")
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('activesupport', "~> 3.0")
   s.add_runtime_dependency('activemodel', "~> 3.0")
-  s.add_runtime_dependency('cassandra', "~> 0.9.1")
+  s.add_runtime_dependency('cassandra', "~> 0.11.3")
 
   s.add_development_dependency('shoulda')
   s.add_development_dependency('bundler', "~> 1.0.0")
