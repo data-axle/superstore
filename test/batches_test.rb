@@ -1,23 +1,15 @@
 require 'test_helper'
 
 class CassandraObject::BatchesTest < CassandraObject::TestCase
-  test 'hola' do
+  test 'find_each' do
     Issue.create 
     Issue.create 
-    p "Issue.all = #{Issue.all}"
-    # Issue.find_each do |issue|
-    #   p "issue = #{issue.inspect}"
-    # end
-  end
 
-  test 'find_in_batches' do
-    Issue.create 
-    Issue.create
+    issues = []
+    Issue.find_each do |issue|
+      issues << issue
+    end
 
-    # Issue.find_in_batches(batch_size: 1) do |batch|
-    #   assert_kind_of Array, batch
-    #   assert_equal 1, batch.size
-    #   assert_kind_of Issue, batch.first
-    # end
+    assert_equal Issue.all.to_set, issues.to_set
   end
 end
