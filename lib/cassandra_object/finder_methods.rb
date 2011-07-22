@@ -5,7 +5,7 @@ module CassandraObject
       def all(keyrange = ''..'', options = {})
         options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
         count = options[:limit]
-        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :column_family => column_family, :start => keyrange.first, :finish => keyrange.last, :key_count => count) do
+        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :column_family => column_family, :start_key => keyrange.first, :finish_key => keyrange.last, :key_count => count) do
           connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :key_count => count, :consistency => consistency_for_thrift(options[:consistency]))
         end
 
@@ -23,7 +23,7 @@ module CassandraObject
         all(keyrange, options.merge(:limit => 1)).first
       end
 
-      def find_with_ids(ids, options=nil)
+      def find_with_ids(*ids)
         expects_array = ids.first.kind_of?(Array)
         return ids.first if expects_array && ids.first.empty?
 
