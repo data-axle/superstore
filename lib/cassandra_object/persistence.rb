@@ -1,6 +1,7 @@
 module CassandraObject
   module Persistence
     extend ActiveSupport::Concern
+
     included do
       extend Consistency
 
@@ -63,28 +64,7 @@ module CassandraObject
         end
       end
 
-      def all(keyrange = ''..'', options = {})
-        options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
-        count = options[:limit]
-        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", :column_family => column_family, :start => keyrange.first, :finish => keyrange.last, :key_count => count) do
-          connection.get_range(column_family, :start => keyrange.first, :finish => keyrange.last, :key_count => count, :consistency => consistency_for_thrift(options[:consistency]))
-        end
-
-        #get_ranges response changed in cassandra gem 0.11.3 for cassandra 0.8.1, now similar to other method responses like multi_get
-        results.map do |k, v|
-          if v.empty?
-            nil
-          else
-            instantiate(k, v)
-          end
-        end.compact
-      end
-
-      def first(keyrange = ''..'', options = {})
-        all(keyrange, options.merge(:limit => 1)).first
-      end
-
-      def create(attributes)
+      def create(attributes = {})
         new(attributes).tap do |object|
           object.save
         end
@@ -135,62 +115,59 @@ module CassandraObject
 
     end
 
-    module InstanceMethods
-      def save(options={})
-        _run_save_callbacks do
-          create_or_update
-        end
+    def save(options={})
+      _run_save_callbacks do
+        create_or_update
       end
-      
-      def create_or_update
-        result = persisted? ? update : create
-        result != false
-      end
-      
-      def create
-        _run_create_callbacks do
-          @key ||= self.class.next_key(self)
-          _write
-          @new_record = false
-          @key
-        end
-      end
-      
-      def update
-        _run_update_callbacks do
-          _write
-        end
-      end
-      
-      def _write
-        changed_attributes = changed.inject({}) { |h, n| h[n] = read_attribute(n); h }
-        self.class.write(key, changed_attributes, schema_version)
-      end
-
-      def new_record?
-        @new_record
-      end
-
-      def destroyed?
-        @destroyed
-      end
-
-      def persisted?
-        !(new_record? || destroyed?)
-      end
-
-      def destroy
-        _run_destroy_callbacks do 
-          self.class.remove(key)
-          @destroyed = true
-          freeze
-        end
-      end
-      
-      def reload
-        self.class.get(self.key)
-      end
-      
     end
+    
+    def create_or_update
+      result = persisted? ? update : create
+      result != false
+    end
+    
+    def create
+      _run_create_callbacks do
+        @key ||= self.class.next_key(self)
+        _write
+        @new_record = false
+        @key
+      end
+    end
+    
+    def update
+      _run_update_callbacks do
+        _write
+      end
+    end
+    
+    def _write
+      changed_attributes = changed.inject({}) { |h, n| h[n] = read_attribute(n); h }
+      self.class.write(key, changed_attributes, schema_version)
+    end
+
+    def new_record?
+      @new_record
+    end
+
+    def destroyed?
+      @destroyed
+    end
+
+    def persisted?
+      !(new_record? || destroyed?)
+    end
+
+    def destroy
+      _run_destroy_callbacks do 
+        self.class.remove(key)
+        @destroyed = true
+        freeze
+      end
+    end
+    
+    def reload
+      self.class.get(self.key)
+    end  
   end
 end

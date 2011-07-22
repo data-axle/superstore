@@ -14,10 +14,6 @@ module CassandraObject
       return value if value.nil?
       value.kind_of?(expected_type) ? value : converter.decode(value)
     end
-
-    def define_methods!
-      @owner_class.define_attribute_methods(true)
-    end
   end
 
   module Attributes
@@ -34,12 +30,9 @@ module CassandraObject
         
         new_attr = Attribute.new(name, self, type_mapping[:converter], type_mapping[:expected_type], options)
         write_inheritable_hash(:model_attributes, {name => new_attr}.with_indifferent_access)
-        new_attr.define_methods!
       end
 
-      def define_attribute_methods(force = false)
-        return unless model_attributes
-        undefine_attribute_methods if force
+      def define_attribute_methods
         super(model_attributes.keys)
       end
       
@@ -75,6 +68,20 @@ module CassandraObject
         end
       end
 
+      def method_missing(method_id, *args, &block)
+        if !self.class.attribute_methods_generated?
+          self.class.define_attribute_methods
+          send(method_id, *args, &block)
+        else
+          super
+        end
+      end
+
+      def respond_to?(*args)
+        self.class.define_attribute_methods unless self.class.attribute_methods_generated?
+        super
+      end
+
       protected
         def attribute_method?(name)
           !!model_attributes[name.to_sym]
@@ -84,7 +91,7 @@ module CassandraObject
         def attribute(name)
           read_attribute(name.to_sym)
         end
-
+      
         def attribute=(name, value)
           write_attribute(name.to_sym, value)
         end

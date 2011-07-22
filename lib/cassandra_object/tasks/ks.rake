@@ -1,5 +1,3 @@
-require 'rake'
-
 namespace :ks do
 
   task :configure => :environment do

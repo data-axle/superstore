@@ -1,5 +1,5 @@
 module CassandraObject
-  module FindEach
+  module Batches
     extend ActiveSupport::Concern
 
     module ClassMethods
@@ -18,9 +18,11 @@ module CassandraObject
         records = all(start..finish, limit: batch_size)
         while records.any?
           yield records
-          records = all(records.last.key.to_s..finish, limit: batch_size+1)
+
+          records = all(records.last.key.to_s..finish, limit: batch_size + 1)
           records.shift
         end
+
         nil
       end
     end

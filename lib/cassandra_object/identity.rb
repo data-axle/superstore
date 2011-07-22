@@ -43,7 +43,6 @@ module CassandraObject
     end
     
     module InstanceMethods
-
       def ==(comparison_object)
         comparison_object.equal?(self) ||
           (comparison_object.instance_of?(self.class) &&

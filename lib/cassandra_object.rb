@@ -1,12 +1,10 @@
-require 'rubygems'
-require 'i18n'
-require 'active_support'
-require 'active_model'
+require 'rails/all'
 
 module CassandraObject
   extend ActiveSupport::Autoload
 
   autoload :Base
+  autoload :Connection
   autoload :Attributes
   autoload :Dirty
   autoload :Consistency
@@ -22,8 +20,8 @@ module CassandraObject
   autoload :Collection
   autoload :Types
   autoload :Mocking
-  autoload :FindEach
-  autoload :FindWithIds
+  autoload :Batches
+  autoload :FinderMethods
   autoload :Timestamps
 
   autoload :Schema
@@ -32,11 +30,7 @@ module CassandraObject
     extend ActiveSupport::Autoload
     autoload :Keyspace
     autoload :ColumnFamily
-
-    require 'cassandra_object/tasks/ks'
-  end
-
-  module Generators
-    require 'cassandra_object/generators/migration_generator'
   end
 end
+
+require 'cassandra_object/railtie'
