@@ -17,7 +17,7 @@ module CassandraObject
       end
 
       def relationships_column_family
-        @relationships_column_family || "#{column_family}Relationships"
+        @relationships_column_family || "#{name}Relationships"
       end
 
       def column_family_configuration
