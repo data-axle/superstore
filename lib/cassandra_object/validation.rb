@@ -26,27 +26,23 @@ module CassandraObject
       end
     end
     
-    module InstanceMethods
-      def valid?
-        run_callbacks :validation do
-          super
-        end
+    def valid?
+      run_callbacks :validation do
+        super
       end
+    end
 
-      def save(options={})
-        perform_validations(options) ?  super : false
-      end
-      
-      def save!
-        save || RecordInvalid.raise_error(self)
-      end
+    def save(options={})
+      perform_validations(options) ?  super : false
+    end
+    
+    def save!
+      save || RecordInvalid.raise_error(self)
+    end
 
     protected
-      
       def perform_validations(options={})
         (options[:validate] != false) ? valid? : true
       end
-      
-    end
   end
 end

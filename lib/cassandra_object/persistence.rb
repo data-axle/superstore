@@ -28,30 +28,6 @@ module CassandraObject
         end
       end
 
-      def get(key, options={})
-        multi_get([key], options).values.first
-      end
-
-      def multi_get(keys, options={})
-        options = {:consistency => self.read_consistency}.merge(options)
-        unless valid_read_consistency_level?(options[:consistency])
-          raise ArgumentError, "Invalid read consistency level: '#{options[:consistency]}'. Valid options are [:quorum, :one]"
-        end
-
-        attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", :column_family => column_family, :keys => keys) do
-          connection.multi_get(column_family, keys.map(&:to_s), :consistency => consistency_for_thrift(options[:consistency]))
-        end
-
-        attribute_results.inject(ActiveSupport::OrderedHash.new) do |memo, (key, attributes)|
-          if attributes.empty?
-            memo[key] = nil
-          else
-            memo[parse_key(key)] = instantiate(key, attributes)
-          end
-          memo
-        end
-      end
-
       def remove(key)
         ActiveSupport::Notifications.instrument("remove.cassandra_object", :column_family => column_family, :key => key) do
           connection.remove(column_family, key.to_s, :consistency => write_consistency_for_thrift)
@@ -83,6 +59,10 @@ module CassandraObject
         # remove any attributes we don't know about. we would do this earlier, but we want to make such
         #  attributes available to migrations
         attributes.delete_if{|k,_| !model_attributes.keys.include?(k)}
+        p "attributes = #{attributes.inspect}"
+
+        p "attributes.slice = #{attributes.dup.slice!(*model_attributes.keys).inspect}"
+
         allocate.tap do |object|
           object.instance_variable_set("@schema_version", attributes.delete('schema_version'))
           object.instance_variable_set("@key", parse_key(key))

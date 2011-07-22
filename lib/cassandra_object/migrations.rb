@@ -56,7 +56,9 @@ module CassandraObject
         end
         
         super(key, attributes).tap do |record|
-          record.attributes_changed!(original_attributes.diff(attributes).keys)
+          original_attributes.diff(attributes).keys.each do |attribute|
+            record.attribute_will_change! attribute
+          end
         end
       end
     end
