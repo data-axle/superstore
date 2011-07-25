@@ -1,5 +1,5 @@
 module CassandraObject
-  class Types
+  module Types
     module BooleanType
       TRUE_VALS = [true, 'true', '1']
       FALSE_VALS = [false, 'false', '0', '', nil]

@@ -1,5 +1,4 @@
 namespace :ks do
-
   task :configure => :environment do
     @configs = YAML.load_file(Rails.root.join("config", "cassandra.yml"))
     @config = @configs[Rails.env || 'development']
@@ -118,6 +117,5 @@ namespace :ks do
     ks.set config['keyspace']
     ks
   end
-
 end
 

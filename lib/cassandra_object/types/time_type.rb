@@ -1,5 +1,5 @@
 module CassandraObject
-  class Types
+  module Types
     module TimeType
       # lifted from the implementation of Time.xmlschema and simplified
       REGEX = /\A\s*

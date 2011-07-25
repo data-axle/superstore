@@ -1,5 +1,5 @@
 module CassandraObject
-  class Types
+  module Types
     module FloatType
       REGEX = /\A[-+]?\d+(\.\d+)?\Z/
       def encode(float)

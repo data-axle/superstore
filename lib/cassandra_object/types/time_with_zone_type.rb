@@ -1,5 +1,5 @@
 module CassandraObject
-  class Types
+  module Types
     module TimeWithZoneType
       def encode(time)
         raise ArgumentError.new("#{self} requires a Time") unless time.kind_of?(Time)

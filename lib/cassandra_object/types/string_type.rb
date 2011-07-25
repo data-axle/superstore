@@ -1,5 +1,5 @@
 module CassandraObject
-  class Types
+  module Types
     module StringType
       def encode(str)
         raise ArgumentError.new("#{self} requires a String") unless str.kind_of?(String)

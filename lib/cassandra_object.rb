@@ -31,14 +31,16 @@ module CassandraObject
     autoload :ColumnFamily
   end
 
-  class Types
+  module Types
     extend ActiveSupport::Autoload
     
+    autoload :ArrayType
     autoload :BooleanType
     autoload :DateType
     autoload :FloatType
     autoload :HashType
     autoload :IntegerType
+    autoload :SetType
     autoload :TimeType
     autoload :TimeWithZoneType
     autoload :UTF8StringType

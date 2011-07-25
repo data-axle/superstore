@@ -1,9 +1,9 @@
 module CassandraObject
   module Types
-    module HashType
-      def encode(hash)
-        raise ArgumentError.new("#{self} requires a Hash") unless hash.kind_of?(Hash)
-        ActiveSupport::JSON.encode(hash)
+    module ArrayType
+      def encode(array)
+        raise ArgumentError.new("#{self} requires an Array") unless array.kind_of?(Array)
+        array.to_json
       end
       module_function :encode
 

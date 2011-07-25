@@ -1,5 +1,5 @@
 module CassandraObject
-  class Types
+  module Types
     module UTF8StringType
       def encode(str)
         # This is technically the most correct, but it is a pain to require utf-8 encoding for all strings. Should revisit.

@@ -1,5 +1,5 @@
 module CassandraObject
-  class Types
+  module Types
     module IntegerType
       REGEX = /\A[-+]?\d+\Z/
       def encode(int)

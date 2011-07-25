@@ -1,5 +1,5 @@
 module CassandraObject
-  class Types
+  module Types
     module DateType
       FORMAT = '%Y-%m-%d'
       REGEX = /\A\d{4}-\d{2}-\d{2}\Z/
