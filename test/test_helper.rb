@@ -19,7 +19,7 @@ module CassandraObject
     end
 
     teardown do
-      # Issue.delete_all
+      Issue.delete_all
     end
 
     def connection

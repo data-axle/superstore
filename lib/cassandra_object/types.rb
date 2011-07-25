@@ -1,12 +1,3 @@
-require 'cassandra_object/types/boolean_type'
-require 'cassandra_object/types/date_type'
-require 'cassandra_object/types/float_type'
-require 'cassandra_object/types/hash_type'
-require 'cassandra_object/types/integer_type'
-require 'cassandra_object/types/time_type'
-require 'cassandra_object/types/time_with_zone_type'
-require 'cassandra_object/types/utf8_string_type'
-
 CassandraObject::Type.register(:boolean, Object, CassandraObject::Types::BooleanType)
 CassandraObject::Type.register(:date, Date, CassandraObject::Types::DateType)
 CassandraObject::Type.register(:float, Float, CassandraObject::Types::FloatType)

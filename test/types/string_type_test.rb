@@ -1,4 +1,4 @@
 require 'test_helper'
 
-class CassandraObject::Type::BooleanTypeTest < CassandraObject::TestCase
+class CassandraObject::Type::StringTypeTest < CassandraObject::TestCase
 end

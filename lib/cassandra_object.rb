@@ -30,6 +30,19 @@ module CassandraObject
     autoload :Keyspace
     autoload :ColumnFamily
   end
+
+  class Types
+    extend ActiveSupport::Autoload
+    
+    autoload :BooleanType
+    autoload :DateType
+    autoload :FloatType
+    autoload :HashType
+    autoload :IntegerType
+    autoload :TimeType
+    autoload :TimeWithZoneType
+    autoload :UTF8StringType
+  end
 end
 
 require 'cassandra_object/railtie'

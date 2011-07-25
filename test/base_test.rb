@@ -13,6 +13,6 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
   end
 
   test 'column family' do
-    assert_equal 'sons', Son.column_family
+    assert_equal 'CassandraObject::BaseTest::Sons', Son.column_family
   end
 end
