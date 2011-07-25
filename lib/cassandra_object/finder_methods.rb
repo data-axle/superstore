@@ -14,6 +14,10 @@ module CassandraObject
         end.compact
       end
 
+      # def find()
+        
+      # end
+
       def first(keyrange = ''..'', options = {})
         all(keyrange, options.merge(:limit => 1)).first
       end

@@ -25,4 +25,13 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
     assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids(first_issue.key, second_issue.key).to_set
     assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids([first_issue.key, second_issue.key]).to_set
   end
+
+  test 'find single id' do
+    created_issue = Issue.create
+    p created_issue.id
+
+    found_issue = Issue.find(created_issue.id)
+
+    assert_equal created_issue, found_issue
+  end
 end

@@ -29,7 +29,6 @@ module CassandraObject
         elsif options[:converter]
           converter = options[:converter]
           expected_type = options[:type]
-          raise 'fail'
         else
           raise "Unknown type #{options[:type]}"
         end

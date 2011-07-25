@@ -1,3 +1,6 @@
+# lib = File.expand_path("#{File.dirname(__FILE__)}/../lib")
+# $:.unshift(lib) unless $:.include?('lib') || $:.include?(lib)
+# require File.expand_path('../../lib/cassandra_object', __FILE__)
 require 'cassandra_object'
 require 'rails/test_help'
 
@@ -16,7 +19,7 @@ module CassandraObject
     end
 
     teardown do
-      Issue.delete_all
+      # Issue.delete_all
     end
 
     def connection
