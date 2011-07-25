@@ -59,9 +59,6 @@ module CassandraObject
         # remove any attributes we don't know about. we would do this earlier, but we want to make such
         #  attributes available to migrations
         attributes.delete_if{|k,_| !model_attributes.keys.include?(k)}
-        p "attributes = #{attributes.inspect}"
-
-        p "attributes.slice = #{attributes.dup.slice!(*model_attributes.keys).inspect}"
 
         allocate.tap do |object|
           object.instance_variable_set("@schema_version", attributes.delete('schema_version'))
@@ -73,7 +70,7 @@ module CassandraObject
       end
 
       def encode_columns_hash(attributes, schema_version)
-        attributes.inject(Hash.new) do |memo, (column_name, value)|
+        attributes.inject({}) do |memo, (column_name, value)|
           # cassandra stores bytes, not strings, so it has no concept of encodings. The ruby thrift gem 
           # expects all strings to be encoded as ascii-8bit.
           # don't attempt to encode columns that are nil

@@ -3,6 +3,7 @@ require 'rails/test_help'
 
 class Issue < CassandraObject::Base
   key :uuid
+  attribute :description, type: :string
 end
 
 module CassandraObject

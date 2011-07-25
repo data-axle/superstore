@@ -3,21 +3,17 @@ module CassandraObject
     extend ActiveSupport::Concern
 
     included do
-      class_attribute :timestamp_override
+      attribute :created_at, type: :time#_with_zone
+      attribute :updated_at, type: :time#_with_zone
 
-      attribute :created_at, :type => :time_with_zone
-      attribute :updated_at, :type => :time_with_zone
+      before_create do #|r|
+        self.created_at ||= Time.current
+        self.updated_at ||= Time.current
+      end
 
-      before_create :set_created_at
-      before_save :set_updated_at
-    end
-
-    def set_created_at
-      self.created_at = Time.current unless timestamp_override
-    end
-
-    def set_updated_at
-      self.updated_at = Time.current unless timestamp_override
+      before_update if: :changed? do #|r|
+        self.updated_at = Time.current
+      end
     end
   end
 end

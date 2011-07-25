@@ -1,12 +1,10 @@
 module CassandraObject
   class Attribute
     attr_reader :name, :converter, :expected_type
-    def initialize(name, owner_class, converter, expected_type, options)
+    def initialize(name, converter, expected_type)
       @name          = name.to_s
-      @owner_class   = owner_class
       @converter     = converter
       @expected_type = expected_type
-      @options       = options
     end
 
     def check_value!(value)
@@ -25,22 +23,22 @@ module CassandraObject
           self.model_attributes = {}.with_indifferent_access
         end
 
-        unless type_mapping = attribute_types[options[:type]]
-          type_mapping = {
-            expected_type: options[:type], 
-            converter: options[:converter]
-          }.with_indifferent_access
+        if type_mapping = CassandraObject::Type.get_mapping(options[:type])
+          converter = type_mapping.converter
+          expected_type = type_mapping.expected_type
+        elsif options[:converter]
+          converter = options[:converter]
+          expected_type = options[:type]
+          raise 'fail'
+        else
+          raise "Unknown type #{options[:type]}"
         end
 
-        model_attributes[name] = Attribute.new(name, self, type_mapping[:converter], type_mapping[:expected_type], options)
+        model_attributes[name] = Attribute.new(name, converter, expected_type)
       end
 
       def define_attribute_methods
         super(model_attributes.keys)
-      end
-
-      def register_attribute_type(name, expected_type, converter)
-        attribute_types[name] = { expected_type: expected_type, converter: converter }.with_indifferent_access
       end
     end
 
@@ -48,10 +46,7 @@ module CassandraObject
       class_attribute :model_attributes
       self.model_attributes = {}.with_indifferent_access
 
-      attribute_method_suffix("", "=")
-      
-      cattr_accessor :attribute_types
-      self.attribute_types = {}.with_indifferent_access
+      attribute_method_suffix("", "=")      
     end
 
     def write_attribute(name, value)

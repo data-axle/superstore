@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TypesTest < CassandraObjectTestCase
+class TypeTest < CassandraObjectTestCase
   context "IntegerType" do
     context "encode" do
 

@@ -2,10 +2,11 @@ require 'cassandra/0.8'
 require 'set'
 
 require 'cassandra_object/log_subscriber'
+require 'cassandra_object/types'
 
 module CassandraObject
   class Base
-    module Naming
+    class << self
       def column_family=(column_family)
         @column_family = column_family
       end
@@ -13,10 +14,7 @@ module CassandraObject
       def column_family
         @column_family || name.pluralize
       end
-    end
-    extend Naming
 
-    class << self
       def base_class
         klass = self
         while klass.superclass != Base
@@ -40,6 +38,7 @@ module CassandraObject
     include Associations
     include Batches
     include FinderMethods
+    include Timestamps
 
     attr_reader :attributes
     attr_accessor :key
@@ -62,5 +61,3 @@ module CassandraObject
     end
   end
 end
-
-require 'cassandra_object/type_registration'

@@ -18,12 +18,11 @@ module CassandraObject
   autoload :Migrations
   autoload :Cursor
   autoload :Collection
-  autoload :Types
   autoload :Mocking
   autoload :Batches
   autoload :FinderMethods
   autoload :Timestamps
-
+  autoload :Type
   autoload :Schema
 
   module Tasks
