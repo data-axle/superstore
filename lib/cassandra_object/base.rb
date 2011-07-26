@@ -26,10 +26,11 @@ module CassandraObject
     end
 
     extend ActiveModel::Naming
+    include ActiveModel::Conversion
     extend ActiveSupport::DescendantsTracker
     
     include Connection
-    include PrimaryKey
+    include Consistency
     include Identity
     include Attributes
     include Persistence
@@ -58,8 +59,23 @@ module CassandraObject
       @schema_version = self.class.current_schema_version
     end
 
-    def to_model
-      self
+    def to_param
+      id.to_s if persisted?
+    end
+
+    def hash
+      id.hash
+    end    
+
+    def ==(comparison_object)
+      comparison_object.equal?(self) ||
+        (comparison_object.instance_of?(self.class) &&
+          comparison_object.key == key &&
+          !comparison_object.new_record?)
+    end
+
+    def eql?(comparison_object)
+      self == (comparison_object)
     end
   end
 end

@@ -42,7 +42,7 @@ module CassandraObject
         key = owner.key
         attributes = {@association_name=>{new_key=>record.key.to_s}}
         ActiveSupport::Notifications.instrument("insert.cassandra_object", :column_family => column_family, :key => key, :attributes => attributes) do
-          connection.insert(column_family, key.to_s, attributes, :consistency => write_consistency_for_thrift)
+          connection.insert(column_family, key.to_s, attributes, :consistency => @owner_class.thrift_write_consistency)
         end
         if has_inverse? && set_inverse
           inverse.set_inverse(record, owner)

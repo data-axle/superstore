@@ -2,40 +2,15 @@ module CassandraObject
   module Persistence
     extend ActiveSupport::Concern
 
-    included do
-      extend Consistency
-
-      class_attribute :write_consistency
-      class_attribute :read_consistency
-      self.write_consistency = self.read_consistency = :quorum
-    end
-
-
     module ClassMethods
-      def consistency_levels(levels)
-        if levels.has_key?(:write)
-          unless valid_write_consistency_level?(levels[:write])
-            raise ArgumentError, "Invalid write consistency level. Valid levels are: #{Consistency::VALID_WRITE_CONSISTENCY_LEVELS.inspect}. You gave me #{levels[:write].inspect}"
-          end
-          self.write_consistency = levels[:write]
-        end
-
-        if levels.has_key?(:read)
-          unless valid_read_consistency_level?(levels[:read])
-            raise ArgumentError, "Invalid read consistency level. Valid levels are #{Consistency::VALID_READ_CONSISTENCY_LEVELS.inspect}. You gave me #{levels[:write].inspect}"
-          end
-          self.read_consistency = levels[:read]
-        end
-      end
-
       def remove(key)
-        ActiveSupport::Notifications.instrument("remove.cassandra_object", :column_family => column_family, :key => key) do
-          connection.remove(column_family, key.to_s, :consistency => write_consistency_for_thrift)
+        ActiveSupport::Notifications.instrument("remove.cassandra_object", column_family: column_family, key: key) do
+          connection.remove(column_family, key.to_s, consistency: thrift_write_consistency)
         end
       end
 
       def delete_all
-        ActiveSupport::Notifications.instrument("truncate.cassandra_object", :column_family => column_family) do
+        ActiveSupport::Notifications.instrument("truncate.cassandra_object", column_family: column_family) do
           connection.truncate!(column_family)
         end
       end
@@ -49,8 +24,8 @@ module CassandraObject
       def write(key, attributes, schema_version)
         key.tap do |key|
           attributes = encode_columns_hash(attributes, schema_version)
-          ActiveSupport::Notifications.instrument("insert.cassandra_object", :column_family => column_family, :key => key, :attributes => attributes) do
-            connection.insert(column_family, key.to_s, attributes, :consistency => write_consistency_for_thrift)
+          ActiveSupport::Notifications.instrument("insert.cassandra_object", column_family: column_family, key: key, attributes: attributes) do
+            connection.insert(column_family, key.to_s, attributes, consistency: thrift_write_consistency)
           end
         end
       end

@@ -15,4 +15,14 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
   test 'column family' do
     assert_equal 'CassandraObject::BaseTest::Sons', Son.column_family
   end
+
+  test 'to_param' do
+    issue = Issue.create
+    assert_equal issue.id, issue.to_param
+  end
+  
+  test 'hash' do
+    issue = Issue.create
+    assert_equal issue.id.hash, issue.hash
+  end
 end

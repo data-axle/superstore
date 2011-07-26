@@ -1,26 +1,18 @@
 module CassandraObject
   module Associations
     class OneToMany
-      include Consistency
-
-      attr_accessor :write_consistency
-      attr_accessor :read_consistency
-
       def initialize(association_name, owner_class, options)
         @association_name  = association_name.to_s
         @owner_class       = owner_class
         @target_class_name = options[:class_name] || association_name.to_s.singularize.camelize
         @options           = options
 
-        @write_consistency = owner_class.write_consistency
-        @read_consistency = owner_class.write_consistency
-
         define_methods!
       end
 
       def find(owner, options = {})
         reversed = options.has_key?(:reversed) ? options[:reversed] : reversed?
-        cursor   = CassandraObject::Cursor.new(target_class, column_family, owner.key.to_s, @association_name, :start_after => options[:start_after], :reversed => reversed, :consistency => read_consistency)
+        cursor   = CassandraObject::Cursor.new(target_class, column_family, owner.key.to_s, @association_name, :start_after => options[:start_after], :reversed => reversed)
         cursor.find(options[:limit] || 100)
       end
 
@@ -28,7 +20,7 @@ module CassandraObject
         key = owner.key
         attributes = {@association_name=>{new_key=>record.key.to_s}}
         ActiveSupport::Notifications.instrument("insert.cassandra_object", :column_family => column_family, :key => key, :attributes => attributes) do
-          connection.insert(column_family, key.to_s, attributes, :consistency => write_consistency_for_thrift)
+          connection.insert(column_family, key.to_s, attributes, :consistency => @owner_class.thrift_write_consistency)
         end
         if has_inverse? && set_inverse
           inverse.set_inverse(record, owner)

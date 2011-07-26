@@ -11,10 +11,9 @@ module CassandraObject
       end
 
       def all(options = {})
-        options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
-        count = options[:limit]
-        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", column_family: column_family, key_count: count) do
-          connection.get_range(column_family, key_count: count, consistency: consistency_for_thrift(options[:consistency]))
+        limit = options[:limit] || 100
+        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", column_family: column_family, key_count: limit) do
+          connection.get_range(column_family, key_count: limit, consistency: thrift_read_consistency)
         end
 
         results.map do |k, v|
@@ -45,13 +44,8 @@ module CassandraObject
 
       private
         def multi_get(keys, options={})
-          options = options.reverse_merge(consistency: self.read_consistency)
-          unless valid_read_consistency_level?(options[:consistency])
-            raise ArgumentError, "Invalid read consistency level: '#{options[:consistency]}'. Valid options are [:quorum, :one]"
-          end
-
           attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", column_family: column_family, keys: keys) do
-            connection.multi_get(column_family, keys.map(&:to_s), consistency: consistency_for_thrift(options[:consistency]))
+            connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency)
           end
 
           attribute_results.inject({}) do |memo, (key, attributes)|

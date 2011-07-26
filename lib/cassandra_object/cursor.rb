@@ -8,8 +8,6 @@ module CassandraObject
       @key           = key.to_s
       @super_column  = super_column
       @options       = options
-      @read_consistency = options[:read_consistency] || options[:consistency] || :quorum
-      @write_consitency = options[:write_consistency] || options[:consistency] || :quorum
       @validators    = []
     end
     
@@ -25,10 +23,11 @@ module CassandraObject
       end
       
       while objects.size < number_to_find && !out_of_keys
-        index_results = connection.get(@column_family, @key, @super_column, :count=>limit,
-                                                                            :start=>start_with,
-                                                                            :reversed=>@options[:reversed],
-                                                                            :consistency=>consistency_for_thrift(@read_consistency))
+        index_results = connection.get(@column_family, @key, @super_column,
+          count: limit,
+          start: start_with,
+          reversed: @options[:reversed],
+          consistency: target_class.thrift_read_consistency)
 
         out_of_keys  = index_results.size < limit
 
@@ -81,7 +80,7 @@ module CassandraObject
     end
     
     def remove(index_key)
-      connection.remove(@column_family, @key, @super_column, index_key, :consistency => consistency_for_thrift(@write_consistency))
+      connection.remove(@column_family, @key, @super_column, index_key, consistency: target_class.thrift_write_consistency)
     end
     
     def validator(&validator)

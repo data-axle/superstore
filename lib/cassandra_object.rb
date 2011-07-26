@@ -6,7 +6,6 @@ module CassandraObject
   autoload :Base
   autoload :Connection
   autoload :Attributes
-  autoload :PrimaryKey
   autoload :Dirty
   autoload :Consistency
   autoload :Persistence

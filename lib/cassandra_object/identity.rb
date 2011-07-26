@@ -1,6 +1,4 @@
 module CassandraObject
-  # Some docs will be needed here but the gist of this is simple.  Instead of returning a string, Base#key  now returns a key object.
-  # There are corresponding key factories which generate them
   module Identity
     extend ActiveSupport::Concern
     extend ActiveSupport::Autoload
@@ -30,41 +28,25 @@ module CassandraObject
           name_or_factory
         end
       end
-    
+
       def next_key(object = nil)
         @key_factory.next_key(object).tap do |key|
           raise "Keys may not be nil" if key.nil?
         end
       end
-      
+
       def parse_key(string)
         @key_factory.parse(string)
       end
     end
-    
-    module InstanceMethods
-      def ==(comparison_object)
-        comparison_object.equal?(self) ||
-          (comparison_object.instance_of?(self.class) &&
-            comparison_object.key == key &&
-            !comparison_object.new_record?)
-      end
 
-      def eql?(comparison_object)
-        self == (comparison_object)
-      end
+    def id
+      key.to_s
+    end
 
-      def hash
-        key.to_s.hash
-      end
-      
-      def to_param
-        key.to_param
-      end
-
-      def to_key
-        [key] if key
-      end
+    def id=(key)
+      self.key = self.class.parse_key(key)
+      id
     end
   end
 end
