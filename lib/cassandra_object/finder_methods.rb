@@ -2,6 +2,14 @@ module CassandraObject
   module FinderMethods
     extend ActiveSupport::Concern
     module ClassMethods
+      def find(key)
+        if parse_key(key) && attributes = connection.get(column_family, key)
+          instantiate(key, attributes)
+        else
+          raise CassandraObject::RecordNotFound
+        end
+      end
+
       def all(options = {})
         options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
         count = options[:limit]

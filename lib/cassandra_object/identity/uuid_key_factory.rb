@@ -25,6 +25,8 @@ module CassandraObject
       # Parse should create a new key object from the 'to_param' format
       def parse(string)
         UUID.new(string)
+      rescue
+        nil
       end
       
       # create should create a new key object from the cassandra format.

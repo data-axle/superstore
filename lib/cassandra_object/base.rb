@@ -3,6 +3,7 @@ require 'set'
 
 require 'cassandra_object/log_subscriber'
 require 'cassandra_object/types'
+require 'cassandra_object/errors'
 
 module CassandraObject
   class Base
@@ -28,10 +29,11 @@ module CassandraObject
     extend ActiveSupport::DescendantsTracker
     
     include Connection
-    include Callbacks
+    include PrimaryKey
     include Identity
     include Attributes
     include Persistence
+    include Callbacks
     include Indexes
     include Dirty
     include Validation

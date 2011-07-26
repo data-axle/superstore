@@ -25,7 +25,7 @@ module CassandraObject
         new(attributes).tap &:save!
       end
     end
-    
+
     def valid?
       run_callbacks :validation do
         super

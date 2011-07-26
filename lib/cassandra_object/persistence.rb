@@ -89,38 +89,6 @@ module CassandraObject
       def column_family_configuration
         [{:Name => column_family, :CompareWith => "UTF8Type"}]
       end
-
-    end
-
-    def save(options={})
-      _run_save_callbacks do
-        create_or_update
-      end
-    end
-    
-    def create_or_update
-      result = persisted? ? update : create
-      result != false
-    end
-    
-    def create
-      _run_create_callbacks do
-        @key ||= self.class.next_key(self)
-        _write
-        @new_record = false
-        @key
-      end
-    end
-    
-    def update
-      _run_update_callbacks do
-        _write
-      end
-    end
-    
-    def _write
-      changed_attributes = changed.inject({}) { |h, n| h[n] = read_attribute(n); h }
-      self.class.write(key, changed_attributes, schema_version)
     end
 
     def new_record?
@@ -135,16 +103,64 @@ module CassandraObject
       !(new_record? || destroyed?)
     end
 
-    def destroy
-      _run_destroy_callbacks do 
-        self.class.remove(key)
-        @destroyed = true
-        freeze
+    def save(*)
+      begin
+        create_or_update
+      rescue CassandraObject::RecordInvalid
+        false
       end
     end
-    
+
+    def save!
+      create_or_update || raise(RecordNotSaved)
+    end
+
+    def destroy
+      self.class.remove(key)
+      @destroyed = true
+      freeze
+    end
+
+    def update_attribute(name, value)
+      name = name.to_s
+      send("#{name}=", value)
+      save(:validate => false)
+    end
+
+    def update_attributes(attributes)
+      self.attributes = attributes
+      save
+    end
+
+    def update_attributes!(attributes)
+      self.attributes = attributes
+      save!
+    end
+
     def reload
-      self.class.get(self.key)
-    end  
+      @attributes.update(self.class.find(self.id).instance_variable_get('@attributes'))
+    end
+
+    private
+      def create_or_update
+        result = new_record? ? create : update
+        result != false
+      end
+
+      def create
+        @key ||= self.class.next_key(self)
+        write
+        @new_record = false
+        @key
+      end
+    
+      def update
+        write
+      end
+
+      def write
+        changed_attributes = changed.inject({}) { |h, n| h[n] = read_attribute(n); h }
+        self.class.write(key, changed_attributes, schema_version)
+      end
   end
 end
