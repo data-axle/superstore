@@ -2,11 +2,11 @@ module CassandraObject
   module FinderMethods
     extend ActiveSupport::Concern
     module ClassMethods
-      def all(keyrange = ''..'', options = {})
+      def all(options = {})
         options = {:consistency => self.read_consistency, :limit => 100}.merge(options)
         count = options[:limit]
-        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", column_family: column_family, start_key: keyrange.first, finish_key: keyrange.last, key_count: count) do
-          connection.get_range(column_family, start: keyrange.first, finish: keyrange.last, key_count: count, consistency: consistency_for_thrift(options[:consistency]))
+        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", column_family: column_family, key_count: count) do
+          connection.get_range(column_family, key_count: count, consistency: consistency_for_thrift(options[:consistency]))
         end
 
         results.map do |k, v|
@@ -14,12 +14,8 @@ module CassandraObject
         end.compact
       end
 
-      # def find()
-        
-      # end
-
-      def first(keyrange = ''..'', options = {})
-        all(keyrange, options.merge(:limit => 1)).first
+      def first(options = {})
+        all(options.merge(:limit => 1)).first
       end
 
       def find_with_ids(*ids)

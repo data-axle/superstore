@@ -14,7 +14,8 @@ module CassandraObject
     setup do
       CassandraObject::Base.establish_connection(
         keyspace: 'place_directory_development',
-        servers: '192.168.0.100:9160'
+        # servers: '192.168.0.100:9160'
+        servers: '127.0.0.1:9160'
       )
     end
 

@@ -8,6 +8,24 @@ module CassandraObject
           yield instantiate(k, v)
         end
       end
+
+      def find_in_batches(options = {})
+        batch_size = options.delete(:batch_size) || 1000
+
+        batch = []
+
+        find_each do |record|
+          batch << record
+          if batch.size == batch_size
+            yield(batch)
+            batch = []
+          end
+        end
+        
+        if batch.size > 0
+          yield batch
+        end
+      end
     end
   end
 end
