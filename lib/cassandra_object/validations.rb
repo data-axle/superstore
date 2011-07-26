@@ -7,7 +7,7 @@ module CassandraObject
     end
   end
 
-  module Validation
+  module Validations
     extend ActiveSupport::Concern
     include ActiveModel::Validations
     
@@ -17,8 +17,10 @@ module CassandraObject
     end
     
     module ClassMethods
-      def create!(attributes)
-        new(attributes).tap &:save!
+      def create!(attributes = {})
+        new(attributes).tap do |object|
+          object.save!
+        end
       end
     end
 

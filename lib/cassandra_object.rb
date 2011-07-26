@@ -10,7 +10,7 @@ module CassandraObject
   autoload :Consistency
   autoload :Persistence
   autoload :Callbacks
-  autoload :Validation
+  autoload :Validations
   autoload :Identity
   autoload :Indexes
   autoload :Serialization

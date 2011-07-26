@@ -37,7 +37,7 @@ module CassandraObject
     include Callbacks
     include Indexes
     include Dirty
-    include Validation
+    include Validations
     include Associations
     include Batches
     include FinderMethods
