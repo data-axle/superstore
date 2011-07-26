@@ -5,10 +5,6 @@ module CassandraObject
       @record = record
       super("Invalid record: #{@record.errors.full_messages.to_sentence}")
     end
-    
-    def self.raise_error(record)
-      raise new(record)
-    end
   end
 
   module Validation
@@ -37,7 +33,7 @@ module CassandraObject
     end
     
     def save!
-      save || RecordInvalid.raise_error(self)
+      save || raise(RecordInvalid.new(self))
     end
 
     protected
