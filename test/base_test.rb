@@ -25,11 +25,4 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
     issue = Issue.create
     assert_equal issue.id.hash, issue.hash
   end
-
-  # test 'mega test' do
-  #   3000.times do |i|
-  #     p i
-  #     Issue.create!
-  #   end
-  # end
 end
