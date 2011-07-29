@@ -1,4 +1,3 @@
-require 'cassandra/0.8'
 require 'set'
 
 require 'cassandra_object/log_subscriber'
