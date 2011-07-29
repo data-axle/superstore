@@ -1,10 +1,2 @@
-pkg
-.yardoc
-doc/
-bin/*
-vendor/gems/*
-!vendor/gems/cache/
-.bundle
-
-*.swp
-*.swo
+Gemfile.lock
+*.gem
