@@ -14,7 +14,7 @@ class CassandraObject::ConnectionTest < CassandraObject::TestCase
     assert_not_equal CassandraObject::Base.connection, TestObject.connection
     assert_equal 'place_directory_development', TestObject.connection.keyspace
     assert_equal ["192.168.0.100:9160"], TestObject.connection.servers
-    assert_equal 10, TestObject.connection.thrift_client_options['timeout']
+    assert_equal 10, TestObject.connection.thrift_client_options[:timeout]
   end
 
   test 'establish_connection defaults' do
