@@ -13,7 +13,7 @@ module CassandraObject
       }
       def establish_connection(spec)
         spec.reverse_merge!(DEFAULT_OPTIONS)
-        self.connection = RetryingCassandra.new(spec[:keyspace], spec[:servers], spec[:thrift].symbolize_keys!)
+        self.connection = Cassandra.new(spec[:keyspace], spec[:servers], spec[:thrift].symbolize_keys!)
       end
     end
   end
