@@ -87,11 +87,11 @@ module CassandraObject
 
     private
       def attribute(name)
-        read_attribute(name.to_sym)
+        read_attribute(name)
       end
     
       def attribute=(name, value)
-        write_attribute(name.to_sym, value)
+        write_attribute(name, value)
       end
   end
 end

@@ -40,7 +40,7 @@ module CassandraObject
           object.instance_variable_set("@key", parse_key(key))
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
-          object.instance_variable_set("@attributes", decode_columns_hash(attributes).with_indifferent_access)
+          object.instance_variable_set("@attributes", decode_columns_hash(attributes))
         end
       end
 
