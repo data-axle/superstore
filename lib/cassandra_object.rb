@@ -12,7 +12,6 @@ module CassandraObject
   autoload :Callbacks
   autoload :Validations
   autoload :Identity
-  autoload :Indexes
   autoload :Serialization
   autoload :Associations
   autoload :Migrations

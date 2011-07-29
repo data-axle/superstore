@@ -35,7 +35,6 @@ module CassandraObject
     include Attributes
     include Persistence
     include Callbacks
-    include Indexes
     include Dirty
     include Validations
     include Associations
