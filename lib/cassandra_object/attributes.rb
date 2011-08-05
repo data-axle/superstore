@@ -1,15 +1,15 @@
 module CassandraObject
   class Attribute
-    attr_reader :name, :converter, :expected_type
-    def initialize(name, converter, expected_type)
+    attr_reader :name, :coder, :expected_type
+    def initialize(name, coder, expected_type)
       @name          = name.to_s
-      @converter     = converter
+      @coder     = coder
       @expected_type = expected_type
     end
 
     def check_value!(value)
       return value if value.nil?
-      value.kind_of?(expected_type) ? value : converter.decode(value)
+      value.kind_of?(expected_type) ? value : coder.decode(value)
     end
   end
 
@@ -24,16 +24,16 @@ module CassandraObject
         end
 
         if type_mapping = CassandraObject::Type.get_mapping(options[:type])
-          converter = type_mapping.converter
+          coder = type_mapping.coder
           expected_type = type_mapping.expected_type
-        elsif options[:converter]
-          converter = options[:converter]
+        elsif options[:coder]
+          coder = options[:coder]
           expected_type = options[:type]
         else
           raise "Unknown type #{options[:type]}"
         end
 
-        model_attributes[name] = Attribute.new(name, converter, expected_type)
+        model_attributes[name] = Attribute.new(name, coder, expected_type)
       end
 
       def define_attribute_methods

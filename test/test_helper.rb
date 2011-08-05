@@ -28,4 +28,13 @@ module CassandraObject
       CassandraObject::Base.connection
     end
   end
+
+  module Types
+    class TestCase < ActiveSupport::TestCase
+      attr_accessor :coder
+      setup do
+        @coder = self.class.name.sub(/Test$/, '').constantize.new
+      end
+    end
+  end
 end

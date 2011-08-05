@@ -1,4 +1,4 @@
 require 'test_helper'
 
-class CassandraObject::Type::FloatTypeTest < CassandraObject::TestCase
+class CassandraObject::Type::FloatTypeTest < CassandraObject::Types::TestCase
 end

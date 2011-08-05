@@ -1,4 +1,4 @@
 require 'test_helper'
 
-class CassandraObject::Type::DateTypeTest < CassandraObject::TestCase
+class CassandraObject::Type::DateTypeTest < CassandraObject::Types::TestCase
 end

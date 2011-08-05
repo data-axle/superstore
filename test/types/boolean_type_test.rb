@@ -1,23 +1,23 @@
 require 'test_helper'
 
-class CassandraObject::Types::BooleanTypeTest < CassandraObject::TestCase
+class CassandraObject::Types::BooleanTypeTest < CassandraObject::Types::TestCase
   test 'encode' do
-    assert_equal '1', CassandraObject::Types::BooleanType.encode(true)
-    assert_equal '1', CassandraObject::Types::BooleanType.encode('true')
-    assert_equal '1', CassandraObject::Types::BooleanType.encode('1')
-
-    assert_equal '0', CassandraObject::Types::BooleanType.encode(false)
-    assert_equal '0', CassandraObject::Types::BooleanType.encode('false')
-    assert_equal '0', CassandraObject::Types::BooleanType.encode('0')
-    assert_equal '0', CassandraObject::Types::BooleanType.encode('')
+    assert_equal '1', coder.encode(true)
+    assert_equal '1', coder.encode('true')
+    assert_equal '1', coder.encode('1')
+                      coder
+    assert_equal '0', coder.encode(false)
+    assert_equal '0', coder.encode('false')
+    assert_equal '0', coder.encode('0')
+    assert_equal '0', coder.encode('')
 
     assert_raise ArgumentError do
-      CassandraObject::Types::BooleanType.encode('wtf')
+      coder.encode('wtf')
     end
   end
 
   test 'decode' do
-    assert_equal true, CassandraObject::Types::BooleanType.decode('1')
-    assert_equal false, CassandraObject::Types::BooleanType.decode('0')
+    assert_equal true, coder.decode('1')
+    assert_equal false, coder.decode('0')
   end
 end
