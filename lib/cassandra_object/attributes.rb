@@ -2,9 +2,9 @@ module CassandraObject
   class Attribute
     attr_reader :name, :coder, :expected_type
     def initialize(name, coder, expected_type)
-      @name          = name.to_s
-      @coder     = coder
-      @expected_type = expected_type
+      @name           = name.to_s
+      @coder          = coder
+      @expected_type  = expected_type
     end
 
     def check_value!(value)
@@ -18,11 +18,12 @@ module CassandraObject
     include ActiveModel::AttributeMethods
 
     module ClassMethods
-      def attribute(name, options)
-        if model_attributes.empty?
-          self.model_attributes = {}.with_indifferent_access
-        end
+      def inherited(child)
+        super
+        child.model_attributes = model_attributes.dup
+      end
 
+      def attribute(name, options)
         if type_mapping = CassandraObject::Type.get_mapping(options[:type])
           coder = type_mapping.coder
           expected_type = type_mapping.expected_type
