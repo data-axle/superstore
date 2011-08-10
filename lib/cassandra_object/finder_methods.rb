@@ -10,6 +10,12 @@ module CassandraObject
         end
       end
 
+      def find_by_id(key)
+        find(key)
+      rescue CassandraObject::RecordNotFound
+        nil
+      end
+
       def all(options = {})
         limit = options[:limit] || 100
         results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", column_family: column_family, key_count: limit) do

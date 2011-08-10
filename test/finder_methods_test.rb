@@ -2,16 +2,21 @@ require 'test_helper'
 
 class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
   test 'find' do
-    persisted_issue = Issue.create
-    found_issue = Issue.find(persisted_issue.id)
+    Issue.create.tap do |issue|
+      assert_equal issue, Issue.find(issue.id)
+    end
 
-    assert_equal persisted_issue, found_issue
-  end
-
-  test 'find missing record' do
     assert_raise CassandraObject::RecordNotFound do
       Issue.find('what')
     end
+  end
+
+  test 'find_by_id' do
+    Issue.create.tap do |issue|
+      assert_equal issue, Issue.find_by_id(issue.id)
+    end
+
+    assert_nil Issue.find_by_id('what')
   end
 
   test 'all' do
