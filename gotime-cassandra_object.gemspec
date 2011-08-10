@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.email = 'gems@gotime.com'
   s.homepage = 'http://github.com/gotime/cassandra_object'
 
-  s.extra_rdoc_files = ["README.markdown"]
+  s.extra_rdoc_files = ["README.rdoc"]
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = ['lib']
