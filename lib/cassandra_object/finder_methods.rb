@@ -3,7 +3,7 @@ module CassandraObject
     extend ActiveSupport::Concern
     module ClassMethods
       def find(key)
-        if parse_key(key) && attributes = connection.get(column_family, key)
+        if key && parse_key(key) && attributes = connection.get(column_family, key)
           instantiate(key, attributes)
         else
           raise CassandraObject::RecordNotFound
