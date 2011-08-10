@@ -3,7 +3,9 @@ module CassandraObject
     extend ActiveSupport::Concern
     module ClassMethods
       def find(key)
-        if parse_key(key) && attributes = connection.get(column_family, key)
+        if !parse_key(key)
+          raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{key.inspect}"
+        elsif attributes = connection.get(column_family, key)
           instantiate(key, attributes)
         else
           raise CassandraObject::RecordNotFound
@@ -28,20 +30,14 @@ module CassandraObject
       end
 
       def first(options = {})
-        all(options.merge(:limit => 1)).first
+        all(options.merge(limit: 1)).first
       end
 
       def find_with_ids(*ids)
-        expects_array = ids.first.kind_of?(Array)
-        return ids.first if expects_array && ids.first.empty?
+        ids = ids.flatten
+        return ids if ids.empty?
 
-        ids = ids.dup
-        ids.flatten!
-        ids.compact!
-        ids.collect!(&:to_s)
-        ids.uniq!
-
-        #raise RecordNotFound, "Couldn't find #{record_klass.name} without an ID" if ids.empty?
+        ids = ids.compact.map(&:to_s).uniq
 
         results = multi_get(ids).values.compact
 

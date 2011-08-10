@@ -6,6 +6,13 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
       assert_equal issue, Issue.find(issue.id)
     end
 
+    begin
+      Issue.find(nil)
+      assert false
+    rescue => e
+      assert_equal "Couldn't find Issue with key nil", e.message
+    end
+
     assert_raise CassandraObject::RecordNotFound do
       Issue.find('what')
     end
@@ -39,16 +46,7 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
     third_issue = Issue.create
 
     assert_equal [], Issue.find_with_ids([])
-    assert_equal first_issue, Issue.find_with_ids(first_issue.key)
     assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids(first_issue.key, second_issue.key).to_set
     assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids([first_issue.key, second_issue.key]).to_set
   end
-
-  # test 'find single id' do
-  #   created_issue = Issue.create
-  # 
-  #   found_issue = Issue.find(created_issue.id)
-  # 
-  #   assert_equal created_issue, found_issue
-  # end
 end

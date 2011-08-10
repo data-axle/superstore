@@ -24,7 +24,7 @@ module CassandraObject
       
       # Parse should create a new key object from the 'to_param' format
       def parse(string)
-        UUID.new(string)
+        UUID.new(string) if string
       rescue
         nil
       end
