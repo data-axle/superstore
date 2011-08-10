@@ -1,9 +1,8 @@
-# lib = File.expand_path("#{File.dirname(__FILE__)}/../lib")
-# $:.unshift(lib) unless $:.include?('lib') || $:.include?(lib)
-# require File.expand_path('../../lib/cassandra_object', __FILE__)
+require 'rubygems'
+require 'bundler/setup'
+require 'test/unit'
 require 'cassandra/0.8'
 require 'cassandra_object'
-require 'rails/test_help'
 
 class Issue < CassandraObject::Base
   key :uuid

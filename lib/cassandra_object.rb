@@ -1,4 +1,5 @@
-require 'rails/all'
+require 'active_support/all'
+require 'active_model'
 
 module CassandraObject
   extend ActiveSupport::Autoload
@@ -46,4 +47,4 @@ module CassandraObject
   end
 end
 
-require 'cassandra_object/railtie'
+require 'cassandra_object/railtie' if defined?(Rails)
