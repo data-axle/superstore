@@ -28,11 +28,6 @@ module CassandraObject
       rescue
         nil
       end
-      
-      # create should create a new key object from the cassandra format.
-      def create(string)
-        UUID.new(string)
-      end
     end
   end
 end

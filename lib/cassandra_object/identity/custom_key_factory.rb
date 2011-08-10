@@ -36,14 +36,6 @@ module CassandraObject
       def next_key(object)
         CustomKey.new(object.send(@method))
       end
-
-      def parse(paramized_key)
-        CustomKey.new(paramized_key)
-      end
-
-      def create(paramized_key)
-        CustomKey.new(paramized_key)
-      end
     end
   end
 end

@@ -41,10 +41,6 @@ module CassandraObject
       def parse(paramized_key)
         NaturalKey.new(paramized_key)
       end
-
-      def create(paramized_key)
-        NaturalKey.new(paramized_key)
-      end
     end
   end
 end

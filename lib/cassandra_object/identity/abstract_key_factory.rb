@@ -20,16 +20,6 @@ module CassandraObject
       def parse(string)
         raise NotImplementedError, "#{self.class.name}#parse isn't implemented."
       end
-
-
-      # create should create a new key object from the cassandra format.
-      #
-      # @param  [String] the result of calling key.to_s
-      # @return [CassandraObject::Identity::Key] the key
-      #
-      def create(string)
-        raise NotImplementedError, "#{self.class.name}#create isn't implemented."
-      end
     end
   end
 end
