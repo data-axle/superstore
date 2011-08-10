@@ -4,7 +4,7 @@ module CassandraObject
 
     included do
       extend ActiveModel::Callbacks
-      define_model_callbacks :save, :create, :destroy, :update
+      define_model_callbacks :save, :create, :update, :destroy
     end
 
     def destroy #:nodoc:
