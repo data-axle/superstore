@@ -1,2 +1,44 @@
 == Cassandra Object
 
+Cassandra Object uses ActiveModel to mimic much of the behavior in ActiveRecord.
+
+
+== Defining Models
+
+  class Widget < CassandraObject::Base
+    key :uuid
+    attribute :name, type: :string
+    attribute :description, type: :string
+    attribute :price, type: :integer
+
+    validates :name, presence: :true
+
+    before_create do
+      self.description = "#{name} is the best product ever"
+    end
+  end
+
+== Creating and updating records
+
+Cassandra Object has equivalent methods as ActiveRecord:
+
+  widget = Widget.new
+  widget.valid?
+  widget = Widget.create(name: 'Acme', price: 100)
+  widget.update_attribute(:price, 1200)
+  widget.update_attributes(price: 1200, name: 'Acme Corporation')
+  widget.attributes = {price: 300}
+  widget.price_was
+  widget.save
+  widget.save!
+
+== Finding records
+
+  widget = Widget.find(uuid)
+  widget = Widget.first
+  widgets = Widget.all
+  Widget.find_each do |widget|
+    ...
+  end
+
+CQL is currently not supported
