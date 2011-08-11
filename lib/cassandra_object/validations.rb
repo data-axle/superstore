@@ -13,7 +13,7 @@ module CassandraObject
     
     included do
       define_model_callbacks :validation
-      define_callbacks :validate, :scope => :name
+      define_callbacks :validate, scope: :name
     end
     
     module ClassMethods
