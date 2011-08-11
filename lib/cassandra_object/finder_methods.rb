@@ -1,6 +1,7 @@
 module CassandraObject
   module FinderMethods
     extend ActiveSupport::Concern
+
     module ClassMethods
       def find(key)
         if !parse_key(key)
@@ -39,9 +40,7 @@ module CassandraObject
 
         ids = ids.compact.map(&:to_s).uniq
 
-        results = multi_get(ids).values.compact
-
-        results.size <= 1 && !expects_array ? results.first : results
+        multi_get(ids).values.compact
       end
 
       private
