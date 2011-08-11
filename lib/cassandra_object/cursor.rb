@@ -27,7 +27,7 @@ module CassandraObject
           count: limit,
           start: start_with,
           reversed: @options[:reversed],
-          consistency: target_class.thrift_read_consistency)
+          consistency: @target_class.thrift_read_consistency)
 
         out_of_keys  = index_results.size < limit
 

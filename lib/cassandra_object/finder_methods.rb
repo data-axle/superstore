@@ -43,25 +43,20 @@ module CassandraObject
         multi_get(ids).values.compact
       end
 
-      private
-        def multi_get(keys, options={})
-          attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", column_family: column_family, keys: keys) do
-            connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency)
-          end
-
-          attribute_results.inject({}) do |memo, (key, attributes)|
-            if attributes.empty?
-              memo[key] = nil
-            else
-              memo[parse_key(key)] = instantiate(key, attributes)
-            end
-            memo
-          end
+      def multi_get(keys, options={})
+        attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", column_family: column_family, keys: keys) do
+          connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency)
         end
 
-        def get(key, options={})
-          multi_get([key], options).values.first
+        attribute_results.inject({}) do |memo, (key, attributes)|
+          if attributes.empty?
+            memo[key] = nil
+          else
+            memo[parse_key(key)] = instantiate(key, attributes)
+          end
+          memo
         end
+      end
     end
   end
 end
