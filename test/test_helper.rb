@@ -2,7 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 require 'test/unit'
 require 'cassandra/0.8'
-require 'cassandra_object'
+require 'gotime-cassandra_object'
 
 class Issue < CassandraObject::Base
   key :uuid

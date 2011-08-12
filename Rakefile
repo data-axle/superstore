@@ -3,8 +3,6 @@ require 'bundler/setup'
 require 'rake'
 require 'rake/testtask'
 
-# require File.expand_path('../lib/cassandra_object', __FILE__)
-
 task default: :test
 
 Rake::TestTask.new(:test) do |t|
