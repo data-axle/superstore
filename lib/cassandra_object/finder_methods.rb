@@ -43,6 +43,10 @@ module CassandraObject
         multi_get(ids).values.compact
       end
 
+      def count
+        connection.count_range(column_family)
+      end
+
       def multi_get(keys, options={})
         attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", column_family: column_family, keys: keys) do
           connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency)

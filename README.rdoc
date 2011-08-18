@@ -23,6 +23,17 @@ Add the following to your Gemfile:
     end
   end
 
+== Connecting to the Server
+
+  CassandraObject::Base.establish_connection(
+    keyspace: 'my_app_development',
+    servers: '127.0.0.1:9160',
+    thrift: {
+      timeout: 20
+      retries: 2
+    }
+  )
+
 == Creating and updating records
 
 Cassandra Object has equivalent methods as ActiveRecord:
