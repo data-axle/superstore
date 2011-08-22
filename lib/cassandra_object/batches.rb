@@ -21,7 +21,7 @@ module CassandraObject
             batch = []
           end
         end
-        
+
         if batch.size > 0
           yield batch
         end
