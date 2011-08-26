@@ -7,7 +7,7 @@ module CassandraObject
       end
 
       def decode(str)
-        str
+        str.force_encoding('UTF-8')
       end
     end
   end

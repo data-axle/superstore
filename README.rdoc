@@ -12,9 +12,9 @@ Add the following to your Gemfile:
 
   class Widget < CassandraObject::Base
     key :uuid
-    attribute :name, type: :string
-    attribute :description, type: :string
-    attribute :price, type: :integer
+    string :name
+    string :description
+    integer :price
 
     validates :name, presence: :true
 

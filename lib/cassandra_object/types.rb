@@ -7,5 +7,4 @@ CassandraObject::Type.register(:integer, Integer, CassandraObject::Types::Intege
 CassandraObject::Type.register(:set, Array, CassandraObject::Types::SetType)
 CassandraObject::Type.register(:time, Time, CassandraObject::Types::TimeType)
 CassandraObject::Type.register(:time_with_zone, ActiveSupport::TimeWithZone, CassandraObject::Types::TimeWithZoneType)
-CassandraObject::Type.register(:string, String, CassandraObject::Types::UTF8StringType) #This could be changed to StringType to support non-utf8 strings
-CassandraObject::Type.register(:utf8, String, CassandraObject::Types::UTF8StringType)
+CassandraObject::Type.register(:string, String, CassandraObject::Types::StringType)

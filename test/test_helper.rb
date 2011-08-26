@@ -6,7 +6,7 @@ require 'gotime-cassandra_object'
 
 class Issue < CassandraObject::Base
   key :uuid
-  attribute :description, type: :string
+  string :description
 end
 
 module CassandraObject

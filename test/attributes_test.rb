@@ -6,7 +6,7 @@ class CassandraObject::AttributesTest < CassandraObject::TestCase
   end
 
   class TestChildIssue < TestIssue
-    attribute :description, type: :string
+    string :description
   end
 
   test 'attributes not shared' do

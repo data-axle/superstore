@@ -17,6 +17,21 @@ module CassandraObject
     extend ActiveSupport::Concern
     include ActiveModel::AttributeMethods
 
+    included do
+      class_attribute :model_attributes
+      self.model_attributes = {}.with_indifferent_access
+
+      attribute_method_suffix("", "=")
+      
+      %w(array boolean date float integer time time_with_zone set string).each do |type|
+        instance_eval <<-EOV, __FILE__, __LINE__ + 1
+          def #{type}(name, options = {})                                     # def string(name, options = {})
+            attribute(name, options.update(type: :#{type}))                   #   attribute(name, options.update(type: :string))
+          end                                                                 # end
+        EOV
+      end
+    end
+
     module ClassMethods
       def inherited(child)
         super
@@ -40,13 +55,6 @@ module CassandraObject
       def define_attribute_methods
         super(model_attributes.keys)
       end
-    end
-
-    included do
-      class_attribute :model_attributes
-      self.model_attributes = {}.with_indifferent_access
-
-      attribute_method_suffix("", "=")      
     end
 
     def write_attribute(name, value)

@@ -41,9 +41,9 @@ module CassandraObject
     autoload :HashType
     autoload :IntegerType
     autoload :SetType
+    autoload :StringType
     autoload :TimeType
     autoload :TimeWithZoneType
-    autoload :UTF8StringType
   end
 end
 

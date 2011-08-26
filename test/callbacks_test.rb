@@ -4,7 +4,7 @@ class CassandraObject::CallbacksTest < CassandraObject::TestCase
   class TestIssue < CassandraObject::Base
     self.column_family = 'Issues'
     key :uuid
-    attribute :description, type: :string
+    string :description
 
     %w(after_save after_create after_update after_destroy).each do |method|
       send(method) do
