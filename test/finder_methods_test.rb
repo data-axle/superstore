@@ -4,6 +4,7 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
   test 'find' do
     Issue.create.tap do |issue|
       assert_equal issue, Issue.find(issue.id)
+      assert_equal issue, Issue.find(issue.key)
     end
 
     begin

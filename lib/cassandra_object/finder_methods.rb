@@ -4,6 +4,8 @@ module CassandraObject
 
     module ClassMethods
       def find(key)
+        key = key.try :to_s
+
         if !parse_key(key)
           raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{key.inspect}"
         elsif attributes = connection.get(column_family, key)
