@@ -40,7 +40,7 @@ module CassandraObject
           object.instance_variable_set("@key", parse_key(key))
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
-          object.instance_variable_set("@attributes", decode_columns_hash(attributes))
+          object.instance_variable_set("@attributes", decode_columns_hash(object, attributes))
         end
       end
 
@@ -54,8 +54,8 @@ module CassandraObject
         end.merge({"schema_version" => schema_version.to_s})
       end
 
-      def decode_columns_hash(attributes)
-        Hash[attributes.map { |k, v| [k.to_s, model_attributes[k].coder.decode(v)] }]
+      def decode_columns_hash(object, attributes)
+        Hash[attributes.map { |k, v| [k.to_s, instantiate_attribute(object, k, v)] }]
       end
       
       def column_family_configuration

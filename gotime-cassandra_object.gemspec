@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'gotime-cassandra_object'
-  s.version = '2.4.2'
+  s.version = '2.5.0'
   s.description = 'Cassandra ActiveModel'
   s.summary = 'Cassandra ActiveModel'
 

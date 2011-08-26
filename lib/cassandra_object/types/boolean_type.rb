@@ -1,6 +1,6 @@
 module CassandraObject
   module Types
-    class BooleanType
+    class BooleanType < BaseType
       TRUE_VALS = [true, 'true', '1']
       FALSE_VALS = [false, 'false', '0', '', nil]
       VALID_VALS = TRUE_VALS + FALSE_VALS

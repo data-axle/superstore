@@ -34,13 +34,13 @@ module CassandraObject
   module Types
     extend ActiveSupport::Autoload
     
+    autoload :BaseType
     autoload :ArrayType
     autoload :BooleanType
     autoload :DateType
     autoload :FloatType
     autoload :HashType
     autoload :IntegerType
-    autoload :SetType
     autoload :StringType
     autoload :TimeType
     autoload :TimeWithZoneType

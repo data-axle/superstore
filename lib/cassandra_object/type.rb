@@ -8,7 +8,7 @@ module CassandraObject
 
     class << self
       def register(name, expected_type, coder)
-        attribute_types[name] = TypeMapping.new(expected_type, coder.new)
+        attribute_types[name] = TypeMapping.new(expected_type, coder)
       end
 
       def get_mapping(name)

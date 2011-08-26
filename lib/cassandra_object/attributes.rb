@@ -3,13 +3,15 @@ module CassandraObject
     attr_reader :name, :coder, :expected_type
     def initialize(name, coder, expected_type)
       @name           = name.to_s
-      @coder          = coder
+      @coder          = coder.new
       @expected_type  = expected_type
     end
 
-    def check_value!(value)
-      return value if value.nil?
-      value.kind_of?(expected_type) ? value : coder.decode(value)
+    def instantiate(record, value)
+      return if value.nil? && coder.ignore_nil?
+
+      value = value.kind_of?(expected_type) ? value : coder.decode(value)
+      coder.wrap(record, name, value)
     end
   end
 
@@ -23,11 +25,11 @@ module CassandraObject
 
       attribute_method_suffix("", "=")
       
-      %w(array boolean date float integer time time_with_zone set string).each do |type|
+      %w(array boolean date float integer time time_with_zone string).each do |type|
         instance_eval <<-EOV, __FILE__, __LINE__ + 1
-          def #{type}(name, options = {})                                     # def string(name, options = {})
-            attribute(name, options.update(type: :#{type}))                   #   attribute(name, options.update(type: :string))
-          end                                                                 # end
+          def #{type}(name, options = {})                                   # def string(name, options = {})
+            attribute(name, options.update(type: :#{type}))                 #   attribute(name, options.update(type: :string))
+          end                                                               # end
         EOV
       end
     end
@@ -52,17 +54,21 @@ module CassandraObject
         model_attributes[name] = Attribute.new(name, coder, expected_type)
       end
 
+      def instantiate_attribute(record, name, value)
+        if model_attribute = model_attributes[name]
+          model_attribute.instantiate(record, value)
+        else
+          raise NoMethodError, "Unknown attribute #{name.inspect}"
+        end
+      end
+
       def define_attribute_methods
         super(model_attributes.keys)
       end
     end
 
     def write_attribute(name, value)
-      if ma = self.class.model_attributes[name]
-        @attributes[name.to_s] = ma.check_value!(value)
-      else
-        raise NoMethodError, "Unknown attribute #{name.inspect}"
-      end
+      @attributes[name.to_s] = self.class.instantiate_attribute(self, name, value)
     end
 
     def read_attribute(name)

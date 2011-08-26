@@ -1,6 +1,6 @@
 module CassandraObject
   module Types
-    class TimeWithZoneType
+    class TimeWithZoneType < BaseType
       def encode(time)
         raise ArgumentError.new("#{self} requires a Time") unless time.kind_of?(Time)
         time.utc.xmlschema(6)

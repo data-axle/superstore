@@ -1,6 +1,6 @@
 module CassandraObject
   module Types
-    class TimeType
+    class TimeType < BaseType
       # lifted from the implementation of Time.xmlschema and simplified
       REGEX = /\A\s*
                 (-?\d+)-(\d\d)-(\d\d)
