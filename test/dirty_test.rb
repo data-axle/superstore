@@ -2,7 +2,8 @@ require 'test_helper'
 
 class CassandraObject::DirtyTest < CassandraObject::TestCase
   class TestRecord < CassandraObject::Base
-    self.column_family = 'Issue'
+    key :uuid
+    self.column_family = 'Issues'
     string :name
   end
 
