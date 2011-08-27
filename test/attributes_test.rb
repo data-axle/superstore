@@ -1,15 +1,27 @@
 require 'test_helper'
 
 class CassandraObject::AttributesTest < CassandraObject::TestCase
+  class CustomType
+  end
+  
+  class CustomCoder < CassandraObject::Types::BaseType
+  end
+
   class TestIssue < CassandraObject::Base
     self.column_family = 'Issue'
+    attribute :custom_column, type: CustomType, coder: CustomCoder
     integer :price
-    array :favorite_colors
-    boolean :enabled
   end
 
   class TestChildIssue < TestIssue
     string :description
+  end
+
+  test 'custom attribute definer' do
+    model_attribute = TestIssue.model_attributes[:custom_column]
+
+    assert_kind_of CustomCoder, model_attribute.coder
+    assert_equal CustomType, model_attribute.expected_type
   end
 
   test 'instantiate_attribute' do

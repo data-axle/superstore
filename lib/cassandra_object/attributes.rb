@@ -40,6 +40,10 @@ module CassandraObject
         child.model_attributes = model_attributes.dup
       end
 
+      # 
+      # attribute :name, type: :string
+      # attribute :ammo, type: Ammo, coder: AmmoCodec
+      # 
       def attribute(name, options)
         if type_mapping = CassandraObject::Type.get_mapping(options[:type])
           coder = type_mapping.coder
