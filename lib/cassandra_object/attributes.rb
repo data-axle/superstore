@@ -1,10 +1,10 @@
 module CassandraObject
   class Attribute
     attr_reader :name, :coder, :expected_type
-    def initialize(name, coder, expected_type)
+    def initialize(name, type_mapping, options)
       @name           = name.to_s
-      @coder          = coder.new
-      @expected_type  = expected_type
+      @coder          = type_mapping.coder.new(options)
+      @expected_type  = type_mapping.expected_type
     end
 
     def instantiate(record, value)
@@ -45,17 +45,18 @@ module CassandraObject
       # attribute :ammo, type: Ammo, coder: AmmoCodec
       # 
       def attribute(name, options)
-        if type_mapping = CassandraObject::Type.get_mapping(options[:type])
-          coder = type_mapping.coder
-          expected_type = type_mapping.expected_type
-        elsif options[:coder]
-          coder = options[:coder]
-          expected_type = options[:type]
+        expected_type = options.delete :type
+        coder = options.delete :coder
+
+        if expected_type.is_a?(Symbol)
+          type_mapping = CassandraObject::Type.get_mapping(expected_type) || (raise "Unknown type #{type}")
+        elsif coder.nil?
+          raise "Must supply a :coder for #{name}"
         else
-          raise "Unknown type #{options[:type]}"
+          type_mapping = CassandraObject::Type::TypeMapping.new(expected_type, coder)
         end
 
-        model_attributes[name] = Attribute.new(name, coder, expected_type)
+        model_attributes[name] = Attribute.new(name, type_mapping, options)
       end
 
       def instantiate_attribute(record, name, value)
