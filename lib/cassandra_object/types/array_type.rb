@@ -2,16 +2,18 @@ module CassandraObject
   module Types
     class ArrayType < BaseType
       class Proxy < BasicObject
-        attr_accessor :record, :name, :array
-        def initialize(record, name, array)
-          @record = record
-          @name   = name
-          @array  = array.presence || []
+        attr_accessor :record, :name, :array, :options
+        def initialize(record, name, array, options)
+          @record   = record
+          @name     = name
+          @array    = array.presence || []
+          @options  = options
         end
 
         def <<(obj)
           array << obj
           array.sort!
+          array.uniq! if options[:unique]
           record.send("#{name}=", array)
         end
 
@@ -30,11 +32,13 @@ module CassandraObject
       end
 
       def decode(str)
-        ActiveSupport::JSON.decode(str)
+        array = ActiveSupport::JSON.decode(str)
+        array.uniq! if options[:unique]
+        array
       end
 
       def wrap(record, name, value)
-        Proxy.new(record, name, value)
+        Proxy.new(record, name, value, options)
       end
     end
   end
