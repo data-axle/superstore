@@ -15,16 +15,4 @@ class CassandraObject::DirtyTest < CassandraObject::TestCase
 
     assert !record.changed?
   end
-
-  test 'reload clears dirty' do
-    record = TestRecord.create!(name: 'foo')
-    record = TestRecord.find(record.id)
-
-    record.name = 'bar'
-    assert record.changed?
-
-    record.reload
-
-    assert !record.changed?
-  end
 end

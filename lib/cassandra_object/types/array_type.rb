@@ -1,41 +1,35 @@
 module CassandraObject
   module Types
     class ArrayType < BaseType
-      class Proxy < BasicObject
-        instance_methods.each { |m| undef_method m }
-        
-        attr_accessor :record, :name, :array, :options
+      class DirtyArray < Array
+        attr_accessor :record, :name, :options
         def initialize(record, name, array, options)
           @record   = record
           @name     = name.to_s
-          @array    = array.presence || []
           @options  = options
+          super(array.presence || [])
         end
 
         def <<(obj)
           modifying do
-            array << obj
-            array.uniq! if options[:unique]
+            super
+            uniq! if options[:unique]
           end
         end
 
         private
-          def method_missing(method, *args, &block)
-            array.send(method, *args, &block)
-          end
-
           def modifying
             unless record.changed_attributes.include?(name)
-              original = array.dup
+              original = dup
             end
 
             yield
 
-            if !record.changed_attributes.key?(name) && original.sort != array.sort
+            if !record.changed_attributes.key?(name) && original.sort != sort
               record.changed_attributes[name] = original
             end
 
-            record.send("#{name}=", array)
+            record.send("#{name}=", self)
           end
       end
 
@@ -55,7 +49,7 @@ module CassandraObject
       end
 
       def wrap(record, name, value)
-        Proxy.new(record, name, value, options)
+        DirtyArray.new(record, name, value, options)
       end
     end
   end

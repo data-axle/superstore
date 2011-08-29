@@ -18,30 +18,19 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
   end
 
   class TestIssue < CassandraObject::Base
-    key :uuid
-    self.column_family = 'Issues'
-    array :favorite_colors, unique: true
+    self.column_family = 'Issue'
+    array :favorite_colors
   end
 
-  test 'array attribute' do
-    issue = TestIssue.new favorite_colors: []
+  test 'wrap' do
+    issue = TestIssue.new
+    colors = []
+    wrapper = coder.wrap(issue, 'favorite_colors', colors)
+
+    assert_kind_of Array, wrapper
     
-    assert_kind_of Array, issue.favorite_colors
-    issue.favorite_colors << 'red'
-
-    assert issue.changed?
-    assert_equal({'favorite_colors' => [nil, ['red']]}, issue.changes)
-  end
-
-  test 'array uniques' do
-    issue = TestIssue.create! favorite_colors: ['red', 'blue']
-
-    issue.favorite_colors << 'red'
-    assert_equal ['red', 'blue'], issue.favorite_colors
     assert !issue.changed?
-
-    issue.favorite_colors << 'yellow'
-    assert_equal ['red', 'blue', 'yellow'], issue.favorite_colors
-    assert_equal({'favorite_colors' => [['red', 'blue'], ['red', 'blue', 'yellow']]}, issue.changes)
+    wrapper << 'red'
+    assert issue.changed?
   end
 end
