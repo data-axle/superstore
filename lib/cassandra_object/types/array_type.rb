@@ -2,24 +2,41 @@ module CassandraObject
   module Types
     class ArrayType < BaseType
       class Proxy < BasicObject
+        instance_methods.each { |m| undef_method m }
+        
         attr_accessor :record, :name, :array, :options
         def initialize(record, name, array, options)
           @record   = record
-          @name     = name
+          @name     = name.to_s
           @array    = array.presence || []
           @options  = options
         end
 
         def <<(obj)
-          array << obj
-          array.sort!
-          array.uniq! if options[:unique]
-          record.send("#{name}=", array)
+          modifying do
+            array << obj
+            array.uniq! if options[:unique]
+          end
         end
 
-        def method_missing(method, *args, &block)
-          array.send(method, *args, &block)
-        end
+        private
+          def method_missing(method, *args, &block)
+            array.send(method, *args, &block)
+          end
+
+          def modifying
+            unless record.changed_attributes.include?(name)
+              original = array.dup
+            end
+
+            yield
+
+            if !record.changed_attributes.key?(name) && original.sort != array.sort
+              record.changed_attributes[name] = original
+            end
+
+            record.send("#{name}=", array)
+          end
       end
 
       def ignore_nil?

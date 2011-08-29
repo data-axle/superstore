@@ -52,7 +52,7 @@ module CassandraObject
       @key = attributes.delete(:key)
       @new_record = true
       @destroyed = false
-      @attributes = {}.with_indifferent_access
+      @attributes = {}
       self.attributes = attributes
       @schema_version = self.class.current_schema_version
     end

@@ -20,6 +20,14 @@ module CassandraObject
       end
     end
 
+    # <tt>reload</tt> the record and clears changed attributes.
+    def reload
+      super.tap do
+        @previously_changed.clear
+        @changed_attributes.clear
+      end
+    end
+
     def write_attribute(name, value)
       name = name.to_s
       unless attribute_changed?(name)
