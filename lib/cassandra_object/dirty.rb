@@ -23,7 +23,7 @@ module CassandraObject
     # <tt>reload</tt> the record and clears changed attributes.
     def reload
       super.tap do
-        @previously_changed.clear
+        @previously_changed.try :clear
         @changed_attributes.clear
       end
     end
