@@ -8,9 +8,12 @@ class CassandraObject::AttributesTest < CassandraObject::TestCase
   end
 
   class TestIssue < CassandraObject::Base
-    self.column_family = 'Issue'
+    key :uuid
+    self.column_family = 'Issues'
+
     attribute :custom_column, type: CustomType, coder: CustomCoder
     integer :price
+    json :orders
   end
 
   class TestChildIssue < TestIssue
@@ -22,6 +25,14 @@ class CassandraObject::AttributesTest < CassandraObject::TestCase
 
     assert_kind_of CustomCoder, model_attribute.coder
     assert_equal CustomType, model_attribute.expected_type
+  end
+
+  test 'json attribute' do
+    issue = TestIssue.create! orders: {'a' => 'b'}
+
+    issue = TestIssue.find issue.id
+
+    assert_equal({'a' => 'b'}, issue.orders)
   end
 
   test 'instantiate_attribute' do

@@ -59,6 +59,10 @@ module CassandraObject
         model_attributes[name] = Attribute.new(name, type_mapping, options)
       end
 
+      def json(name)
+        attribute(name, type: :hash)
+      end
+
       def instantiate_attribute(record, name, value)
         if model_attribute = model_attributes[name]
           model_attribute.instantiate(record, value)
