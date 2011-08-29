@@ -15,6 +15,7 @@ Add the following to your Gemfile:
     string :name
     string :description
     integer :price
+    array :colors, unique: true
 
     validates :name, presence: :true
 
