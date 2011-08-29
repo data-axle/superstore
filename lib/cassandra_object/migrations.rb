@@ -31,36 +31,6 @@ module CassandraObject
           self.current_schema_version = version
         end
       end
-      
-      def instantiate(key, attributes)
-        version = attributes.delete('schema_version')
-        original_attributes = attributes.dup
-        if version == current_schema_version
-          return super(key, attributes)
-        end
-        
-        versions_to_migrate = ((version.to_i + 1)..current_schema_version)
-        
-        migrations_to_run = versions_to_migrate.map do |v|
-          migrations.find {|m| m.version == v}
-        end
-        
-        if migrations_to_run.any?(&:nil?)
-          raise MigrationNotFoundError.new(version, migrations)
-        end
-        
-        migrations_to_run.inject(attributes) do |attrs, migration|
-          migration.run(attrs)
-          @schema_version = migration.version.to_s
-          attrs
-        end
-        
-        super(key, attributes).tap do |record|
-          original_attributes.diff(attributes).keys.each do |attribute|
-            record.send :attribute_will_change!, attribute
-          end
-        end
-      end
     end
   end
 end

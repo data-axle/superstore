@@ -32,7 +32,7 @@ module CassandraObject
 
       def instantiate(key, attributes)
         # remove any attributes we don't know about. we would do this earlier, but we want to make such
-        #  attributes available to migrations
+        # attributes available to migrations
         attributes.delete_if { |k,_| model_attributes[k].nil? }
 
         allocate.tap do |object|
@@ -56,10 +56,6 @@ module CassandraObject
 
       def decode_columns_hash(object, attributes)
         Hash[attributes.map { |k, v| [k.to_s, instantiate_attribute(object, k, v)] }]
-      end
-      
-      def column_family_configuration
-        [{:Name => column_family, :CompareWith => "UTF8Type"}]
       end
     end
 
