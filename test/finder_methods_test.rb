@@ -13,7 +13,7 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
     rescue => e
       assert_equal "Couldn't find Issue with key nil", e.message
     end
-
+    
     assert_raise CassandraObject::RecordNotFound do
       Issue.find('what')
     end
