@@ -7,29 +7,40 @@ module CassandraObject
           @record   = record
           @name     = name.to_s
           @options  = options
-          super(array.presence || [])
+
+          super(array)
+          setify!
         end
 
         def <<(obj)
           modifying do
             super
-            uniq! if options[:unique]
           end
         end
 
         private
+          def setify!
+            if options[:unique]
+              uniq!
+              sort!
+            end
+          end
+
           def modifying
             unless record.changed_attributes.include?(name)
               original = dup
             end
 
-            yield
+            result = yield
+            setify!
 
-            if !record.changed_attributes.key?(name) && original.sort != sort
+            if !record.changed_attributes.key?(name) && original != self
               record.changed_attributes[name] = original
             end
 
             record.send("#{name}=", self)
+
+            result
           end
       end
 

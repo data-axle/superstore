@@ -30,11 +30,13 @@ module CassandraObject
 
     def write_attribute(name, value)
       name = name.to_s
-      unless attribute_changed?(name)
-        old = read_attribute(name)
-        changed_attributes[name] = old if old != value
-      end
+      old = read_attribute(name)
+
       super
+
+      unless attribute_changed?(name) || old == read_attribute(name)
+        changed_attributes[name] = old
+      end
     end
   end
 end
