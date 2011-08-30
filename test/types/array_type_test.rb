@@ -19,14 +19,22 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
     array :favorite_colors, unique: true
   end
 
-  test 'wrap' do
+  test 'append marks dirty' do
     issue = TestIssue.create favorite_colors: []
     assert !issue.changed?
-    assert_kind_of Array, issue.favorite_colors
 
     issue.favorite_colors << 'red'
     assert issue.changed?
     assert_equal({'favorite_colors' => [[], ['red']]}, issue.changes)
+  end
+
+  test 'delete marks dirty' do
+    issue = TestIssue.create favorite_colors: ['red']
+    assert !issue.changed?
+
+    issue.favorite_colors.delete('red')
+    assert issue.changed?
+    assert_equal({'favorite_colors' => [['red'], []]}, issue.changes)
   end
 
   test 'unique array' do

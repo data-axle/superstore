@@ -6,8 +6,7 @@ module CassandraObject
 
   autoload :Base
   autoload :Connection
-  autoload :Attributes
-  autoload :Dirty
+  autoload :AttributeMethods
   autoload :Consistency
   autoload :Persistence
   autoload :Callbacks
@@ -24,6 +23,15 @@ module CassandraObject
   autoload :Timestamps
   autoload :Type
   autoload :Schema
+
+  module AttributeMethods
+    extend ActiveSupport::Autoload
+
+    eager_autoload do
+      autoload :Definition
+      autoload :Dirty
+    end
+  end
 
   module Tasks
     extend ActiveSupport::Autoload

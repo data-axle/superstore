@@ -1,31 +1,14 @@
 module CassandraObject
-  class Attribute
-    attr_reader :name, :coder, :expected_type
-    def initialize(name, type_mapping, options)
-      @name           = name.to_s
-      @coder          = type_mapping.coder.new(options)
-      @expected_type  = type_mapping.expected_type
-    end
-
-    def instantiate(record, value)
-      value ||= coder.default
-      return unless value
-        
-      value = value.kind_of?(expected_type) ? value : coder.decode(value)
-      coder.wrap(record, name, value)
-    end
-  end
-
-  module Attributes
+  module AttributeMethods
     extend ActiveSupport::Concern
     include ActiveModel::AttributeMethods
 
     included do
-      class_attribute :model_attributes
-      self.model_attributes = {}
+      class_attribute :attribute_definitions
+      self.attribute_definitions = {}
 
       attribute_method_suffix("", "=")
-      
+
       %w(array boolean date float integer time time_with_zone string).each do |type|
         instance_eval <<-EOV, __FILE__, __LINE__ + 1
           def #{type}(name, options = {})                                   # def string(name, options = {})
@@ -38,7 +21,7 @@ module CassandraObject
     module ClassMethods
       def inherited(child)
         super
-        child.model_attributes = model_attributes.dup
+        child.attribute_definitions = attribute_definitions.dup
       end
 
       # 
@@ -47,7 +30,7 @@ module CassandraObject
       # 
       def attribute(name, options)
         expected_type = options.delete :type
-        coder = options.delete :coder
+        coder         = options.delete :coder
 
         if expected_type.is_a?(Symbol)
           type_mapping = CassandraObject::Type.get_mapping(expected_type) || (raise "Unknown type #{type}")
@@ -57,7 +40,7 @@ module CassandraObject
           type_mapping = CassandraObject::Type::TypeMapping.new(expected_type, coder)
         end
 
-        model_attributes[name.to_sym] = Attribute.new(name, type_mapping, options)
+        attribute_definitions[name.to_sym] = AttributeMethods::Definition.new(name, type_mapping, options)
       end
 
       def json(name, options = {})
@@ -65,15 +48,15 @@ module CassandraObject
       end
 
       def instantiate_attribute(record, name, value)
-        if model_attribute = model_attributes[name.to_sym]
-          model_attribute.instantiate(record, value)
+        if attribute_definition = attribute_definitions[name.to_sym]
+          attribute_definition.instantiate(record, value)
         else
           raise NoMethodError, "Unknown attribute #{name.inspect}"
         end
       end
 
       def define_attribute_methods
-        super(model_attributes.keys)
+        super(attribute_definitions.keys)
       end
     end
 
@@ -107,7 +90,7 @@ module CassandraObject
 
     protected
       def attribute_method?(name)
-        !!model_attributes[name.to_sym]
+        !!attribute_definitions[name.to_sym]
       end
 
     private

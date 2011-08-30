@@ -5,7 +5,7 @@ class CassandraObject::Types::BooleanTypeTest < CassandraObject::Types::TestCase
     assert_equal '1', coder.encode(true)
     assert_equal '1', coder.encode('true')
     assert_equal '1', coder.encode('1')
-                      coder
+
     assert_equal '0', coder.encode(false)
     assert_equal '0', coder.encode('false')
     assert_equal '0', coder.encode('0')

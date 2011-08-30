@@ -15,6 +15,13 @@ module CassandraObject
         def <<(obj)
           modifying do
             super
+            setify!
+          end
+        end
+
+        def delete(obj)
+          modifying do
+            super
           end
         end
 
@@ -32,7 +39,6 @@ module CassandraObject
             end
 
             result = yield
-            setify!
 
             if !record.changed_attributes.key?(name) && original != self
               record.changed_attributes[name] = original

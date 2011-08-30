@@ -31,14 +31,14 @@ module CassandraObject
     include Connection
     include Consistency
     include Identity
-    include Attributes
+    include FinderMethods
     include Persistence
+    include Batches
+    include AttributeMethods
+    include AttributeMethods::Dirty
     include Callbacks
-    include Dirty
     include Validations
     include Associations
-    include Batches
-    include FinderMethods
     include Timestamps
 
     attr_reader :attributes
@@ -54,9 +54,9 @@ module CassandraObject
       @destroyed = false
       @attributes = {}
       self.attributes = attributes
-      model_attributes.each do |k, model_attribute|
-        unless read_attribute(k)
-          write_attribute(k, model_attribute.instantiate(self, nil))
+      attribute_definitions.each do |attr, attribute_definition|
+        unless read_attribute(attr)
+          write_attribute(attr, attribute_definition.instantiate(self, nil))
         end
       end
 
@@ -69,7 +69,7 @@ module CassandraObject
 
     def hash
       id.hash
-    end    
+    end
 
     def ==(comparison_object)
       comparison_object.equal?(self) ||

@@ -19,9 +19,17 @@ module CassandraObject
     teardown do
       Issue.delete_all
     end
-
+    
     def connection
       CassandraObject::Base.connection
+    end
+
+    def temp_object(&block)
+      Class.new(CassandraObject::Base) do
+        key :uuid
+        self.column_family = 'Issues'
+        instance_eval(&block)
+      end
     end
   end
 

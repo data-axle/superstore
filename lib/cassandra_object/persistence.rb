@@ -45,14 +45,14 @@ module CassandraObject
           # cassandra stores bytes, not strings, so it has no concept of encodings. The ruby thrift gem 
           # expects all strings to be encoded as ascii-8bit.
           # don't attempt to encode columns that are nil
-          memo[column_name.to_s] = value.nil? ? '' : model_attributes[column_name.to_sym].coder.encode(value).force_encoding('ASCII-8BIT')
+          memo[column_name.to_s] = value.nil? ? '' : attribute_definitions[column_name.to_sym].coder.encode(value).force_encoding('ASCII-8BIT')
           memo
         end.merge({"schema_version" => schema_version.to_s})
       end
 
       def instantiate_attributes(object, attributes)
         attributes = attributes.symbolize_keys
-        Hash[model_attributes.map { |k, model_attribute| [k.to_s, model_attribute.instantiate(object, attributes[k])] }]
+        Hash[attribute_definitions.map { |k, attribute_definition| [k.to_s, attribute_definition.instantiate(object, attributes[k])] }]
       end
     end
 
