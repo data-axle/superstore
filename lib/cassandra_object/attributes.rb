@@ -8,8 +8,9 @@ module CassandraObject
     end
 
     def instantiate(record, value)
-      return if value.nil? && coder.ignore_nil?
-
+      value ||= coder.default
+      return unless value
+        
       value = value.kind_of?(expected_type) ? value : coder.decode(value)
       coder.wrap(record, name, value)
     end
@@ -21,7 +22,7 @@ module CassandraObject
 
     included do
       class_attribute :model_attributes
-      self.model_attributes = {}.with_indifferent_access
+      self.model_attributes = {}
 
       attribute_method_suffix("", "=")
       
@@ -56,15 +57,15 @@ module CassandraObject
           type_mapping = CassandraObject::Type::TypeMapping.new(expected_type, coder)
         end
 
-        model_attributes[name] = Attribute.new(name, type_mapping, options)
+        model_attributes[name.to_sym] = Attribute.new(name, type_mapping, options)
       end
 
-      def json(name)
-        attribute(name, type: :hash)
+      def json(name, options = {})
+        attribute(name, options.update(type: :hash))
       end
 
       def instantiate_attribute(record, name, value)
-        if model_attribute = model_attributes[name]
+        if model_attribute = model_attributes[name.to_sym]
           model_attribute.instantiate(record, value)
         else
           raise NoMethodError, "Unknown attribute #{name.inspect}"

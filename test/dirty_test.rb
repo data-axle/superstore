@@ -8,10 +8,20 @@ class CassandraObject::DirtyTest < CassandraObject::TestCase
   end
 
   test 'save clears dirty' do
-    record = TestRecord.new(name: 'foo')
+    record = TestRecord.new name: 'foo'
     assert record.changed?
 
-    record.save
+    record.save!
+
+    assert !record.changed?
+  end
+
+  test 'reload clears dirty' do
+    record = TestRecord.create! name: 'foo'
+    record.name = 'bar'
+    assert record.changed?
+
+    record.reload
 
     assert !record.changed?
   end

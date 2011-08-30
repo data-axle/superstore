@@ -6,7 +6,7 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
 
   class Grandson < Son
   end
-  
+
   test 'base_class' do
     assert_equal Son, Son.base_class
     assert_equal Son, Grandson.base_class
@@ -14,6 +14,13 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
 
   test 'column family' do
     assert_equal 'CassandraObject::BaseTest::Sons', Son.column_family
+  end
+
+  test 'initialiaze' do
+    issue = Issue.new
+    
+    assert issue.new_record?
+    assert !issue.destroyed?
   end
 
   test 'to_param' do

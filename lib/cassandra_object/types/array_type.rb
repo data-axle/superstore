@@ -44,8 +44,8 @@ module CassandraObject
           end
       end
 
-      def ignore_nil?
-        false
+      def default
+        []
       end
 
       def encode(array)

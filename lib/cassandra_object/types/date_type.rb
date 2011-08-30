@@ -10,7 +10,6 @@ module CassandraObject
       end
 
       def decode(str)
-        return nil if str.empty?
         Date.parse(str)
       end
     end

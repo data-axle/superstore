@@ -6,8 +6,8 @@ module CassandraObject
         @options = options
       end
 
-      def ignore_nil?
-        true
+      def default
+        options[:default].dup if options[:default]
       end
 
       def encode(value)

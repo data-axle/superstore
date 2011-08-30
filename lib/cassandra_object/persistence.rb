@@ -23,7 +23,7 @@ module CassandraObject
 
       def write(key, attributes, schema_version)
         key.tap do |key|
-          attributes = encode_columns_hash(attributes, schema_version)
+          attributes = encode_attributes(attributes, schema_version)
           ActiveSupport::Notifications.instrument("insert.cassandra_object", column_family: column_family, key: key, attributes: attributes) do
             connection.insert(column_family, key.to_s, attributes, consistency: thrift_write_consistency)
           end
@@ -31,31 +31,28 @@ module CassandraObject
       end
 
       def instantiate(key, attributes)
-        # remove any attributes we don't know about. we would do this earlier, but we want to make such
-        # attributes available to migrations
-        attributes.delete_if { |k,_| model_attributes[k].nil? }
-
         allocate.tap do |object|
           object.instance_variable_set("@schema_version", attributes.delete('schema_version'))
-          object.instance_variable_set("@key", parse_key(key))
+          object.instance_variable_set("@key", parse_key(key)) if key
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
-          object.instance_variable_set("@attributes", decode_columns_hash(object, attributes))
+          object.instance_variable_set("@attributes", instantiate_attributes(object, attributes))
         end
       end
 
-      def encode_columns_hash(attributes, schema_version)
+      def encode_attributes(attributes, schema_version)
         attributes.inject({}) do |memo, (column_name, value)|
           # cassandra stores bytes, not strings, so it has no concept of encodings. The ruby thrift gem 
           # expects all strings to be encoded as ascii-8bit.
           # don't attempt to encode columns that are nil
-          memo[column_name.to_s] = value.nil? ? '' : model_attributes[column_name].coder.encode(value).force_encoding('ASCII-8BIT')
+          memo[column_name.to_s] = value.nil? ? '' : model_attributes[column_name.to_sym].coder.encode(value).force_encoding('ASCII-8BIT')
           memo
         end.merge({"schema_version" => schema_version.to_s})
       end
 
-      def decode_columns_hash(object, attributes)
-        Hash[attributes.map { |k, v| [k.to_s, instantiate_attribute(object, k, v)] }]
+      def instantiate_attributes(object, attributes)
+        attributes = attributes.symbolize_keys
+        Hash[model_attributes.map { |k, model_attribute| [k.to_s, model_attribute.instantiate(object, attributes[k])] }]
       end
     end
 

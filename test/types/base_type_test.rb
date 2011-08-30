@@ -1,8 +1,9 @@
 require 'test_helper'
 
 class CassandraObject::Types::BaseTypeTest < CassandraObject::Types::TestCase
-  test 'ignore_nil' do
-    assert_equal true, coder.ignore_nil?
+  test 'default' do
+    assert_equal nil, coder.default
+    assert_equal '5', CassandraObject::Types::BaseType.new(default: '5').default
   end
 
   test 'encode' do

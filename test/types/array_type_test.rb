@@ -1,10 +1,6 @@
 require 'test_helper'
 
 class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
-  test 'ignore_nil' do
-    assert_equal false, coder.ignore_nil?
-  end
-  
   test 'encode' do
     assert_equal ['1', '2'].to_json, coder.encode(['1', '2'])
     

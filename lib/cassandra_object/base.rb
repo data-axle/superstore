@@ -52,8 +52,14 @@ module CassandraObject
       @key = attributes.delete(:key)
       @new_record = true
       @destroyed = false
-      @attributes = {}.with_indifferent_access
+      @attributes = {}
       self.attributes = attributes
+      model_attributes.each do |k, model_attribute|
+        unless read_attribute(k)
+          write_attribute(k, model_attribute.instantiate(self, nil))
+        end
+      end
+
       @schema_version = self.class.current_schema_version
     end
 
