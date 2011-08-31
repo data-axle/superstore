@@ -33,7 +33,7 @@ module CassandraObject
         coder         = options.delete :coder
 
         if expected_type.is_a?(Symbol)
-          type_mapping = CassandraObject::Type.get_mapping(expected_type) || (raise "Unknown type #{type}")
+          type_mapping = CassandraObject::Type.get_mapping(expected_type) || (raise "Unknown type #{expected_type}")
         elsif coder.nil?
           raise "Must supply a :coder for #{name}"
         else
