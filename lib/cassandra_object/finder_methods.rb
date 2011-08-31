@@ -54,14 +54,9 @@ module CassandraObject
           connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency)
         end
 
-        attribute_results.inject({}) do |memo, (key, attributes)|
-          if attributes.empty?
-            memo[key] = nil
-          else
-            memo[parse_key(key)] = instantiate(key, attributes)
-          end
-          memo
-        end
+        Hash[attribute_results.map do |key, attributes|
+          [parse_key(key), attributes.present? ? instantiate(key, attributes) : nil]
+        end]
       end
     end
   end
