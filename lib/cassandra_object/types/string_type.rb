@@ -6,8 +6,8 @@ module CassandraObject
         str.dup
       end
 
-      def decode(str)
-        str.force_encoding('UTF-8')
+      def wrap(record, name, value)
+        value.force_encoding('UTF-8')
       end
     end
   end

@@ -44,6 +44,7 @@ module CassandraObject
       key.to_s
     end
 
+    # TODO test this
     def id=(key)
       self.key = self.class.parse_key(key)
       id
