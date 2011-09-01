@@ -15,4 +15,11 @@ class CassandraObject::Types::StringTypeTest < CassandraObject::Types::TestCase
       coder.wrap(nil, nil, '123'.force_encoding('ASCII-8BIT')).encoding
     )
   end
+
+  test 'wrap when frozen' do
+    assert_equal(
+      '123'.force_encoding('UTF-8').encoding,
+      coder.wrap(nil, nil, '123'.force_encoding('ASCII-8BIT').freeze).encoding
+    )
+  end
 end
