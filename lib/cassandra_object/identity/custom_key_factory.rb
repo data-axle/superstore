@@ -26,6 +26,10 @@ module CassandraObject
       def next_key(object)
         CustomKey.new(object.send(@method))
       end
+
+      def parse(value)
+        value
+      end
     end
   end
 end
