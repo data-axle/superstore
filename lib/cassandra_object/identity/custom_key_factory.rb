@@ -2,8 +2,6 @@ module CassandraObject
   module Identity
     class CustomKeyFactory < AbstractKeyFactory
       class CustomKey
-        include Key
-
         attr_reader :value
 
         def initialize(value)
@@ -14,16 +12,8 @@ module CassandraObject
           value
         end
 
-        def to_param
-          value
-        end
-
         def ==(other)
-          other.is_a?(CustomKey) && other.value == value
-        end
-
-        def eql?(other)
-          other == self
+          other.to_s == value
         end
       end
 
