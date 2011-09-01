@@ -24,7 +24,7 @@ class CassandraObject::AttributeMethodsTest < CassandraObject::TestCase
     model_attribute = TestIssue.attribute_definitions[:custom_column]
 
     assert_kind_of CustomCoder, model_attribute.coder
-    assert_equal CustomType, model_attribute.expected_type
+    assert_equal 'custom_column', model_attribute.name
   end
 
   test 'json attribute' do

@@ -25,7 +25,7 @@ module CassandraObject
       def reload
         super.tap do
           @previously_changed.try :clear
-          @changed_attributes.clear
+          @changed_attributes.try :clear
         end
       end
 

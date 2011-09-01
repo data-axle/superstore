@@ -1,17 +1,14 @@
 module CassandraObject
   class Type
-    class TypeMapping < Struct.new(:expected_type, :coder)
-    end
-
     cattr_accessor :attribute_types
     self.attribute_types = {}.with_indifferent_access
 
     class << self
-      def register(name, expected_type, coder)
-        attribute_types[name] = TypeMapping.new(expected_type, coder)
+      def register(name, coder)
+        attribute_types[name] = coder
       end
 
-      def get_mapping(name)
+      def get_coder(name)
         attribute_types[name]
       end
     end

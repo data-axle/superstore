@@ -29,18 +29,16 @@ module CassandraObject
       # attribute :ammo, type: Ammo, coder: AmmoCodec
       # 
       def attribute(name, options)
-        expected_type = options.delete :type
-        coder         = options.delete :coder
+        type  = options.delete :type
+        coder = options.delete :coder
 
-        if expected_type.is_a?(Symbol)
-          type_mapping = CassandraObject::Type.get_mapping(expected_type) || (raise "Unknown type #{expected_type}")
+        if type.is_a?(Symbol)
+          coder = CassandraObject::Type.get_coder(type) || (raise "Unknown type #{type}")
         elsif coder.nil?
           raise "Must supply a :coder for #{name}"
-        else
-          type_mapping = CassandraObject::Type::TypeMapping.new(expected_type, coder)
         end
 
-        attribute_definitions[name.to_sym] = AttributeMethods::Definition.new(name, type_mapping, options)
+        attribute_definitions[name.to_sym] = AttributeMethods::Definition.new(name, coder, options)
       end
 
       def json(name, options = {})
@@ -56,7 +54,13 @@ module CassandraObject
       end
 
       def define_attribute_methods
+        return if attribute_methods_generated?
         super(attribute_definitions.keys)
+        @attribute_methods_generated = true
+      end
+
+      def attribute_methods_generated?
+        @attribute_methods_generated ||= false
       end
     end
 
