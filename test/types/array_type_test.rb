@@ -11,6 +11,7 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
 
   test 'decode' do
     assert_equal ['1', '2'], coder.decode(['1', '2'].to_json)
+    assert_equal [], coder.decode(nil)
   end
 
   class TestIssue < CassandraObject::Base
@@ -38,7 +39,8 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
   end
 
   test 'unique array' do
-    issue = TestIssue.create favorite_colors: ['blue', 'red']
+    issue = TestIssue.create favorite_colors: ['blue', 'red', nil]
+    assert_equal ['blue', 'red'], issue.favorite_colors
 
     issue.favorite_colors = ['red', 'red', 'blue']
     assert !issue.changed?

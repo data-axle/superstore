@@ -28,6 +28,7 @@ module CassandraObject
         private
           def setify!
             if options[:unique]
+              compact!
               uniq!
               sort!
             end
@@ -60,9 +61,11 @@ module CassandraObject
       end
 
       def decode(str)
-        array = ActiveSupport::JSON.decode(str)
-        array.uniq! if options[:unique]
-        array
+        return [] if str.nil?
+
+        ActiveSupport::JSON.decode(str).tap do |array|
+          array.uniq! if options[:unique]
+        end
       end
 
       def wrap(record, name, value)
