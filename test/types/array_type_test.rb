@@ -12,6 +12,7 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
   test 'decode' do
     assert_equal ['1', '2'], coder.decode(['1', '2'].to_json)
     assert_equal [], coder.decode(nil)
+    assert_equal [], coder.decode('')
   end
 
   class TestIssue < CassandraObject::Base

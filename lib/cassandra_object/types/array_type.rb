@@ -61,7 +61,7 @@ module CassandraObject
       end
 
       def decode(str)
-        return [] if str.nil?
+        return [] if str.blank?
 
         ActiveSupport::JSON.decode(str).tap do |array|
           array.uniq! if options[:unique]
