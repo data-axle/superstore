@@ -30,7 +30,7 @@ module CassandraObject
             if options[:unique]
               compact!
               uniq!
-              sort!
+              begin sort! rescue ArgumentError end
             end
           end
 
