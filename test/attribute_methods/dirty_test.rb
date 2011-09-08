@@ -26,7 +26,7 @@ class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
     assert !record.changed?
   end
 
-  test 'typecase before dirty check' do
+  test 'typecast float before dirty check' do
     record = temp_object do
       float :price
     end.create(price: 5.01)
@@ -35,6 +35,20 @@ class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
     assert !record.changed?
 
     record.price = '7.12'
+    assert record.changed?
+  end
+
+  test 'boolean' do
+    record = temp_object do
+      boolean :awesome
+    end.create(awesome: false)
+
+    p record.changes
+
+    record.awesome = false
+    assert !record.changed?
+
+    record.awesome = true
     assert record.changed?
   end
 end

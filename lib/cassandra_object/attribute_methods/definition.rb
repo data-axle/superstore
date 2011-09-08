@@ -8,9 +8,9 @@ module CassandraObject
       end
 
       def instantiate(record, value)
-        value ||= coder.default
+        value = value.nil? ? coder.default : value
         return unless value
-      
+
         value = value.kind_of?(String) ? coder.decode(value) : value
         coder.wrap(record, name, value)
       end
