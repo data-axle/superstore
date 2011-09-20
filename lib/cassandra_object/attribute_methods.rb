@@ -72,6 +72,10 @@ module CassandraObject
       @attributes[name.to_s]
     end
 
+    def attribute_exists?(name)
+      @attributes.key?(name.to_s)
+    end
+
     def attributes=(attributes)
       attributes.each do |(name, value)|
         send("#{name}=", value)

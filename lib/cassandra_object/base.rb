@@ -55,7 +55,7 @@ module CassandraObject
       @attributes = {}
       self.attributes = attributes
       attribute_definitions.each do |attr, attribute_definition|
-        unless read_attribute(attr)
+        unless attribute_exists?(attr)
           write_attribute(attr, attribute_definition.instantiate(self, nil))
         end
       end

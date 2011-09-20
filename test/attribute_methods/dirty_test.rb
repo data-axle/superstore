@@ -42,9 +42,7 @@ class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
     record = temp_object do
       boolean :awesome
     end.create(awesome: false)
-
-    p record.changes
-
+    
     record.awesome = false
     assert !record.changed?
 

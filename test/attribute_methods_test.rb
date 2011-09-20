@@ -59,4 +59,15 @@ class CassandraObject::AttributeMethodsTest < CassandraObject::TestCase
 
     assert_equal 'foo', issue.description
   end
+
+  test 'read and write attributes' do
+    issue = Issue.new
+    assert_nil issue.read_attribute(:description)
+
+    issue.write_attribute(:description, nil)
+    assert_nil issue.read_attribute(:description)
+
+    issue.write_attribute(:description, 'foo')
+    assert_equal 'foo', issue.read_attribute(:description)
+  end
 end

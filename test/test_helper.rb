@@ -28,6 +28,11 @@ module CassandraObject
       Class.new(CassandraObject::Base) do
         key :uuid
         self.column_family = 'Issues'
+
+        def self.name
+          'Issue'
+        end
+
         instance_eval(&block)
       end
     end

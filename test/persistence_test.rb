@@ -1,6 +1,27 @@
 require 'test_helper'
 
 class CassandraObject::PersistenceTest < CassandraObject::TestCase
+  test 'encode_attributes' do
+    klass = temp_object do
+      string :description
+    end
+    
+    assert_equal(
+      {'schema_version' => 'foo'},
+      klass.encode_attributes({}, 'foo')
+    )
+
+    assert_equal(
+      {'schema_version' => 'foo'},
+      klass.encode_attributes({description: nil}, 'foo')
+    )
+
+    assert_equal(
+      {'description' => 'lol', 'schema_version' => 'foo'},
+      klass.encode_attributes({description: 'lol'}, 'foo')
+    )
+  end
+
   test 'persistance inquiries' do
     issue = Issue.new
     assert issue.new_record?
@@ -19,16 +40,17 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
   end
 
   test 'save!' do
-    begin
-      Issue.validates(:description, presence: true)
+    klass = temp_object do
+      string :description
+      validates :description, presence: true
+    end
+    
+    record = klass.new(description: 'bad')
+    record.save!
 
-      issue = Issue.new(description: 'bad')
-      issue.save!
-
-      issue = Issue.new
-      assert_raise(CassandraObject::RecordInvalid) { issue.save! }
-    ensure
-      Issue.reset_callbacks(:validate)
+    assert_raise CassandraObject::RecordInvalid do
+      record = klass.new
+      record.save!
     end
   end
 
