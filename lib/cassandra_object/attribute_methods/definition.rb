@@ -3,8 +3,8 @@ module CassandraObject
     class Definition
       attr_reader :name, :coder
       def initialize(name, coder, options)
-        @name           = name.to_s
-        @coder          = coder.new(options)
+        @name   = name.to_s
+        @coder  = coder.new(options)
       end
 
       def instantiate(record, value)
