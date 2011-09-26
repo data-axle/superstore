@@ -83,3 +83,5 @@ module CassandraObject
     end
   end
 end
+
+ActiveSupport.run_load_hooks(:cassandra_object, CassandraObject::Base)
