@@ -11,9 +11,9 @@ module CassandraObject
 
       %w(array boolean date float integer time time_with_zone string).each do |type|
         instance_eval <<-EOV, __FILE__, __LINE__ + 1
-          def #{type}(name, options = {})                                   # def string(name, options = {})
-            attribute(name, options.update(type: :#{type}))                 #   attribute(name, options.update(type: :string))
-          end                                                               # end
+          def #{type}(name, options = {})                                 # def string(name, options = {})
+            attribute(name, options.update(type: :#{type}))               #   attribute(name, options.update(type: :string))
+          end                                                             # end
         EOV
       end
     end
