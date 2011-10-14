@@ -49,7 +49,7 @@ module CassandraObject
     
         unless missing_keys.empty?
           @target_class.multi_get(missing_keys, :quorum=>true).each do |(key, result)|
-            index_key = index_results.index(key)
+            index_key = index_results.key(key)
             if result.nil?
               remove(index_key)
               results.delete(key)
@@ -80,7 +80,7 @@ module CassandraObject
     end
     
     def remove(index_key)
-      connection.remove(@column_family, @key, @super_column, index_key, consistency: target_class.thrift_write_consistency)
+      connection.remove(@column_family, @key, @super_column, index_key, consistency: @target_class.thrift_write_consistency)
     end
     
     def validator(&validator)
