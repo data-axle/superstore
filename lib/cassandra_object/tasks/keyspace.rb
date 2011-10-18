@@ -19,7 +19,7 @@ module CassandraObject
 
       def create(name, options = {})
         opts = { :name => name.to_s,
-                 :strategy_class => 'org.apache.cassandra.locator.LocalStrategy',
+                 :strategy_class => 'org.apache.cassandra.locator.SimpleStrategy',
                  :replication_factor => 1,
                  :cf_defs => [] }.merge(options)
 
