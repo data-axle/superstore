@@ -1,10 +1,17 @@
 require 'test_helper'
 
 class CassandraObject::IdentityTest < CassandraObject::TestCase
-  test 'id' do
+  test 'get id' do
     issue = Issue.create
 
     assert_equal issue.key.to_s, issue.id
+  end
+
+  test 'set id' do
+    uuid = SimpleUUID::UUID.new.to_guid
+    issue = Issue.create id: uuid
+
+    assert_equal issue.key.to_s, uuid
   end
 
   test 'equality of new records' do
