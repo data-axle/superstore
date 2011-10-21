@@ -26,6 +26,10 @@ module CassandraObject
           yield batch
         end
       end
+
+      def batch(&block)
+        connection.batch(&block)
+      end
     end
   end
 end

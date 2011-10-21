@@ -27,4 +27,14 @@ class CassandraObject::BatchesTest < CassandraObject::TestCase
     assert issue_batches.any? { |issues| issues.size == 2 }
     assert issue_batches.any? { |issues| issues.size == 1 }
   end
+
+  test 'batch' do
+    Issue.batch do
+      Issue.create
+      Issue.create
+      assert_equal 0, Issue.count
+    end
+
+    assert_equal 2, Issue.count
+  end
 end
