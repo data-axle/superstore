@@ -47,8 +47,8 @@ module CassandraObject
     autoload :BooleanType
     autoload :DateType
     autoload :FloatType
-    autoload :HashType
     autoload :IntegerType
+    autoload :JsonType
     autoload :StringType
     autoload :TimeType
     autoload :TimeWithZoneType

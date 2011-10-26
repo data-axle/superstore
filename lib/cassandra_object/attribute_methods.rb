@@ -9,7 +9,7 @@ module CassandraObject
 
       attribute_method_suffix("", "=")
 
-      %w(array boolean date float integer time time_with_zone string).each do |type|
+      %w(array boolean date float integer json string time time_with_zone).each do |type|
         instance_eval <<-EOV, __FILE__, __LINE__ + 1
           def #{type}(name, options = {})                                 # def string(name, options = {})
             attribute(name, options.update(type: :#{type}))               #   attribute(name, options.update(type: :string))
@@ -39,10 +39,6 @@ module CassandraObject
         end
 
         attribute_definitions[name.to_sym] = AttributeMethods::Definition.new(name, coder, options)
-      end
-
-      def json(name, options = {})
-        attribute(name, options.update(type: :hash))
       end
 
       def instantiate_attribute(record, name, value)

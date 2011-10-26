@@ -1,8 +1,7 @@
 module CassandraObject
   module Types
-    class HashType < BaseType
+    class JsonType < BaseType
       def encode(hash)
-        raise ArgumentError.new("#{self} requires a Hash") unless hash.kind_of?(Hash)
         ActiveSupport::JSON.encode(hash)
       end
 
