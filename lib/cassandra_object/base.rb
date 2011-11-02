@@ -56,7 +56,7 @@ module CassandraObject
       self.attributes = attributes
       attribute_definitions.each do |attr, attribute_definition|
         unless attribute_exists?(attr)
-          write_attribute(attr, attribute_definition.instantiate(self, nil))
+          self.attributes[attr.to_s] = self.class.instantiate_attribute(self, attr, nil)
         end
       end
 
