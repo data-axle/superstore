@@ -8,7 +8,7 @@ module CassandraObject
 
         if key_string.blank?
           raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{key.inspect}"
-        elsif attributes = connection.get(column_family, key_string).presence
+        elsif attributes = connection.get(column_family, key_string, {:count => 500}).presence
           instantiate(key_string, attributes)
         else
           raise CassandraObject::RecordNotFound
@@ -51,7 +51,7 @@ module CassandraObject
 
       def multi_get(keys, options={})
         attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", column_family: column_family, keys: keys) do
-          connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency)
+          connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency, count: 500)
         end
 
         Hash[attribute_results.map do |key, attributes|
