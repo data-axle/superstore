@@ -17,12 +17,12 @@ class CassandraObject::BatchesTest < CassandraObject::TestCase
     Issue.create 
     Issue.create
     Issue.create
-    
+
     issue_batches = []
     Issue.find_in_batches(batch_size: 2) do |issues|
       issue_batches << issues
     end
-    
+
     assert_equal 2, issue_batches.size
     assert issue_batches.any? { |issues| issues.size == 2 }
     assert issue_batches.any? { |issues| issues.size == 1 }

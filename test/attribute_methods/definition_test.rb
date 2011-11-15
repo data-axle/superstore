@@ -4,7 +4,7 @@ class CassandraObject::AttributeMethods::DefinitionTest < CassandraObject::TestC
   class TestType < CassandraObject::Types::BaseType
   end
   
-  test 'instantiate' do
+  test 'typecast' do
     definition = CassandraObject::AttributeMethods::Definition.new(:foo, TestType, {a: :b})
 
     assert_equal 'foo', definition.name

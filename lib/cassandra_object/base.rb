@@ -36,6 +36,7 @@ module CassandraObject
     include Batches
     include AttributeMethods
     include AttributeMethods::Dirty
+    include AttributeMethods::Typecasting
     include Callbacks
     include Validations
     include Associations
@@ -56,7 +57,7 @@ module CassandraObject
       self.attributes = attributes
       attribute_definitions.each do |attr, attribute_definition|
         unless attribute_exists?(attr)
-          self.attributes[attr.to_s] = self.class.instantiate_attribute(self, attr, nil)
+          self.attributes[attr.to_s] = self.class.typecast_attribute(self, attr, nil)
         end
       end
 
