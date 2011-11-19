@@ -1,8 +1,6 @@
-require 'rubygems'
 require 'bundler/setup'
-require 'test/unit'
-require 'cassandra/0.8'
-require 'gotime-cassandra_object'
+require 'minitest/autorun'
+Bundler.require(:default, :test)
 
 CassandraObject::Base.establish_connection(
   keyspace: 'place_directory_development',
