@@ -24,7 +24,7 @@ module CassandraObject
       def all(options = {})
         limit = options[:limit] || 100
         results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", column_family: column_family, key_count: limit) do
-          connection.get_range(column_family, key_count: limit, consistency: thrift_read_consistency)
+          connection.get_range(column_family, key_count: limit, consistency: thrift_read_consistency, count: 500)
         end
 
         results.map do |k, v|
