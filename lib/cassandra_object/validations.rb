@@ -24,12 +24,6 @@ module CassandraObject
       end
     end
 
-    def valid?
-      run_callbacks :validation do
-        super
-      end
-    end
-
     def save(options={})
       perform_validations(options) ?  super : false
     end
