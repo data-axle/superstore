@@ -4,7 +4,7 @@ module CassandraObject
 
     module ClassMethods
       def find(key)
-        key_string = key.try :to_s
+        key_string = key.try(:to_s)
 
         if key_string.blank?
           raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{key.inspect}"

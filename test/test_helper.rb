@@ -2,24 +2,13 @@ require 'bundler/setup'
 require 'minitest/autorun'
 Bundler.require(:default, :test)
 
-CassandraObject::Base.establish_connection(
-  keyspace: 'place_directory_development',
-  servers: '127.0.0.1:9160'
-)
-
-class Issue < CassandraObject::Base
-  key :uuid
-  string :description
-end
+require 'support/connect'
+autoload :Issue, 'support/issue'
 
 module CassandraObject
   class TestCase < ActiveSupport::TestCase
     teardown do
       Issue.delete_all
-    end
-    
-    def connection
-      CassandraObject::Base.connection
     end
 
     def temp_object(&block)
