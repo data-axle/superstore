@@ -75,7 +75,7 @@ module CassandraObject
     def ==(comparison_object)
       comparison_object.equal?(self) ||
         (comparison_object.instance_of?(self.class) &&
-          comparison_object.key == key &&
+          comparison_object.id == id &&
           !comparison_object.new_record?)
     end
 

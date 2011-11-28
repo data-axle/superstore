@@ -14,18 +14,6 @@ class CassandraObject::IdentityTest < CassandraObject::TestCase
     assert_equal issue.key.to_s, uuid
   end
 
-  test 'equality of new records' do
-    assert_not_equal Issue.new, Issue.new
-  end
-
-  test 'equality' do
-    first_issue = Issue.create
-    second_issue = Issue.create
-
-    assert_equal first_issue, first_issue
-    assert_not_equal first_issue, second_issue
-  end
-
   test 'parse_key' do
     assert_kind_of(
       CassandraObject::Identity::UUIDKeyFactory::UUID,
