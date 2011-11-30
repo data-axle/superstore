@@ -6,12 +6,12 @@ module CassandraObject
       attribute :created_at, type: :time#_with_zone
       attribute :updated_at, type: :time#_with_zone
 
-      before_create do #|r|
+      before_create do
         self.created_at ||= Time.current
         self.updated_at ||= Time.current
       end
 
-      before_update if: :changed? do #|r|
+      before_update if: :changed? do
         self.updated_at = Time.current
       end
     end

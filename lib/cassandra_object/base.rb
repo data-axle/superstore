@@ -43,7 +43,6 @@ module CassandraObject
     include Timestamps
 
     attr_reader :attributes
-    attr_accessor :key
 
     include Serialization
     include Migrations

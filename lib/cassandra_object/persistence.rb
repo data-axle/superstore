@@ -115,10 +115,9 @@ module CassandraObject
       end
 
       def create
-        @key ||= self.class.next_key(self)
         write
         @new_record = false
-        @key
+        key
       end
     
       def update

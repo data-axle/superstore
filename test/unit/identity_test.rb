@@ -1,15 +1,22 @@
 require 'test_helper'
 
 class CassandraObject::IdentityTest < CassandraObject::TestCase
+  test 'get key' do
+    issue = Issue.new
+
+    assert_not_nil issue.key
+  end
+
+
   test 'get id' do
-    issue = Issue.create
+    issue = Issue.new
 
     assert_equal issue.key.to_s, issue.id
   end
 
   test 'set id' do
     uuid = SimpleUUID::UUID.new.to_guid
-    issue = Issue.create id: uuid
+    issue = Issue.new id: uuid
 
     assert_equal issue.key.to_s, uuid
   end
