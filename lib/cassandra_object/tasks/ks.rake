@@ -19,7 +19,7 @@ namespace :ks do
   end
 
   namespace :migrate do
-    task :reset => ["ks:drop", "ks:create", "ks:migrate"]]
+    task :reset => ["ks:drop", "ks:create", "ks:migrate"]
   end
 
   desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n)'
