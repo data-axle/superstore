@@ -12,7 +12,7 @@ module CassandraObject
       end
 
       def column_family
-        @column_family || name.pluralize
+        @column_family ||= base_class.name.pluralize
       end
 
       def base_class
@@ -37,6 +37,7 @@ module CassandraObject
     include AttributeMethods
     include AttributeMethods::Dirty
     include AttributeMethods::Typecasting
+    include BelongsTo
     include Callbacks
     include Validations
     include Associations

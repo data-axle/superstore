@@ -14,6 +14,7 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
 
   test 'column family' do
     assert_equal 'CassandraObject::BaseTest::Sons', Son.column_family
+    assert_equal 'CassandraObject::BaseTest::Sons', Grandson.column_family
   end
 
   test 'initialiaze' do
