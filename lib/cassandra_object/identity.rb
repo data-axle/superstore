@@ -10,6 +10,10 @@ module CassandraObject
     autoload :HashedNaturalKeyFactory
     autoload :CustomKeyFactory
 
+    included do
+      class_attribute :key_factory
+    end
+
     module ClassMethods
       # Indicate what kind of key the model will have: uuid or natural
       #
@@ -17,26 +21,26 @@ module CassandraObject
       # @param the options you want to pass along to the key factory (like :attributes => :name, for a natural key).
       # 
       def key(name_or_factory = :uuid, *options)
-        @key_factory = case name_or_factory
-        when :uuid
-          UUIDKeyFactory.new
-        when :natural
-          NaturalKeyFactory.new(*options)
-        when :custom
-          CustomKeyFactory.new(*options)
-        else
-          name_or_factory
-        end
+        self.key_factory = case name_or_factory
+          when :uuid
+            UUIDKeyFactory.new
+          when :natural
+            NaturalKeyFactory.new(*options)
+          when :custom
+            CustomKeyFactory.new(*options)
+          else
+            name_or_factory
+          end
       end
 
       def next_key(object = nil)
-        @key_factory.next_key(object).tap do |key|
+        key_factory.next_key(object).tap do |key|
           raise "Keys may not be nil" if key.nil?
         end
       end
 
       def parse_key(string)
-        @key_factory.parse(string)
+        key_factory.parse(string)
       end
     end
 
