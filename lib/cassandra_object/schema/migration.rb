@@ -96,11 +96,9 @@ module CassandraObject
       end
 
       private
-
-      def self.column_family_tasks
-        Tasks::ColumnFamily.new(CassandraObject::Base.connection.keyspace)
-      end
-
+        def self.column_family_tasks
+          Tasks::ColumnFamily.new(CassandraObject::Base.connection.keyspace)
+        end
     end
   end
 end

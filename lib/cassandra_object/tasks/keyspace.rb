@@ -62,14 +62,13 @@ module CassandraObject
       end
 
       private
-
-      def connection
-        unless @connection
-          c = CassandraObject::Base.connection
-          @connection = Cassandra.new('system', c.servers, c.thrift_client_options)
+        def connection
+          unless @connection
+            c = CassandraObject::Base.connection
+            @connection = Cassandra.new('system', c.servers, c.thrift_client_options)
+          end
+          @connection
         end
-        @connection
-      end
 
     end
 

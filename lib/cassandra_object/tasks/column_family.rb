@@ -1,7 +1,5 @@
 module CassandraObject
-
   module Tasks
-
     class ColumnFamily
 
       COMPARATOR_TYPES = { :time      => 'TimeUUIDType',
@@ -21,14 +19,14 @@ module CassandraObject
         connection.schema.cf_defs.find { |cf_def| cf_def.name == name.to_s }
       end
 
-      def create(name, &block)
+      def create(name)
         cf = Cassandra::ColumnFamily.new
         cf.name = name.to_s
         cf.keyspace = @keyspace.to_s
         cf.comparator_type = 'BytesType'
         cf.column_type = 'Standard'
 
-        block.call cf if block
+        yield(cf) if block_given?
 
         post_process_column_family(cf)
         connection.add_column_family(cf)
