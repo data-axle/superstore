@@ -40,7 +40,6 @@ module CassandraObject
     include BelongsTo
     include Callbacks
     include Validations
-    include Associations
     include Timestamps
 
     attr_reader :attributes
