@@ -5,5 +5,4 @@ CassandraObject::Type.register(:float,          CassandraObject::Types::FloatTyp
 CassandraObject::Type.register(:integer,        CassandraObject::Types::IntegerType)
 CassandraObject::Type.register(:json,           CassandraObject::Types::JsonType)
 CassandraObject::Type.register(:time,           CassandraObject::Types::TimeType)
-CassandraObject::Type.register(:time_with_zone, CassandraObject::Types::TimeWithZoneType)
 CassandraObject::Type.register(:string,         CassandraObject::Types::StringType)

@@ -52,7 +52,6 @@ module CassandraObject
     autoload :JsonType
     autoload :StringType
     autoload :TimeType
-    autoload :TimeWithZoneType
   end
 end
 
