@@ -58,9 +58,8 @@ namespace :ks do
 
   private
     def schema_dump(env = Rails.env)
-      ks = set_keyspace env
       File.open "#{Rails.root}/ks/schema.json", 'w' do |file|
-        schema = ActiveSupport::JSON.decode(ks.schema_dump.to_json)
+        schema = ActiveSupport::JSON.decode(get_keyspace.schema_dump.to_json)
         JSON.pretty_generate(schema).split(/\n/).each do |line|
           file.puts line
         end
@@ -68,10 +67,9 @@ namespace :ks do
     end
 
     def schema_load(env = Rails.env)
-      ks = set_keyspace env
       File.open "#{Rails.root}/ks/schema.json", 'r' do |file|
         hash = JSON.parse(file.read(nil))
-        ks.schema_load CassandraObject::Tasks::Keyspace.parse(hash)
+        get_keyspace.schema_load CassandraObject::Tasks::Keyspace.parse(hash)
       end
     end
 
@@ -80,6 +78,12 @@ namespace :ks do
         cassandra_configs = YAML.load_file(Rails.root.join("cassandra_config", "cassandra.yml"))
         cassandra_configs[Rails.env || 'development']
       end
+    end
+
+    def get_keyspace
+      ks = CassandraObject::Tasks::Keyspace.new
+      ks.set cassandra_config['keyspace']
+      ks
     end
 end
 
