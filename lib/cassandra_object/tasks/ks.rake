@@ -75,7 +75,7 @@ namespace :ks do
 
     def cassandra_config
       @cassandra_config ||= begin
-        cassandra_configs = YAML.load_file(Rails.root.join("cassandra_config", "cassandra.yml"))
+        cassandra_configs = YAML.load_file(Rails.root.join("config", "cassandra.yml"))
         cassandra_configs[Rails.env || 'development']
       end
     end
