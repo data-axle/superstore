@@ -42,6 +42,10 @@ module CassandraObject
       def parse_key(string)
         key_factory.parse(string)
       end
+
+      def primary_key
+        'id'
+      end
     end
 
     def key
