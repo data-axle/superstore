@@ -22,4 +22,11 @@ class CassandraObject::Types::StringTypeTest < CassandraObject::Types::TestCase
       coder.wrap(nil, nil, '123'.force_encoding('ASCII-8BIT').freeze).encoding
     )
   end
+
+  test 'wrap when not a string' do
+    assert_equal(
+      "123",
+      coder.wrap(nil, nil, 123)
+    )
+  end
 end
