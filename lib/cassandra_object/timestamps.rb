@@ -3,8 +3,8 @@ module CassandraObject
     extend ActiveSupport::Concern
 
     included do
-      attribute :created_at, type: :time#_with_zone
-      attribute :updated_at, type: :time#_with_zone
+      attribute :created_at, type: :time
+      attribute :updated_at, type: :time
 
       before_create do
         self.created_at ||= Time.current
