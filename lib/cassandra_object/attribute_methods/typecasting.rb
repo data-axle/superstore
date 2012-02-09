@@ -27,8 +27,8 @@ module CassandraObject
         # attribute :ammo, type: Ammo, coder: AmmoCodec
         # 
         def attribute(name, options)
-          type  = options.delete :type
-          coder = options.delete :coder
+          type  = options[:type]
+          coder = options[:coder]
 
           if type.is_a?(Symbol)
             coder = CassandraObject::Type.get_coder(type) || (raise "Unknown type #{type}")
