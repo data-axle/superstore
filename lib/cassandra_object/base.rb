@@ -38,8 +38,8 @@ module CassandraObject
     include AttributeMethods::Dirty
     include AttributeMethods::Typecasting
     include BelongsTo
-    include Callbacks
     include Validations
+    include Callbacks
     include Timestamps
 
     attr_reader :attributes
