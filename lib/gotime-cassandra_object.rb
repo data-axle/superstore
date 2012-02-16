@@ -16,7 +16,6 @@ module CassandraObject
   autoload :Inspect
   autoload :Serialization
   autoload :Migrations
-  autoload :Cursor
   autoload :Collection
   autoload :Mocking
   autoload :Batches

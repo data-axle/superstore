@@ -12,7 +12,6 @@ module CassandraObject
     include ActiveModel::Validations
     
     included do
-      define_model_callbacks :validation
       define_callbacks :validate, scope: :name
     end
     

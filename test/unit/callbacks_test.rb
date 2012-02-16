@@ -6,7 +6,7 @@ class CassandraObject::CallbacksTest < CassandraObject::TestCase
     key :uuid
     string :description
 
-    %w(after_save after_create after_update after_destroy).each do |method|
+    %w(before_validation after_validation after_save after_create after_update after_destroy).each do |method|
       send(method) do
         callback_history << method
       end
@@ -24,7 +24,7 @@ class CassandraObject::CallbacksTest < CassandraObject::TestCase
   test 'create' do
     issue = TestIssue.create
 
-    assert_equal ['after_create', 'after_save'], issue.callback_history
+    assert_equal ['before_validation', 'after_validation', 'after_create', 'after_save'], issue.callback_history
   end
 
   test 'update' do

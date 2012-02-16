@@ -4,6 +4,8 @@ module CassandraObject
 
     included do
       extend ActiveModel::Callbacks
+      include ActiveModel::Validations::Callbacks
+
       define_model_callbacks :save, :create, :update, :destroy
     end
 
