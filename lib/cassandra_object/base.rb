@@ -31,6 +31,7 @@ module CassandraObject
     include Connection
     include Consistency
     include Identity
+    include Inspect
     include FinderMethods
     include Persistence
     include Batches
