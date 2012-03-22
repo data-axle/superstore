@@ -1,6 +1,5 @@
 module CassandraObject
   module Schema
-
     class Migration
 
       @@verbose = true
