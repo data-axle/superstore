@@ -138,32 +138,32 @@ module CassandraObject
 
       def migrations
         @migrations ||= begin
-                          files = Dir["#{@migrations_path}/[0-9]*_*.rb"]
+          files = Dir["#{@migrations_path}/[0-9]*_*.rb"]
 
-                          migrations = files.inject([]) do |klasses, file|
-                            version, name = file.scan(/([0-9]+)_([_a-z0-9]*).rb/).first
+          migrations = files.inject([]) do |klasses, file|
+            version, name = file.scan(/([0-9]+)_([_a-z0-9]*).rb/).first
 
-                            raise IllegalMigrationNameError.new(file) unless version
-                            version = version.to_i
+            raise IllegalMigrationNameError.new(file) unless version
+            version = version.to_i
 
-                            if klasses.detect { |m| m.version == version }
-                              raise DuplicateMigrationVersionError.new(version)
-                            end
+            if klasses.detect { |m| m.version == version }
+              raise DuplicateMigrationVersionError.new(version)
+            end
 
-                            if klasses.detect { |m| m.name == name.camelize }
-                              raise DuplicateMigrationNameError.new(name.camelize)
-                            end
+            if klasses.detect { |m| m.name == name.camelize }
+              raise DuplicateMigrationNameError.new(name.camelize)
+            end
 
-                            migration = MigrationProxy.new
-                            migration.name     = name.camelize
-                            migration.version  = version
-                            migration.filename = file
-                            klasses << migration
-                          end
+            migration = MigrationProxy.new
+            migration.name     = name.camelize
+            migration.version  = version
+            migration.filename = file
+            klasses << migration
+          end
 
-                          migrations = migrations.sort_by { |m| m.version }
-                          down? ? migrations.reverse : migrations
-                        end
+          migrations = migrations.sort_by { |m| m.version }
+          down? ? migrations.reverse : migrations
+        end
       end
 
       def pending_migrations
@@ -177,35 +177,34 @@ module CassandraObject
 
       private
 
-      def column_family_tasks
-        Tasks::ColumnFamily.new(connection.keyspace)
-      end
-
-      def connection
-        CassandraObject::Base.connection
-      end
-
-      def record_version_state_after_migrating(migration)
-        sm_cf = self.class.schema_migrations_column_family
-
-        @migrated_versions ||= []
-        if down?
-          @migrated_versions.delete(migration.version)
-          connection.remove sm_cf, 'all', migration.version
-        else
-          @migrated_versions.push(migration.version).sort!
-          connection.insert sm_cf, 'all', { migration.version => migration.name }
+        def column_family_tasks
+          Tasks::ColumnFamily.new(connection.keyspace)
         end
-      end
 
-      def up?
-        @direction == :up
-      end
+        def connection
+          CassandraObject::Base.connection
+        end
 
-      def down?
-        @direction == :down
-      end
+        def record_version_state_after_migrating(migration)
+          sm_cf = self.class.schema_migrations_column_family
 
+          @migrated_versions ||= []
+          if down?
+            @migrated_versions.delete(migration.version)
+            connection.remove sm_cf, 'all', migration.version
+          else
+            @migrated_versions.push(migration.version).sort!
+            connection.insert sm_cf, 'all', { migration.version => migration.name }
+          end
+        end
+
+        def up?
+          @direction == :up
+        end
+
+        def down?
+          @direction == :down
+        end
     end
   end
 end
