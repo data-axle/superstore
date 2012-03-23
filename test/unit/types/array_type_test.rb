@@ -16,7 +16,6 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
   end
 
   class TestIssue < CassandraObject::Base
-    key :uuid
     self.column_family = 'Issues'
     array :favorite_colors, unique: true
   end
