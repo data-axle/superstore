@@ -4,10 +4,18 @@ module CassandraObject
     include ActiveModel::AttributeMethods
 
     included do
-      alias :[] :read_attribute
-      alias :[]= :write_attribute
-
       attribute_method_suffix("", "=")
+      
+      # (Alias for the protected read_attribute method).
+      def [](attr_name)
+        read_attribute(attr_name)
+      end
+
+      # Updates the attribute identified by <tt>attr_name</tt> with the specified +value+.
+      # (Alias for the protected write_attribute method).
+      def []=(attr_name, value)
+        write_attribute(attr_name, value)
+      end
     end
 
     module ClassMethods

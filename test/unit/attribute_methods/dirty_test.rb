@@ -38,7 +38,7 @@ class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
     assert record.changed?
   end
 
-  test 'boolean' do
+  test 'typecast boolean before dirty check' do
     record = temp_object do
       boolean :awesome
     end.create(awesome: false)
@@ -48,5 +48,24 @@ class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
 
     record.awesome = true
     assert record.changed?
+  end
+
+  test 'write_attribute' do
+    object = temp_object do
+      string :name
+    end
+
+    expected = {"name"=>[nil, "foo"]}
+
+    object.new.tap do |record|
+      record.name = 'foo'
+      assert_equal expected, record.changes
+    end
+
+    object.new.tap do |record|
+      record[:name] = 'foo'
+      # record.write_attribute(:name, 'foo')
+      assert_equal expected, record.changes
+    end
   end
 end
