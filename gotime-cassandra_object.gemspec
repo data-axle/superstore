@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'gotime-cassandra_object'
-  s.version = '2.10.9'
+  s.version = '2.10.10'
   s.description = 'Cassandra ActiveModel'
   s.summary = 'Cassandra ActiveModel'
 
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
 
   s.authors = ["Michael Koziarski", "gotime"]
   s.email = 'gems@gotime.com'
-  s.homepage = 'http://github.com/gotime/cassandra_object'
+  s.homepage = 'http://github.com/data-axle/cassandra_object'
 
   s.extra_rdoc_files = ["README.rdoc"]
   s.files       = `git ls-files`.split("\n")
