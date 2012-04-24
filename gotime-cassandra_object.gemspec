@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'gotime-cassandra_object'
-  s.version = '2.10.10'
+  s.version = '2.11.1'
   s.description = 'Cassandra ActiveModel'
   s.summary = 'Cassandra ActiveModel'
 
@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('activemodel', ">= 3.0")
   s.add_runtime_dependency('cassandra', ">= 0.12.0")
+  s.add_runtime_dependency('thrift_client', "~> 0.7.0")
 
   s.add_development_dependency('bundler')
 end

@@ -13,7 +13,6 @@ module CassandraObject
 
     def temp_object(&block)
       Class.new(CassandraObject::Base) do
-        key :uuid
         self.column_family = 'Issues'
 
         def self.name

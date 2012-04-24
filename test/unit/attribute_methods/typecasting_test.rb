@@ -8,7 +8,6 @@ class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::Test
   end
 
   class TestIssue < CassandraObject::Base
-    key :uuid
     self.column_family = 'Issues'
 
     attribute :custom_column, type: CustomType, coder: CustomCoder

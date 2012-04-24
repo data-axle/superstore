@@ -12,6 +12,7 @@ module CassandraObject
 
     included do
       class_attribute :key_factory
+      key :uuid
     end
 
     module ClassMethods

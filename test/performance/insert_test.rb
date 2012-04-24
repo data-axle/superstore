@@ -1,6 +1,5 @@
 
 # class BigIssue < CassandraObject::Base
-#   key :uuid
 #   self.column_family = 'Issues'
 # 
 #   1.upto(400) do |i|
@@ -9,7 +8,6 @@
 # end
 # 
 # class SmallIssue
-#   key :uuid
 #   self.column_family = 'Issues'
 # 
 #   string :foo

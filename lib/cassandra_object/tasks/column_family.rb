@@ -1,15 +1,10 @@
 module CassandraObject
   module Tasks
     class ColumnFamily
-
-      COMPARATOR_TYPES = { :time      => 'TimeUUIDType',
-                           :timestamp => 'TimeUUIDType',
-                           :long      => 'LongType',
-                           :string    => 'BytesType',
-                           :utf8      => 'UTF8Type' }
-
-      COLUMN_TYPES = {     :standard  => 'Standard',
-                           :super     => 'Super' }
+      COLUMN_TYPES = {
+        standard: 'Standard',
+        super:    'Super'
+      }
 
       def initialize(keyspace)
         @keyspace = keyspace
@@ -23,7 +18,7 @@ module CassandraObject
         cf = Cassandra::ColumnFamily.new
         cf.name = name.to_s
         cf.keyspace = @keyspace.to_s
-        cf.comparator_type = 'BytesType'
+        cf.comparator_type = 'UTF8Type'
         cf.column_type = 'Standard'
 
         yield(cf) if block_given?
@@ -40,39 +35,21 @@ module CassandraObject
         connection.rename_column_family(old_name.to_s, new_name.to_s)
       end
 
-      def clear(name)
-        connection.truncate!(name.to_s)
-      end
-
       private
-
-      def connection
-        CassandraObject::Base.connection
-      end
-
-      def post_process_column_family(cf)
-        comp_type = cf.comparator_type
-        if comp_type && COMPARATOR_TYPES.has_key?(comp_type)
-          cf.comparator_type = COMPARATOR_TYPES[comp_type]
+        def connection
+          CassandraObject::Base.connection
         end
 
-        comp_type = cf.subcomparator_type
-        if comp_type && COMPARATOR_TYPES.has_key?(comp_type)
-          cf.subcomparator_type = COMPARATOR_TYPES[comp_type]
+        def post_process_column_family(cf)
+          col_type = cf.column_type
+          if col_type && COLUMN_TYPES.has_key?(col_type)
+            cf.column_type = COLUMN_TYPES[col_type]
+          end
+
+          cf
         end
-
-        col_type = cf.column_type
-        if col_type && COLUMN_TYPES.has_key?(col_type)
-          cf.column_type = COLUMN_TYPES[col_type]
-        end
-
-        cf
-      end
-
     end
-
   end
-
 end
 
 class Cassandra

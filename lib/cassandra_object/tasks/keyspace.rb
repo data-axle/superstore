@@ -1,9 +1,6 @@
 module CassandraObject
-
   module Tasks
-
     class Keyspace
-
       def self.parse(hash)
         ks = Cassandra::Keyspace.new.with_fields hash
         ks.cf_defs = []
@@ -69,11 +66,8 @@ module CassandraObject
           end
           @connection
         end
-
     end
-
   end
-
 end
 
 class Cassandra
