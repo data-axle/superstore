@@ -56,7 +56,7 @@ module CassandraObject
       self.attributes = attributes
       attribute_definitions.each do |attr, attribute_definition|
         unless attribute_exists?(attr)
-          self.attributes[attr.to_s] = self.class.typecast_attribute(self, attr, nil)
+          @attributes[attr.to_s] = self.class.typecast_attribute(self, attr, nil)
         end
       end
 
