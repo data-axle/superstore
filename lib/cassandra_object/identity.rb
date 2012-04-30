@@ -43,23 +43,10 @@ module CassandraObject
       def parse_key(string)
         key_factory.parse(string)
       end
-
-      def primary_key
-        'id'
-      end
     end
 
     def key
       @key ||= self.class.next_key(self)
-    end
-
-    def id
-      key.to_s
-    end
-
-    def id=(key)
-      @key = self.class.parse_key(key)
-      id
     end
   end
 end

@@ -30,6 +30,7 @@ module CassandraObject
     eager_autoload do
       autoload :Definition
       autoload :Dirty
+      autoload :PrimaryKey
       autoload :Typecasting
     end
   end

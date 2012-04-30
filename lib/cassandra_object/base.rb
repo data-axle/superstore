@@ -37,13 +37,12 @@ module CassandraObject
     include Batches
     include AttributeMethods
     include AttributeMethods::Dirty
+    include AttributeMethods::PrimaryKey
     include AttributeMethods::Typecasting
     include BelongsTo
     include Validations
     include Callbacks
     include Timestamps
-
-    attr_reader :attributes
 
     include Serialization
     include Migrations

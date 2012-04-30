@@ -42,6 +42,10 @@ module CassandraObject
       @attributes.key?(name.to_s)
     end
 
+    def attributes
+      Hash[@attributes.map { |name, _| [name, read_attribute(name)] }]
+    end
+
     def attributes=(attributes)
       attributes.each do |(name, value)|
         send("#{name}=", value)

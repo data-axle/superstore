@@ -11,19 +11,6 @@ class CassandraObject::IdentityTest < CassandraObject::TestCase
     assert_not_nil issue.key
   end
 
-  test 'get id' do
-    issue = Issue.new
-
-    assert_equal issue.key.to_s, issue.id
-  end
-
-  test 'set id' do
-    uuid = SimpleUUID::UUID.new.to_guid
-    issue = Issue.new id: uuid
-
-    assert_equal issue.key.to_s, uuid
-  end
-
   test 'parse_key' do
     assert_kind_of(
       CassandraObject::Identity::UUIDKeyFactory::UUID,
