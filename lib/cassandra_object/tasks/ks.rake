@@ -1,18 +1,18 @@
 namespace :ks do
   desc 'Create the keyspace in cassandra_config/cassandra.yml for the current environment'
-  task :create => :environment do
+  task create: :environment do
     CassandraObject::Tasks::Keyspace.new.create cassandra_config['keyspace'], cassandra_config
     puts "Created keyspace: #{cassandra_config['keyspace']}"
   end
 
   desc 'Drop keyspace in cassandra_config/cassandra.yml for the current environment'
-  task :drop => :environment do
+  task drop: :environment do
     CassandraObject::Tasks::Keyspace.new.drop cassandra_config['keyspace']
     puts "Dropped keyspace: #{cassandra_config['keyspace']}"
   end
 
   desc 'Migrate the keyspace (options: VERSION=x)'
-  task :migrate => :environment do
+  task migrate: :environment do
     version = ( ENV['VERSION'] ? ENV['VERSION'].to_i : nil )
     CassandraObject::Schema::Migrator.migrate CassandraObject::Schema::Migrator.migrations_path, version
     schema_dump
@@ -30,7 +30,7 @@ namespace :ks do
   end
 
   desc 'Pushes the schema to the next version (specify steps w/ STEP=n)'
-  task :forward => :environment do
+  task forward: :environment do
     step = ENV['STEP'] ? ENV['STEP'].to_i : 1
     CassandraObject::Schema::Migrator.forward CassandraObject::Schema::Migrator.migrations_path, step
     schema_dump
@@ -50,7 +50,7 @@ namespace :ks do
 
   namespace :test do
     desc 'Load the development schema in to the test keyspace'
-    task :prepare => :environment do
+    task prepare: :environment do
       schema_dump :development
       schema_load :test
     end

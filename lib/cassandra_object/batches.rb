@@ -4,7 +4,7 @@ module CassandraObject
 
     module ClassMethods
       def find_each
-        connection.each(column_family, {:count => 500}) do |k, v|
+        connection.each(column_family, count: 500) do |k, v|
           yield instantiate(k, v)
         end
       end
