@@ -7,18 +7,18 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     end
     
     assert_equal(
-      {'schema_version' => 'foo'},
-      klass.encode_attributes({}, 'foo')
+      {},
+      klass.encode_attributes({})
     )
 
     assert_equal(
-      {'schema_version' => 'foo'},
-      klass.encode_attributes({description: nil}, 'foo')
+      {},
+      klass.encode_attributes({description: nil})
     )
 
     assert_equal(
-      {'description' => 'lol', 'schema_version' => 'foo'},
-      klass.encode_attributes({description: 'lol'}, 'foo')
+      {'description' => 'lol'},
+      klass.encode_attributes({description: 'lol'})
     )
   end
 
