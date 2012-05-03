@@ -10,7 +10,7 @@ module CassandraObject
                 \s*\z/ix
 
       def encode(time)
-        raise ArgumentError.new("#{self} requires a Time") unless time.kind_of?(Time)
+        raise ArgumentError.new("#{time.inspect} is not a Time") unless time.kind_of?(Time)
         time.utc.xmlschema(6)
       end
 
