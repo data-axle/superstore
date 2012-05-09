@@ -46,6 +46,10 @@ module CassandraObject
             raise NoMethodError, "Unknown attribute #{name.inspect}"
           end
         end
+
+        def coder_for(attribute)
+          attribute_definitions[attribute.to_sym].coder
+        end
       end
     end
   end

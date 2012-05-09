@@ -56,7 +56,7 @@ module CassandraObject
       end
 
       def encode(array)
-        raise ArgumentError.new("#{self} requires an Array") unless array.kind_of?(Array)
+        raise ArgumentError.new("#{array.inspect} is not an Array") unless array.kind_of?(Array)
         array.to_a.to_json
       end
 

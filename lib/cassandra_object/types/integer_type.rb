@@ -3,7 +3,7 @@ module CassandraObject
     class IntegerType < BaseType
       REGEX = /\A[-+]?\d+\Z/
       def encode(int)
-        raise ArgumentError.new("#{self} requires an Integer. You passed #{int.inspect}") unless int.kind_of?(Integer)
+        raise ArgumentError.new("#{int.inspect} is not an Integer.") unless int.kind_of?(Integer)
         int.to_s
       end
 

@@ -7,7 +7,7 @@ module CassandraObject
       
       def encode(bool)
         unless VALID_VALS.include?(bool)
-          raise ArgumentError.new("#{self} requires a boolean")
+          raise ArgumentError.new("#{bool.inspect} is not a Boolean")
         end
         TRUE_VALS.include?(bool) ? '1' : '0'
       end

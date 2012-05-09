@@ -3,7 +3,7 @@ module CassandraObject
     class FloatType < BaseType
       REGEX = /\A[-+]?\d+(\.\d+)?\Z/
       def encode(float)
-        raise ArgumentError.new("#{self} requires a Float") unless float.kind_of?(Float)
+        raise ArgumentError.new("#{float.inspect} is not a Float") unless float.kind_of?(Float)
         float.to_s
       end
 

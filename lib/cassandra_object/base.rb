@@ -59,8 +59,6 @@ module CassandraObject
           @attributes[attr.to_s] = self.class.typecast_attribute(self, attr, nil)
         end
       end
-
-      @schema_version = self.class.current_schema_version
     end
 
     def to_param
