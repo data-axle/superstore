@@ -62,11 +62,10 @@ module CassandraObject
 
       private
         def connection
-          unless @connection
+          @connection ||= begin
             c = CassandraObject::Base.connection
-            @connection = Cassandra.new('system', c.servers, c.thrift_client_options)
+            Cassandra.new('system', c.servers, c.thrift_client_options)
           end
-          @connection
         end
     end
   end
