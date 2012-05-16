@@ -21,7 +21,7 @@ module CassandraObject
           replication_factor: 1,
           cf_defs: []
         }.merge(options)
-
+        
         ks = Cassandra::Keyspace.new.with_fields(opts)
         connection.add_keyspace ks
       end
@@ -63,8 +63,7 @@ module CassandraObject
       private
         def connection
           @connection ||= begin
-            c = CassandraObject::Base.connection
-            Cassandra.new('system', c.servers, c.thrift_client_options)
+            Cassandra.new('system', CassandraObject::Base.connection.servers)
           end
         end
     end
