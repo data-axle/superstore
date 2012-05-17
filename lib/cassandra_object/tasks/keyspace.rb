@@ -15,11 +15,13 @@ module CassandraObject
       end
 
       def create(name, options = {})
-        opts = { :name => name.to_s,
-                 :strategy_class => 'org.apache.cassandra.locator.SimpleStrategy',
-                 :replication_factor => 1,
-                 :cf_defs => [] }.merge(options)
-
+        opts = {
+          name: name.to_s,
+          strategy_class: 'org.apache.cassandra.locator.SimpleStrategy',
+          replication_factor: 1,
+          cf_defs: []
+        }.merge(options)
+        
         ks = Cassandra::Keyspace.new.with_fields(opts)
         connection.add_keyspace ks
       end
@@ -60,11 +62,9 @@ module CassandraObject
 
       private
         def connection
-          unless @connection
-            c = CassandraObject::Base.connection
-            @connection = Cassandra.new('system', c.servers, c.thrift_client_options)
+          @connection ||= begin
+            Cassandra.new('system', CassandraObject::Base.connection.servers)
           end
-          @connection
         end
     end
   end
