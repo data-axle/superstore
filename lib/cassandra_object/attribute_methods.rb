@@ -47,6 +47,7 @@ module CassandraObject
     end
 
     def attributes=(attributes)
+      p "attributes = #{attributes.inspect}"
       attributes.each do |(name, value)|
         send("#{name}=", value)
       end
