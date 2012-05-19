@@ -1,11 +1,6 @@
 module CassandraObject
   module Identity
     extend ActiveSupport::Concern
-    extend ActiveSupport::Autoload
-
-    autoload :NaturalKeyFactory
-    autoload :HashedNaturalKeyFactory
-    autoload :CustomKeyFactory
 
     included do
       class_attribute :key_generator
