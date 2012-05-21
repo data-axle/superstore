@@ -4,7 +4,6 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
   test 'find' do
     Issue.create.tap do |issue|
       assert_equal issue, Issue.find(issue.id)
-      assert_equal issue, Issue.find(issue.key)
     end
 
     begin
@@ -47,7 +46,7 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
     third_issue = Issue.create
 
     assert_equal [], Issue.find_with_ids([])
-    assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids(first_issue.key, second_issue.key).to_set
-    assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids([first_issue.key, second_issue.key]).to_set
+    assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids(first_issue.id, second_issue.id).to_set
+    assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids([first_issue.id, second_issue.id]).to_set
   end
 end
