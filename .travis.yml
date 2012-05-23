@@ -1,0 +1,6 @@
+before_install:
+  - sudo service cassandra start
+  - sleep 3
+rvm:
+  - 1.9.2
+  - 1.9.3
