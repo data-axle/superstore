@@ -4,7 +4,9 @@ module CassandraObject
     include ActiveModel::AttributeMethods
 
     included do
-      attribute_method_suffix("", "=")
+      if ActiveModel::VERSION::STRING < '3.2'
+        attribute_method_suffix("", "=")
+      end
       
       # (Alias for the protected read_attribute method).
       def [](attr_name)
