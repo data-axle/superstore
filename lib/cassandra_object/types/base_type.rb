@@ -7,7 +7,7 @@ module CassandraObject
       end
 
       def default
-        options[:default].dup if options[:default]
+        options[:default].dup if options[:default].duplicable?
       end
 
       def encode(value)

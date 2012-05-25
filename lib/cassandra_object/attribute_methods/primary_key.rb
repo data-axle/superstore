@@ -10,12 +10,11 @@ module CassandraObject
       end
 
       def id
-        key.to_s
+        @id ||= self.class._generate_key(self)
       end
 
-      def id=(key)
-        @key = self.class.parse_key(key)
-        id
+      def id=(id)
+        @id = id
       end
 
       def attributes

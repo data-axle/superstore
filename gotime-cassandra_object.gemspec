@@ -2,16 +2,15 @@
 
 Gem::Specification.new do |s|
   s.name = 'gotime-cassandra_object'
-  s.version = '2.11.9'
+  s.version = '2.12.1'
   s.description = 'Cassandra ActiveModel'
   s.summary = 'Cassandra ActiveModel'
-
-  s.required_ruby_version     = '>= 1.9.2'
-  s.required_rubygems_version = '>= 1.3.5'
-
   s.authors = ["Michael Koziarski", "gotime"]
   s.email = 'gems@gotime.com'
   s.homepage = 'http://github.com/data-axle/cassandra_object'
+
+  s.required_ruby_version     = '>= 1.9.2'
+  s.required_rubygems_version = '>= 1.3.5'
 
   s.extra_rdoc_files = ["README.rdoc"]
   s.files       = `git ls-files`.split("\n")
@@ -19,7 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_runtime_dependency('activemodel', ">= 3.0")
-  s.add_runtime_dependency('cassandra', ">= 0.12.0")
+  s.add_runtime_dependency('mcmire-cassandra', ">= 0.12.3")
   s.add_runtime_dependency('thrift_client', "~> 0.8.0")
 
   s.add_development_dependency('bundler')

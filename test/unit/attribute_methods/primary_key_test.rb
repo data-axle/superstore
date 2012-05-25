@@ -1,17 +1,21 @@
 require 'test_helper'
 
-class CassandraObject::AttributeMethods::PrimaryTest < CassandraObject::TestCase
+class CassandraObject::AttributeMethods::PrimaryKeyTest < CassandraObject::TestCase
   test 'get id' do
-    issue = Issue.new
+    model = temp_object do
+      key do
+        "foo"
+      end
+    end
+    record = model.new
 
-    assert_equal issue.key.to_s, issue.id
+    assert_equal 'foo', record.id
   end
 
   test 'set id' do
-    uuid = SimpleUUID::UUID.new.to_guid
-    issue = Issue.new id: uuid
+    issue = Issue.new id: 'foo'
 
-    assert_equal issue.key.to_s, uuid
+    assert_equal 'foo', issue.id
   end
 
   test 'attributes' do

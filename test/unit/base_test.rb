@@ -38,7 +38,7 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
   end
 
   test 'to_param' do
-    issue = Issue.create
+    issue = Issue.new
     assert_equal issue.id, issue.to_param
   end
   

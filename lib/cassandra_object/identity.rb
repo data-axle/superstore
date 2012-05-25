@@ -1,52 +1,24 @@
 module CassandraObject
   module Identity
     extend ActiveSupport::Concern
-    extend ActiveSupport::Autoload
-
-    autoload :Key
-    autoload :AbstractKeyFactory
-    autoload :UUIDKeyFactory
-    autoload :NaturalKeyFactory
-    autoload :HashedNaturalKeyFactory
-    autoload :CustomKeyFactory
 
     included do
-      class_attribute :key_factory
-      key :uuid
+      class_attribute :key_generator
+
+      key do
+        SimpleUUID::UUID.new.to_guid
+      end
     end
 
     module ClassMethods
-      # Indicate what kind of key the model will have: uuid or natural
-      #
-      # @param [:uuid, :natural] the type of key
-      # @param the options you want to pass along to the key factory (like :attributes => :name, for a natural key).
-      # 
-      def key(name_or_factory = :uuid, *options)
-        self.key_factory = case name_or_factory
-          when :uuid
-            UUIDKeyFactory.new
-          when :natural
-            NaturalKeyFactory.new(*options)
-          when :custom
-            CustomKeyFactory.new(*options)
-          else
-            name_or_factory
-          end
+      # Define a key generator. Default is UUID.
+      def key(&block)
+        self.key_generator = block
       end
 
-      def next_key(object = nil)
-        key_factory.next_key(object).tap do |key|
-          raise "Keys may not be nil" if key.nil?
-        end
+      def _generate_key(object)
+        object.instance_eval(&key_generator)
       end
-
-      def parse_key(string)
-        key_factory.parse(string)
-      end
-    end
-
-    def key
-      @key ||= self.class.next_key(self)
     end
   end
 end

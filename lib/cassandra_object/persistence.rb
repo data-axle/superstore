@@ -33,7 +33,7 @@ module CassandraObject
 
       def instantiate(key, attributes)
         allocate.tap do |object|
-          object.instance_variable_set("@key", parse_key(key)) if key
+          object.instance_variable_set("@id", key) if key
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
           object.instance_variable_set("@attributes", typecast_attributes(object, attributes))
@@ -82,7 +82,7 @@ module CassandraObject
     end
 
     def destroy
-      self.class.remove(key)
+      self.class.remove(id)
       @destroyed = true
       freeze
     end
@@ -104,7 +104,7 @@ module CassandraObject
     end
 
     def reload
-      @attributes.update(self.class.find(self.id).instance_variable_get('@attributes'))
+      @attributes.update(self.class.find(id).instance_variable_get('@attributes'))
     end
 
     private
@@ -116,7 +116,7 @@ module CassandraObject
       def create
         write
         @new_record = false
-        key
+        id
       end
     
       def update
@@ -125,7 +125,7 @@ module CassandraObject
 
       def write
         changed_attributes = changed.inject({}) { |h, n| h[n] = read_attribute(n); h }
-        self.class.write(key, changed_attributes)
+        self.class.write(id, changed_attributes)
       end
   end
 end
