@@ -48,12 +48,11 @@ module CassandraObject
     include Migrations
     include Mocking
 
-    def initialize(attributes={})
-      @key = attributes.delete(:key)
+    def initialize(attributes=nil)
       @new_record = true
       @destroyed = false
       @attributes = {}
-      self.attributes = attributes
+      self.attributes = attributes || {}
       attribute_definitions.each do |attr, attribute_definition|
         unless attribute_exists?(attr)
           @attributes[attr.to_s] = self.class.typecast_attribute(self, attr, nil)
