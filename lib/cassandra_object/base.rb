@@ -41,7 +41,7 @@ module CassandraObject
     include AttributeMethods::Typecasting
     include BelongsTo
     include Validations
-    include Callbacks
+    include Callbacks, ActiveModel::Observing
     include Timestamps
 
     include Serialization
