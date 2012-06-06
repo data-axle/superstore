@@ -3,9 +3,9 @@ module CassandraObject
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def remove(key)
-        ActiveSupport::Notifications.instrument("remove.cassandra_object", column_family: column_family, key: key) do
-          connection.remove(column_family, key.to_s, consistency: thrift_write_consistency)
+      def remove(id)
+        ActiveSupport::Notifications.instrument("remove.cassandra_object", column_family: column_family, key: id) do
+          connection.remove(column_family, id, consistency: thrift_write_consistency)
         end
       end
 
@@ -21,19 +21,19 @@ module CassandraObject
         end
       end
 
-      def write(key, attributes)
+      def write(id, attributes)
         attributes = encode_attributes(attributes)
-        ActiveSupport::Notifications.instrument("insert.cassandra_object", column_family: column_family, key: key, attributes: attributes) do
-          connection.insert(column_family, key.to_s, attributes, consistency: thrift_write_consistency)
+        ActiveSupport::Notifications.instrument("insert.cassandra_object", column_family: column_family, key: id, attributes: attributes) do
+          connection.insert(column_family, id, attributes, consistency: thrift_write_consistency)
           # if nil_attributes.any?
             # connection.remove(connection, key.to_s, *nil_attributes)
           # end          
         end
       end
 
-      def instantiate(key, attributes)
+      def instantiate(id, attributes)
         allocate.tap do |object|
-          object.instance_variable_set("@id", key) if key
+          object.instance_variable_set("@id", id) if id
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
           object.instance_variable_set("@attributes", typecast_attributes(object, attributes))
@@ -124,7 +124,7 @@ module CassandraObject
       end
 
       def write
-        changed_attributes = changed.inject({}) { |h, n| h[n] = read_attribute(n); h }
+        changed_attributes = Hash[changed.map { |attr| [attr, read_attribute(attr)] }]
         self.class.write(id, changed_attributes)
       end
   end
