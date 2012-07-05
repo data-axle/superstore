@@ -2,6 +2,11 @@ module CassandraObject
   module BelongsTo
     extend ActiveSupport::Concern
 
+    included do
+      class_attribute :belongs_to_reflections
+      self.belongs_to_reflections = {}
+    end
+
     module ClassMethods
       # === Options
       # [:class_name]
@@ -14,29 +19,41 @@ module CassandraObject
       #   class Truck < CassandraObject::Base
       #   end
       def belongs_to(name, options = {})
-        instance_variable_name = "@#{name}"
+        CassandraObject::BelongsTo::Builder.build(self, name, options)
+      end
 
-        define_method("#{name}=") do |record|
-          instance_variable_set(instance_variable_name, record)
-          send("#{name}_id=", record.try(:id))
-          if options[:polymorphic]
-            send("#{name}_type=", record.class.name)
-          end
-        end
-
-        define_method(name) do
-          unless instance_variable_defined?(instance_variable_name)
-            if record_id = send("#{name}_id").presence
-              model_name = options[:polymorphic] ? send("#{name}_type") : (options[:class_name] || name.to_s.classify)
-              instance_variable_set(instance_variable_name, model_name.constantize.find_by_id(record_id))
-            else
-              instance_variable_set(instance_variable_name, nil)
-            end
-          end
-
-          instance_variable_get(instance_variable_name)
+      def generated_belongs_to_methods
+        @generated_belongs_to_methods ||= begin
+          mod = const_set(:GeneratedSearchesManyMethods, Module.new)
+          include mod
+          mod
         end
       end
     end
+
+    # Returns the belongs_to instance for the given name, instantiating it if it doesn't already exist
+    def belongs_to_association(name)
+      association = belongs_to_instance_get(name)
+
+      if association.nil?
+        association = CassandraObject::BelongsTo::Association.new(self, belongs_to_reflections[name])
+        belongs_to_instance_set(name, association)
+      end
+
+      association
+    end
+
+    private
+      def belongs_to_cache
+        @belongs_to_cache ||= {}
+      end
+
+      def belongs_to_instance_get(name)
+        belongs_to_cache[name.to_sym]
+      end
+
+      def belongs_to_instance_set(name, association)
+        belongs_to_cache[name.to_sym] = association
+      end
   end
 end

@@ -24,6 +24,14 @@ module CassandraObject
   autoload :Type
   autoload :Schema
 
+  module BelongsTo
+    extend ActiveSupport::Autoload
+
+    autoload :Association
+    autoload :Builder
+    autoload :Reflection
+  end
+
   module AttributeMethods
     extend ActiveSupport::Autoload
 
