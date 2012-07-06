@@ -24,7 +24,7 @@ module CassandraObject
 
       def generated_belongs_to_methods
         @generated_belongs_to_methods ||= begin
-          mod = const_set(:GeneratedSearchesManyMethods, Module.new)
+          mod = const_set(:GeneratedBelongsToMethods, Module.new)
           include mod
           mod
         end
