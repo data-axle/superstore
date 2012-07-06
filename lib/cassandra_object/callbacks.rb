@@ -14,7 +14,7 @@ module CassandraObject
     end
 
     private
-      def create_or_update #:nodoc:
+      def write #:nodoc:
         _run_save_callbacks { super }
       end
 

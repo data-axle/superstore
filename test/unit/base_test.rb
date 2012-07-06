@@ -29,8 +29,8 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
   end
 
   test 'equality' do
-    first_issue = Issue.create
-    second_issue = Issue.create
+    first_issue = Issue.create description: 'poop'
+    second_issue = Issue.create description: 'poop'
 
     assert_equal first_issue, first_issue
     assert_equal first_issue, Issue.find(first_issue.id)

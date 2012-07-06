@@ -36,13 +36,14 @@ module CassandraObject
     include Persistence
     include Batches
     include AttributeMethods
+    include Validations
     include AttributeMethods::Dirty
     include AttributeMethods::PrimaryKey
     include AttributeMethods::Typecasting
     include BelongsTo
-    include Validations
     include Callbacks, ActiveModel::Observing
     include Timestamps
+    include Transactions
 
     include Serialization
     include Migrations

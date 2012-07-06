@@ -14,6 +14,8 @@ module CassandraObject
     def temp_object(&block)
       Class.new(CassandraObject::Base) do
         self.column_family = 'Issues'
+        string :force_save
+        before_save { self.force_save = 'junk' }
 
         def self.name
           'Issue'

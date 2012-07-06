@@ -23,7 +23,7 @@ class CassandraObject::CallbacksTest < CassandraObject::TestCase
   test 'create' do
     issue = TestIssue.create
 
-    assert_equal ['before_validation', 'after_validation', 'after_create', 'after_save'], issue.callback_history
+    assert_equal ['before_validation', 'after_validation', 'after_save', 'after_create'], issue.callback_history
   end
 
   test 'update' do
@@ -32,7 +32,7 @@ class CassandraObject::CallbacksTest < CassandraObject::TestCase
 
     issue.update_attribute :description, 'foo'
 
-    assert_equal ['after_update', 'after_save'], issue.callback_history
+    assert_equal ['after_save', 'after_update'], issue.callback_history
   end
 
   test 'destroy' do

@@ -70,15 +70,7 @@ module CassandraObject
     end
 
     def save(*)
-      begin
-        create_or_update
-      rescue CassandraObject::RecordInvalid
-        false
-      end
-    end
-
-    def save!
-      create_or_update || raise(RecordNotSaved)
+      new_record? ? create : update
     end
 
     def destroy
@@ -90,7 +82,7 @@ module CassandraObject
     def update_attribute(name, value)
       name = name.to_s
       send("#{name}=", value)
-      save(:validate => false)
+      save(validate: false)
     end
 
     def update_attributes(attributes)
@@ -108,18 +100,12 @@ module CassandraObject
     end
 
     private
-      def create_or_update
-        result = new_record? ? create : update
-        result != false
+      def update
+        write
       end
 
       def create
-        write
         @new_record = false
-        id
-      end
-    
-      def update
         write
       end
 

@@ -21,6 +21,7 @@ module CassandraObject
   autoload :Batches
   autoload :FinderMethods
   autoload :Timestamps
+  autoload :Transactions
   autoload :Type
   autoload :Schema
 

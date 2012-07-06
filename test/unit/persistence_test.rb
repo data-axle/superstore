@@ -99,7 +99,6 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     fresh_issue = Issue.find(persisted_issue.id)
     fresh_issue.update_attribute(:description, 'say what')
 
-    assert_nil persisted_issue.description
     persisted_issue.reload
     assert_equal 'say what', persisted_issue.description
   end
