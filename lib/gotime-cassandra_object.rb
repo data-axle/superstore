@@ -20,8 +20,8 @@ module CassandraObject
   autoload :Mocking
   autoload :Batches
   autoload :FinderMethods
+  autoload :Savepoints
   autoload :Timestamps
-  autoload :Transactions
   autoload :Type
   autoload :Schema
 

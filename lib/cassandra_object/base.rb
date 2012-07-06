@@ -43,7 +43,7 @@ module CassandraObject
     include BelongsTo
     include Callbacks, ActiveModel::Observing
     include Timestamps
-    include Transactions
+    include Savepoints
 
     include Serialization
     include Migrations
