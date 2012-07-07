@@ -15,15 +15,14 @@ module CassandraObject
       end
 
       def create(name, options = {})
-        opts = {
-          name: name.to_s,
-          strategy_class: 'org.apache.cassandra.locator.SimpleStrategy',
-          replication_factor: 1,
-          cf_defs: []
-        }.merge(options)
-        
-        ks = Cassandra::Keyspace.new.with_fields(opts)
-        connection.add_keyspace ks
+        keyspace = Cassandra::Keyspace.new.tap do |keyspace|
+          keyspace.name           = name.to_s
+          keyspace.strategy_class = options[:strategy_class] || 'org.apache.cassandra.locator.SimpleStrategy'
+          keyspace.replication_factor = options[:replication_factor] || 1
+          keyspace.cf_defs        = options[:cf_defs] || []
+        end
+
+        connection.add_keyspace keyspace
       end
 
       def drop(name)
@@ -66,17 +65,6 @@ module CassandraObject
             Cassandra.new('system', CassandraObject::Base.connection.servers)
           end
         end
-    end
-  end
-end
-
-class Cassandra
-  class Keyspace
-    def with_fields(options)
-      struct_fields.collect { |f| f[1][:name] }.each do |f|
-        send("#{f}=", options[f.to_sym] || options[f.to_s])
-      end
-      self
     end
   end
 end
