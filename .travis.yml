@@ -1,4 +1,5 @@
 before_install:
+  - cassandra -v
   - sudo service cassandra start
   - sleep 3
 rvm:
