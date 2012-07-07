@@ -8,8 +8,8 @@ module CassandraObject
       def create(name, options = {})
         keyspace = Cassandra::Keyspace.new
         keyspace.name           = name.to_s
-        keyspace.strategy_class = options[:strategy_class] || 'org.apache.cassandra.locator.SimpleStrategy'
         keyspace.replication_factor = options[:replication_factor] || 1
+        keyspace.strategy_class = options[:strategy_class] || 'org.apache.cassandra.locator.SimpleStrategy'
         keyspace.cf_defs        = options[:cf_defs] || []
 
         connection.add_keyspace keyspace
