@@ -23,7 +23,7 @@ namespace :ks do
   end
 
   desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n)'
-  task :rollback => :environment do
+  task rollback: :environment do
     step = ENV['STEP'] ? ENV['STEP'].to_i : 1
     CassandraObject::Schema::Migrator.rollback CassandraObject::Schema::Migrator.migrations_path, step
     schema_dump
@@ -38,14 +38,10 @@ namespace :ks do
 
   namespace :schema do
     desc 'Create ks/schema.json file that can be portably used against any Cassandra instance supported by CassandraObject'
-    task :dump => :environment do
+    task dump: :environment do
       schema_dump
     end
 
-    desc 'Load ks/schema.json file into Cassandra'
-    task :load => :environment do
-      schema_load
-    end
   end
 
   namespace :test do
@@ -58,19 +54,11 @@ namespace :ks do
 
   private
     def schema_dump(env = Rails.env)
-      File.open "#{Rails.root}/ks/schema.json", 'w' do |file|
-        schema = ActiveSupport::JSON.decode(get_keyspace.schema_dump.to_json)
-        JSON.pretty_generate(schema).split(/\n/).each do |line|
-          file.puts line
-        end
-      end
+      # File.open "#{Rails.root}/ks/schema.rb", 'w' do |file|
+      # end
     end
 
     def schema_load(env = Rails.env)
-      File.open "#{Rails.root}/ks/schema.json", 'r' do |file|
-        hash = JSON.parse(file.read(nil))
-        get_keyspace.schema_load CassandraObject::Tasks::Keyspace.parse(hash)
-      end
     end
 
     def cassandra_config
