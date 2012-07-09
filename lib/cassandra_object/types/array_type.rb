@@ -28,7 +28,7 @@ module CassandraObject
         private
           def setify!
             if options[:unique]
-              compact!
+              reject!(&:blank?)
               uniq!
               begin sort! rescue ArgumentError end
             end

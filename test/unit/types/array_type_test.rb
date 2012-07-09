@@ -42,8 +42,8 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
     assert_equal({'favorite_colors' => [['red'], []]}, issue.changes)
   end
 
-  test 'unique array removes nil' do
-    issue = TestIssue.create favorite_colors: ['blue', 'red', nil]
+  test 'unique array removes blank' do
+    issue = TestIssue.create favorite_colors: ['blue', 'red', '', nil]
     assert_equal ['blue', 'red'], issue.favorite_colors
   end
 
