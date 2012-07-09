@@ -4,7 +4,8 @@ CassandraObject::Base.establish_connection(
 )
 
 CassandraObject::Tasks::Keyspace.new.tap do |keyspace_task|
-  keyspace_task.create('cassandra_object_test') unless keyspace_task.exists?('cassandra_object_test')
+  keyspace_task.drop('cassandra_object_test') if keyspace_task.exists?('cassandra_object_test')
+  keyspace_task.create('cassandra_object_test')
 end
 
 CassandraObject::Tasks::ColumnFamily.new('cassandra_object_test').tap do |column_family_task|
