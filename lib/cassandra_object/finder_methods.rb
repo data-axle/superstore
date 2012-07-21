@@ -3,18 +3,16 @@ module CassandraObject
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def find(id)
-        if id.blank?
-          raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{id.inspect}"
-        elsif attributes = connection.get(column_family, id, {:count => 500}).presence
-          instantiate(id, attributes)
+      def find(ids)
+        if ids.is_a?(Array)
+          find_some(ids)
         else
-          raise CassandraObject::RecordNotFound
+          find_one(ids)
         end
       end
 
-      def find_by_id(id)
-        find(id)
+      def find_by_id(ids)
+        find(ids)
       rescue CassandraObject::RecordNotFound
         nil
       end
@@ -34,17 +32,29 @@ module CassandraObject
         all(options.merge(limit: 1)).first
       end
 
-      def find_with_ids(*ids)
+      def count
+        connection.count_range(column_family)
+      end
+
+      private
+      
+      def find_one(id)
+        if id.blank?
+          raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{id.inspect}"
+        elsif attributes = connection.get(column_family, id, {:count => 500}).presence
+          instantiate(id, attributes)
+        else
+          raise CassandraObject::RecordNotFound
+        end
+      end
+
+      def find_some(ids)
         ids = ids.flatten
         return ids if ids.empty?
 
         ids = ids.compact.map(&:to_s).uniq
 
         multi_get(ids).values.compact
-      end
-
-      def count
-        connection.count_range(column_family)
       end
 
       def multi_get(keys, options={})

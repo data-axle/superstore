@@ -18,6 +18,15 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
     end
   end
 
+  test 'find with ids' do
+    first_issue = Issue.create
+    second_issue = Issue.create
+    third_issue = Issue.create
+
+    assert_equal [], Issue.find([])
+    assert_equal [first_issue, second_issue], Issue.find([first_issue.id, second_issue.id])
+  end
+
   test 'find_by_id' do
     Issue.create.tap do |issue|
       assert_equal issue, Issue.find_by_id(issue.id)
@@ -38,15 +47,5 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
     second_issue = Issue.create
 
     assert [first_issue, second_issue].include?(Issue.first)
-  end
-
-  test 'find_with_ids' do
-    first_issue = Issue.create
-    second_issue = Issue.create
-    third_issue = Issue.create
-
-    assert_equal [], Issue.find_with_ids([])
-    assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids(first_issue.id, second_issue.id).to_set
-    assert_equal [first_issue, second_issue].to_set, Issue.find_with_ids([first_issue.id, second_issue.id]).to_set
   end
 end
