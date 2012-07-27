@@ -61,6 +61,17 @@ module CassandraObject
       end
     end
 
+    def initialize_dup(other)
+      @attributes = other.attributes
+      @attributes['created_at'] = nil
+      @attributes['updated_at'] = nil
+      @attributes.delete(self.class.primary_key)
+      @id = nil
+      @new_record = true
+      @destroyed = false
+      super
+    end
+
     def to_param
       id
     end

@@ -24,6 +24,18 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
     assert !issue.destroyed?
   end
 
+  test 'dup' do
+    issue = Issue.create description: 'foo'
+
+    dup_issue = issue.dup
+
+    assert dup_issue.new_record?
+    assert_not_equal issue.id, dup_issue.id
+    assert_nil dup_issue.created_at
+    assert_nil dup_issue.updated_at
+    assert_equal 'foo', issue.description
+  end
+
   test 'equality of new records' do
     assert_not_equal Issue.new, Issue.new
   end
