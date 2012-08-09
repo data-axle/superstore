@@ -5,7 +5,7 @@ CassandraObject::Base.establish_connection(
 
 begin
   CassandraObject::Schema.drop_keyspace 'cassandra_object_test'
-rescue
+rescue Exception => e
 end
 
 CassandraObject::Schema.create_keyspace 'cassandra_object_test'
