@@ -1,8 +1,7 @@
 namespace :ks do
   desc 'Create the keyspace in cassandra_config/cassandra.yml for the current environment'
   task create: :environment do
-    CassandraObject::Tasks::Keyspace.new.create cassandra_config['keyspace'], cassandra_config
-    puts "Created keyspace: #{cassandra_config['keyspace']}"
+    CassandraObject::Schema.create_keyspace cassandra_config['keyspace']
   end
 
   namespace :schema do
