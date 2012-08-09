@@ -17,32 +17,42 @@ module CassandraObject
         nil
       end
 
-      def all(options = {})
-        limit = options[:limit] || 100
-        results = ActiveSupport::Notifications.instrument("get_range.cassandra_object", column_family: column_family, key_count: limit) do
-          connection.get_range(column_family, key_count: limit, consistency: thrift_read_consistency, count: 500)
-        end
-
-        results.map do |k, v|
-          v.empty? ? nil : instantiate(k, v)
-        end.compact
+      def all
+        instantiate_from_cql "select * from #{column_family}"
       end
 
       def first(options = {})
-        all(options.merge(limit: 1)).first
-      end
-
-      def count
-        connection.count_range(column_family)
+        instantiate_from_cql("select * from #{column_family} limit 1").first
       end
 
       private
+
+      # attribute_results = ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: cql_string) do
+      #   connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency, count: 500)
+      # end
+
+      def instantiate_from_cql(cql_string, *args)
+        results = []
+        cql.execute(cql_string, *args).fetch do |cql_row|
+          results << instantiate_cql_row(cql_row)
+        end
+        results.compact!
+        results
+      end
+
+      def instantiate_cql_row(cql_row)
+        attributes = cql_row.to_hash
+        key = attributes.delete('KEY')
+        if attributes.any?
+          instantiate(key, attributes)
+        end
+      end
       
       def find_one(id)
         if id.blank?
           raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{id.inspect}"
-        elsif attributes = connection.get(column_family, id, {:count => 500}).presence
-          instantiate(id, attributes)
+        elsif record = instantiate_from_cql("select * from #{column_family} where KEY = ? limit 1", id).first
+          record
         else
           raise CassandraObject::RecordNotFound
         end
@@ -50,21 +60,12 @@ module CassandraObject
 
       def find_some(ids)
         ids = ids.flatten
-        return ids if ids.empty?
+        return [] if ids.empty?
 
         ids = ids.compact.map(&:to_s).uniq
 
-        multi_get(ids).values.compact
-      end
-
-      def multi_get(keys, options={})
-        attribute_results = ActiveSupport::Notifications.instrument("multi_get.cassandra_object", column_family: column_family, keys: keys) do
-          connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency, count: 500)
-        end
-
-        Hash[attribute_results.map do |key, attributes|
-          [key, attributes.present? ? instantiate(key, attributes) : nil]
-        end]
+        statement = "select * from #{column_family} where KEY in (#{Array.new(ids.size, '?') * ','})"
+        instantiate_from_cql statement, *ids
       end
     end
   end

@@ -17,9 +17,10 @@ Gem::Specification.new do |s|
   s.test_files  = `git ls-files -- {test}/*`.split("\n")
   s.require_paths = ['lib']
 
-  s.add_runtime_dependency('activemodel', ">= 3.0")
-  s.add_runtime_dependency('cassandra', ">= 0.14.0")
-  s.add_runtime_dependency('thrift_client', "~> 0.8.0")
+  s.add_runtime_dependency('activemodel', '>= 3.0')
+  s.add_runtime_dependency('cassandra', '>= 0.14.0')
+  s.add_runtime_dependency('cassandra-cql')
+  s.add_runtime_dependency('thrift_client', '~> 0.8.0')
 
   s.add_development_dependency('bundler')
 end

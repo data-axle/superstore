@@ -16,9 +16,10 @@ module CassandraObject
 
       def create(name)
         cf = Cassandra::ColumnFamily.new
+
         cf.name = name.to_s
         cf.keyspace = @keyspace.to_s
-        cf.comparator_type = 'UTF8Type'
+        cf.key_validation_class = 'UTF8Type'
         cf.column_type = 'Standard'
 
         yield(cf) if block_given?

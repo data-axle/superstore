@@ -31,10 +31,9 @@ class CassandraObject::BatchesTest < CassandraObject::TestCase
   test 'batch' do
     Issue.batch do
       Issue.create
-      Issue.create
-      assert_equal 0, Issue.count
+      assert_nil Issue.first
     end
 
-    assert_equal 2, Issue.count
+    assert_not_nil Issue.first
   end
 end
