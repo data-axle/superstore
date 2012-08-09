@@ -14,9 +14,9 @@ module CassandraObject
 
     module ClassMethods
       THRIFT_LEVELS = {
-        :one    => Cassandra::Consistency::ONE,
-        :quorum => Cassandra::Consistency::QUORUM,
-        :all    => Cassandra::Consistency::ALL
+        one:    Cassandra::Consistency::ONE,
+        quorum: Cassandra::Consistency::QUORUM,
+        all:    Cassandra::Consistency::ALL
       }
 
       def thrift_read_consistency
