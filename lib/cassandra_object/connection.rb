@@ -3,7 +3,7 @@ module CassandraObject
     extend ActiveSupport::Concern
     
     included do
-      class_attribute :connection
+      class_attribute :connection_config
     end
 
     module ClassMethods
@@ -13,12 +13,15 @@ module CassandraObject
       }
 
       def establish_connection(spec)
-        spec.reverse_merge!(DEFAULT_OPTIONS)
-        self.connection = Cassandra.new(spec[:keyspace], spec[:servers], spec[:thrift].symbolize_keys!)
+        self.connection_config = spec.reverse_merge(DEFAULT_OPTIONS)
+      end
+
+      def connection
+        @@connection ||= Cassandra.new(connection_config[:keyspace], connection_config[:servers], connection_config[:thrift].symbolize_keys!)
       end
 
       def cql
-        @cql ||= CassandraCQL::Database.new(connection.servers, keyspace: connection.keyspace)
+        @@cql ||= CassandraCQL::Database.new(connection_config[:servers], keyspace: connection_config[:keyspace])
       end
     end
   end

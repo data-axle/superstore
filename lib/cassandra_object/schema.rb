@@ -1,37 +1,34 @@
 module CassandraObject
-  module Schema
-    extend ActiveSupport::Autoload
-
-    class IrreversibleMigration < StandardError
-    end
-
-    class DuplicateMigrationVersionError < StandardError#:nodoc:
-      def initialize(version)
-        super("Multiple migrations have the version number #{version}")
+  class Schema
+    class << self
+      def create_keyspace(keyspace)
+        system_execute "CREATE KEYSPACE #{keyspace} " +
+                       "WITH strategy_class = SimpleStrategy " +
+                       " AND strategy_options:replication_factor = 1"
       end
-    end
 
-    class DuplicateMigrationNameError < StandardError#:nodoc:
-      def initialize(name)
-        super("Multiple migrations have the name #{name}")
+      def drop_keyspace(keyspace)
+        system_execute "DROP KEYSPACE #{keyspace}"
       end
-    end
 
-    class UnknownMigrationVersionError < StandardError #:nodoc:
-      def initialize(version)
-        super("No migration with version number #{version}")
+      def create_column_family(column_family)
+        execute "CREATE COLUMNFAMILY #{column_family} " +
+                "(KEY varchar PRIMARY KEY)"
       end
-    end
 
-    class IllegalMigrationNameError < StandardError#:nodoc:
-      def initialize(name)
-        super("Illegal name for migration file: #{name}\n\t(only lower case letters, numbers, and '_' allowed)")
+      def alter_column_family_with(with)
+        execute "ALTER TABLE users WITH #{with}"
       end
+
+      private
+        def execute(cql)
+          CassandraObject::Base.cql.execute cql
+        end
+
+        def system_execute(cql)
+          @system_cql ||= CassandraCQL::Database.new(CassandraObject::Base.connection_config[:servers], keyspace: 'system')
+          @system_cql.execute cql
+        end
     end
-
-    autoload :Migrator
-    autoload :Migration
-    autoload :MigrationProxy
-
   end
 end

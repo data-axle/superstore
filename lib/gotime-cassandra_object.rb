@@ -16,15 +16,14 @@ module CassandraObject
   autoload :Identity
   autoload :Inspect
   autoload :Serialization
-  autoload :Migrations
   autoload :Collection
   autoload :Mocking
   autoload :Batches
   autoload :FinderMethods
   autoload :Savepoints
+  autoload :Schema
   autoload :Timestamps
   autoload :Type
-  autoload :Schema
 
   module BelongsTo
     extend ActiveSupport::Autoload
@@ -43,12 +42,6 @@ module CassandraObject
       autoload :PrimaryKey
       autoload :Typecasting
     end
-  end
-
-  module Tasks
-    extend ActiveSupport::Autoload
-    autoload :Keyspace
-    autoload :ColumnFamily
   end
 
   module Types
