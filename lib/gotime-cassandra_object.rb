@@ -1,5 +1,6 @@
 require 'active_support/all'
 require 'active_model'
+require 'cassandra-cql'
 
 module CassandraObject
   extend ActiveSupport::Autoload
