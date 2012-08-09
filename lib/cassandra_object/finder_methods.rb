@@ -27,10 +27,6 @@ module CassandraObject
 
       private
 
-      # attribute_results = ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: cql_string) do
-      #   connection.multi_get(column_family, keys.map(&:to_s), consistency: thrift_read_consistency, count: 500)
-      # end
-
       def instantiate_from_cql(cql_string, *args)
         results = []
         cql.execute(cql_string, *args).fetch do |cql_row|

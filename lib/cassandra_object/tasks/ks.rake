@@ -4,34 +4,15 @@ namespace :ks do
     CassandraObject::Schema.create_keyspace cassandra_config['keyspace']
   end
 
-  namespace :schema do
-    desc 'Create ks/schema.json file that can be portably used against any Cassandra instance supported by CassandraObject'
-    task dump: :environment do
-      schema_dump
-    end
-
+  task drop: :environment do
+    CassandraObject::Schema.drop_keyspace cassandra_config['keyspace']
   end
 
   private
-    def schema_dump(env = Rails.env)
-      # File.open "#{Rails.root}/ks/schema.rb", 'w' do |file|
-      # end
-    end
-
-    def schema_load(env = Rails.env)
-    end
-
     def cassandra_config
       @cassandra_config ||= begin
         cassandra_configs = YAML.load_file(Rails.root.join("config", "cassandra.yml"))
         cassandra_configs[Rails.env || 'development']
       end
     end
-
-    def get_keyspace
-      ks = CassandraObject::Tasks::Keyspace.new
-      ks.set cassandra_config['keyspace']
-      ks
-    end
 end
-

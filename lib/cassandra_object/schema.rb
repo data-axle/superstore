@@ -20,6 +20,10 @@ module CassandraObject
         execute "ALTER TABLE users WITH #{with}"
       end
 
+      def add_index()
+        
+      end
+
       private
         def execute(cql)
           CassandraObject::Base.cql.execute cql
