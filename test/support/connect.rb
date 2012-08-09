@@ -1,5 +1,5 @@
 CassandraObject::Base.establish_connection(
-  keyspace: 'system',
+  keyspace: 'cassandra_object_test',
   servers: '127.0.0.1:9160'
 )
 
@@ -9,10 +9,4 @@ rescue Exception => e
 end
 
 CassandraObject::Schema.create_keyspace 'cassandra_object_test'
-
-CassandraObject::Base.establish_connection(
-  keyspace: 'cassandra_object_test',
-  servers: '127.0.0.1:9160'
-)
-
 CassandraObject::Schema.create_column_family 'Issues'
