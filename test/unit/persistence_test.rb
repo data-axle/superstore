@@ -94,6 +94,15 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     end
   end
 
+  test 'update nil attributes' do
+    issue = Issue.create(title: 'I rule', description: 'lololol')
+
+    issue.update_attributes title: nil
+
+    issue = Issue.find issue.id
+    assert_nil issue.title
+  end
+
   test 'reload' do
     persisted_issue = Issue.create
     fresh_issue = Issue.find(persisted_issue.id)
