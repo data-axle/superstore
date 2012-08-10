@@ -4,15 +4,11 @@ module CassandraObject
 
     module ClassMethods
       def remove(id)
-        ActiveSupport::Notifications.instrument("remove.cassandra_object", column_family: column_family, key: id) do
-          cql.execute "DELETE FROM #{column_family} WHERE KEY = ?", id
-        end
+        execute_cql "DELETE FROM #{column_family} WHERE KEY = ?", id
       end
 
       def delete_all
-        ActiveSupport::Notifications.instrument("truncate.cassandra_object", column_family: column_family) do
-          cql.execute "TRUNCATE #{column_family}"
-        end
+        execute_cql "TRUNCATE #{column_family}"
       end
 
       def create(attributes = {})
@@ -22,15 +18,14 @@ module CassandraObject
       end
 
       def write(id, attributes)
-        attributes = {'KEY' => id}.update encode_attributes(attributes)
-
-        statement = "INSERT INTO #{column_family} (#{attributes.keys * ','}) VALUES (#{Array.new(attributes.size, '?') * ','})"
-        ActiveSupport::Notifications.instrument("insert.cassandra_object", cql: statement, attributes: attributes) do
-          cql.execute statement, *attributes.values
+        if (encoded = encode_attributes(attributes)).any?
+          insert_attributes = {'KEY' => id}.update encode_attributes(attributes)
+          statement = "INSERT INTO #{column_family} (#{insert_attributes.keys * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})"
+          execute_cql statement, *insert_attributes.values
         end
 
         if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
-          cql.execute "DELETE #{nil_attributes.keys * ','} FROM #{column_family} WHERE KEY = ?", id
+          execute_cql "DELETE #{nil_attributes.keys * ','} FROM #{column_family} WHERE KEY = ?", id
         end
       end
 

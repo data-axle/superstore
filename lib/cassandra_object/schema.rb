@@ -26,7 +26,7 @@ module CassandraObject
 
       private
         def execute(cql)
-          CassandraObject::Base.cql.execute cql
+          CassandraObject::Base.execute_cql cql
         end
 
         def system_execute(cql)
