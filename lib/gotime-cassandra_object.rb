@@ -15,10 +15,10 @@ module CassandraObject
   autoload :Identity
   autoload :Inspect
   autoload :Serialization
-  autoload :Batches
-  autoload :FinderMethods
   autoload :Savepoints
   autoload :Schema
+  autoload :Scope
+  autoload :Scoping
   autoload :Timestamps
   autoload :Type
 

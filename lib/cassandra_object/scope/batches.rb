@@ -1,8 +1,6 @@
 module CassandraObject
-  module Batches
-    extend ActiveSupport::Concern
-
-    module ClassMethods
+  class Scope
+    module Batches
       def find_each(options = {})
         find_in_batches(options) do |records|
           records.each { |record| yield record }

@@ -22,6 +22,10 @@ module CassandraObject
         end
         klass
       end
+
+      def scope
+        Scope.new(self)
+      end
     end
 
     extend ActiveModel::Naming
@@ -31,9 +35,7 @@ module CassandraObject
     include Connection
     include Identity
     include Inspect
-    include FinderMethods
     include Persistence
-    include Batches
     include AttributeMethods
     include Validations
     include AttributeMethods::Dirty
@@ -43,6 +45,7 @@ module CassandraObject
     include Callbacks, ActiveModel::Observing
     include Timestamps
     include Savepoints
+    include Scoping
 
     include Serialization
 
