@@ -33,12 +33,8 @@ module CassandraObject
         self.connection_config = spec.reverse_merge(DEFAULT_OPTIONS)
       end
 
-      def connection
-        @@connection ||= Cassandra.new(connection_config[:keyspace], connection_config[:servers], connection_config[:thrift].symbolize_keys)
-      end
-
       def cql
-        @@cql ||= CassandraCQL::Database.new(connection_config[:servers], keyspace: connection_config[:keyspace], connection_config[:thrift].symbolize_keys)
+        @@cql ||= CassandraCQL::Database.new(connection_config[:servers], {keyspace: connection_config[:keyspace]}, connection_config[:thrift].symbolize_keys)
       end
 
       def execute_cql(cql_string, *bind_vars)
