@@ -1,37 +1,29 @@
 module CassandraObject
   class LogSubscriber < ActiveSupport::LogSubscriber
-    def multi_get(event)
-      name = '%s multi_get (%.1fms)' % [event.payload[:column_family], event.duration]
-
-      debug "  #{name}  (#{event.payload[:keys].size}) #{event.payload[:keys].join(" ")}"
+    def initialize
+      super
+      @odd_or_even = false
     end
 
-    def remove(event)
-      name = '%s remove (%.1fms)' % [event.payload[:column_family], event.duration]
+    def cql(event)
+      payload = event.payload
+      name = '%s (%.1fms)' % [payload[:name], event.duration]
+      cql = payload[:cql].squeeze(' ')
 
-      message = "  #{name}  #{event.payload[:key]}"
-      message << " #{Array(event.payload[:attributes]).inspect}" if event.payload[:attributes]
+      if odd?
+        name = color(name, CYAN, true)
+        cql  = color(cql, nil, true)
+      else
+        name = color(name, MAGENTA, true)
+      end
 
-      debug message
+      debug "  #{name}  #{cql}"
     end
 
-    def truncate(event)
-      name = '%s truncate (%.1fms)' % [event.payload[:column_family], event.duration]
-
-      debug "  #{name}  #{event.payload[:column_family]}"
-    end
-
-    def insert(event)
-      name = '%s insert (%.1fms)' % [event.payload[:column_family], event.duration]
-
-      debug "  #{name}  #{event.payload[:key]} #{event.payload[:attributes].inspect}"
-    end
-
-    def get_range(event)
-      name = '%s get_range (%.1fms)' % [event.payload[:column_family], event.duration]
-      
-      debug "  #{name}  (#{event.payload[:count]}) '#{event.payload[:start]}' => '#{event.payload[:finish]}'"
+    def odd?
+      @odd_or_even = !@odd_or_even
     end
   end
 end
+
 CassandraObject::LogSubscriber.attach_to :cassandra_object
