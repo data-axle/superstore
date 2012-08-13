@@ -9,7 +9,6 @@ module CassandraObject
   autoload :Connection
   autoload :AttributeMethods
   autoload :BelongsTo
-  autoload :Consistency
   autoload :Persistence
   autoload :Callbacks
   autoload :Validations
