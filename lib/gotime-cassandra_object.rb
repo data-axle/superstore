@@ -16,7 +16,6 @@ module CassandraObject
   autoload :Identity
   autoload :Inspect
   autoload :Serialization
-  autoload :Mocking
   autoload :Batches
   autoload :FinderMethods
   autoload :Savepoints

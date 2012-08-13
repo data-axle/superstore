@@ -33,7 +33,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
   end
 
   test 'save' do
-    issue = Issue.new
+    issue = Issue.new title: '?'
     issue.save
 
     assert_equal issue, Issue.find(issue.id)

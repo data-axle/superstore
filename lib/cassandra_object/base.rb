@@ -46,7 +46,6 @@ module CassandraObject
     include Savepoints
 
     include Serialization
-    include Mocking
 
     def initialize(attributes=nil)
       @new_record = true
