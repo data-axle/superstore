@@ -61,4 +61,12 @@ Cassandra Object has equivalent methods as ActiveRecord:
     ...
   end
 
-CQL is currently not supported
+== Scoping
+
+Some lightweight scoping features are available:
+
+  Widget.where('color' => 'red')
+  Widget.select(['name', 'color'])
+  Widget.limit(10)
+
+  
