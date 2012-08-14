@@ -7,7 +7,7 @@ module CassandraObject
     include Batches, FinderMethods, QueryMethods
 
     attr_accessor :klass
-    attr_accessor :select_values, :where_values
+    attr_accessor :limit_value, :select_values, :where_values
 
     def initialize(klass)
       @klass = klass
@@ -15,10 +15,6 @@ module CassandraObject
       @limit_value = nil
       @select_values = []
       @where_values = []
-    end
-
-    def to_a
-      
     end
 
     private

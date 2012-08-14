@@ -16,18 +16,18 @@ module CassandraObject
       end
 
       def all
-        instantiate_from_cql "select * from #{klass.column_family}"
+        to_a
       end
 
-      def first(options = {})
-        instantiate_from_cql("select * from #{klass.column_family} limit 1").first
+      def first
+        limit(1).to_a.first
       end
 
       private
         def find_one(id)
           if id.blank?
             raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{id.inspect}"
-          elsif record = instantiate_from_cql("select * from #{klass.column_family} where KEY = ? limit 1", id).first
+          elsif record = where('KEY' => id).first
             record
           else
             raise CassandraObject::RecordNotFound
@@ -40,8 +40,7 @@ module CassandraObject
 
           ids = ids.compact.map(&:to_s).uniq
 
-          statement = "select * from #{klass.column_family} where KEY in (#{Array.new(ids.size, '?') * ','})"
-          instantiate_from_cql statement, *ids
+          where("KEY in (#{ids * ','})").to_a
         end
     end
   end

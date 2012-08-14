@@ -11,8 +11,8 @@ module CassandraObject
         batch_size = options.delete(:batch_size) || 1000
         start_key = nil
 
-        statement = "select * from #{column_family} limit #{batch_size + 1}"
-        records = instantiate_from_cql statement
+        scope = limit(batch_size + 1)
+        records = scope.to_a
 
         while records.any?
           if records.size > batch_size
@@ -24,8 +24,7 @@ module CassandraObject
           yield records
           break if next_record.nil?
 
-          statement = "SELECT * FROM #{column_family} WHERE KEY >= ? LIMIT #{batch_size + 1}"
-          records = instantiate_from_cql statement, next_record.id
+          records = scope.where("KEY >= #{next_record.id}").to_a
         end
       end
     end
