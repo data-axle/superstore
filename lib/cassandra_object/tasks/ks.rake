@@ -1,4 +1,4 @@
-namespace :ks do
+ks_namespace = namespace :ks do
   desc 'Create the keyspace in cassandra_config/cassandra.yml for the current environment'
   task create: :environment do
     CassandraObject::Schema.create_keyspace cassandra_config['keyspace']
@@ -10,17 +10,22 @@ namespace :ks do
 
   task reset: [:drop, :setup]
 
-  task setup: :environment do
-    
+  task setup: :create do
+    filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structure.cql"
+    CassandraObject::Schema.load(filename)
   end
 
-  namespace :schema
-    task :dump do
-      filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structue.cql"
+  namespace :structure do
+    task dump: :environment do
+      filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structure.cql"
       File.open(filename, "w:utf-8") do |file|
         CassandraObject::Schema.dump(file)
       end
     end
+  end
+
+  task :_dump do
+    ks_namespace["structure:dump"].invoke
   end
 
   private
