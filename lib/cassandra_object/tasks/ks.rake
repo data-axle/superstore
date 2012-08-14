@@ -8,6 +8,8 @@ namespace :ks do
     CassandraObject::Schema.drop_keyspace cassandra_config['keyspace']
   end
 
+  task reset: [:drop, :create]
+
   private
     def cassandra_config
       @cassandra_config ||= begin

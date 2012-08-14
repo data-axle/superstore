@@ -21,7 +21,6 @@ module CassandraObject
       end
 
       def add_index()
-        
       end
 
       private
