@@ -3,7 +3,6 @@ module CassandraObject
     module Tasks
       def dump(io)
         column_families.each do |column_family|
-          p "column_family = #{column_family}"
           io.puts run_command("DESCRIBE COLUMNFAMILY #{column_family}")
           io.puts
         end
