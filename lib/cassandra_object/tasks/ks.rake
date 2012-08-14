@@ -8,12 +8,19 @@ namespace :ks do
     CassandraObject::Schema.drop_keyspace cassandra_config['keyspace']
   end
 
-  task reset: [:drop, :create]
+  task reset: [:drop, :setup]
 
-  task :setup do
+  task setup: :environment do
+    
   end
 
-  task :dump do
+  namespace :schema
+    task :dump do
+      filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structue.cql"
+      File.open(filename, "w:utf-8") do |file|
+        CassandraObject::Schema.dump(file)
+      end
+    end
   end
 
   private
