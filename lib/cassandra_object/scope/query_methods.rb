@@ -30,7 +30,7 @@ module CassandraObject
 
       def to_a
         statement = [
-          "select #{select_string} from #{klass.column_family}",
+          "SELECT #{select_string} FROM #{klass.column_family}",
           where_string,
           limit_string
         ].delete_if(&:blank?) * ' '
@@ -88,7 +88,7 @@ module CassandraObject
 
         def limit_string
           if limit_value
-            "limit #{limit_value}"
+            "LIMIT #{limit_value}"
           else
             ""
           end

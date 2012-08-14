@@ -3,14 +3,11 @@ require 'minitest/autorun'
 Bundler.require(:default, :test)
 
 require 'support/connect'
-autoload :Issue, 'support/issue'
+require 'support/teardown'
+require 'support/issue'
 
 module CassandraObject
   class TestCase < ActiveSupport::TestCase
-    teardown do
-      Issue.delete_all
-    end
-
     def temp_object(&block)
       Class.new(CassandraObject::Base) do
         self.column_family = 'Issues'
