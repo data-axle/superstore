@@ -1,5 +1,9 @@
+require 'cassandra_object/schema/tasks'
+
 module CassandraObject
   class Schema
+    extend Tasks
+
     class << self
       def create_keyspace(keyspace)
         system_execute "CREATE KEYSPACE #{keyspace} " +
@@ -29,7 +33,7 @@ module CassandraObject
         end
 
         def system_execute(cql)
-          @system_cql ||= CassandraCQL::Database.new(CassandraObject::Base.connection_config[:servers], keyspace: 'system')
+          @system_cql ||= CassandraCQL::Database.new(CassandraObject::Base.connection_config.servers, keyspace: 'system')
           @system_cql.execute cql
         end
     end

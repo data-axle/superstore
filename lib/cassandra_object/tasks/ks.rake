@@ -10,6 +10,12 @@ namespace :ks do
 
   task reset: [:drop, :create]
 
+  task :setup do
+  end
+
+  task :dump do
+  end
+
   private
     def cassandra_config
       @cassandra_config ||= begin
