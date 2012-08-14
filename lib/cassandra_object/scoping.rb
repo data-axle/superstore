@@ -9,5 +9,11 @@ module CassandraObject
         delegate :select, :where, to: :scope
       end
     end
+
+    module ClassMethods
+      def scope
+        Scope.new(self)
+      end
+    end
   end
 end

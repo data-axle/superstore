@@ -22,10 +22,6 @@ module CassandraObject
         end
         klass
       end
-
-      def scope
-        Scope.new(self)
-      end
     end
 
     extend ActiveModel::Naming
