@@ -52,18 +52,37 @@ module CassandraObject
             wheres = []
 
             where_values.map do |where_value|
-              if where_value.is_a?(String)
-                wheres << where_value
-              elsif where_value.is_a?(Hash)
-                where_value.each do |column, value|
-                  wheres << "#{column} = #{value}"
-                end
-              end
+              wheres.concat format_where_statement(where_value)
             end
 
             "WHERE #{wheres * ' AND '}"
           else
             ''
+          end
+        end
+
+        def format_where_statement(where_value)
+          if where_value.is_a?(String)
+            [where_value]
+          elsif where_value.is_a?(Hash)
+            where_value.map do |column, value|
+              if value.is_a?(Array)
+                "#{column} IN (#{escape_where_value(value)})"
+              else
+                "#{column} = #{escape_where_value(value)}"
+              end
+            end
+          end
+        end
+
+        def escape_where_value(value)
+          if value.is_a?(Array)
+            value.map { |v| escape_where_value(v) }.join(",")
+          elsif value.is_a?(String)
+            value = value.gsub("'", "''")
+            "'#{value}'"
+          else
+            value
           end
         end
 
