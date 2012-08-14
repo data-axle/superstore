@@ -1,13 +1,17 @@
 module CassandraObject
   class Scope
     module QueryMethods
-      def select!(value)
-        self.select_values += Array.wrap(value)
+      def select!(*values)
+        self.select_values += values.flatten
         self
       end
 
-      def select(value)
-        clone.select! value
+      def select(*values, &block)
+        if block_given?
+          to_a.select(&block)
+        else
+          clone.select! *values
+        end
       end
 
       def where!(*values)
