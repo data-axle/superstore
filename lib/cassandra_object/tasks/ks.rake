@@ -10,10 +10,7 @@ ks_namespace = namespace :ks do
 
   task reset: [:drop, :setup]
 
-  task setup: :create do
-    filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structure.cql"
-    CassandraObject::Schema.load(filename)
-  end
+  task setup: [:create, :_load]
 
   namespace :structure do
     task dump: :environment do
@@ -22,10 +19,19 @@ ks_namespace = namespace :ks do
         CassandraObject::Schema.dump(file)
       end
     end
+
+    task load: :environment do
+      filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structure.cql"
+      CassandraObject::Schema.load(filename)
+    end
   end
 
   task :_dump do
     ks_namespace["structure:dump"].invoke
+  end
+
+  task :_load do
+    ks_namespace["structure:load"].invoke
   end
 
   private
