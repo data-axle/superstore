@@ -36,9 +36,11 @@ module CassandraObject
         statement = [
           "SELECT #{select_string} FROM #{klass.column_family}",
           where_string,
-          limit_string
+          limit_string,
+          consistency_string
         ].delete_if(&:blank?) * ' '
 
+        p statement
         instantiate_from_cql(statement)
       end
 
@@ -95,6 +97,12 @@ module CassandraObject
             "LIMIT #{limit_value}"
           else
             ""
+          end
+        end
+
+        def consistency_string
+          if klass.default_consistency
+            "USING CONSISTENCY #{klass.default_consistency}"
           end
         end
     end

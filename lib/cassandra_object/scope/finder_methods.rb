@@ -20,7 +20,8 @@ module CassandraObject
       end
 
       def first
-        limit(1).to_a.first
+        to_a.first
+        # limit(1).to_a.first
       end
 
       private

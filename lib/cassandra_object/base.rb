@@ -29,6 +29,7 @@ module CassandraObject
     extend ActiveSupport::DescendantsTracker
     
     include Connection
+    include Consistency
     include Identity
     include Inspect
     include Persistence

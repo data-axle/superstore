@@ -7,6 +7,7 @@ module CassandraObject
 
   autoload :Base
   autoload :Connection
+  autoload :Consistency
   autoload :AttributeMethods
   autoload :BelongsTo
   autoload :Persistence

@@ -16,4 +16,10 @@ class CassandraObject::Scope::QueryMethodsTest < CassandraObject::TestCase
 
     assert_equal [foo_issue], Issue.select { |issue| issue.title == 'foo' }
   end
+
+  test "select with consistency" do
+    Issue.with_consistency 'ONE' do
+      Issue.all
+    end
+  end
 end
