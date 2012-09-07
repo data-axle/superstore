@@ -40,7 +40,6 @@ module CassandraObject
           consistency_string
         ].delete_if(&:blank?) * ' '
 
-        p statement
         instantiate_from_cql(statement)
       end
 
