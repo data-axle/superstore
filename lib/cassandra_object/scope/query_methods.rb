@@ -35,9 +35,9 @@ module CassandraObject
       def to_a
         statement = [
           "SELECT #{select_string} FROM #{klass.column_family}",
+          consistency_string,
           where_string,
-          limit_string,
-          consistency_string
+          limit_string
         ].delete_if(&:blank?) * ' '
 
         instantiate_from_cql(statement)
