@@ -4,7 +4,7 @@ module CassandraObject
 
     module ClassMethods
       def remove(id)
-        execute_cql "DELETE FROM #{column_family} WHERE KEY = ?", id
+        execute_cql "DELETE FROM #{column_family} #{write_option_string} WHERE KEY = ?", id
       end
 
       def delete_all
@@ -20,12 +20,12 @@ module CassandraObject
       def write(id, attributes)
         if (encoded = encode_attributes(attributes)).any?
           insert_attributes = {'KEY' => id}.update encode_attributes(attributes)
-          statement = "INSERT INTO #{column_family} (#{insert_attributes.keys * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})"
+          statement = "INSERT INTO #{column_family} (#{insert_attributes.keys * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','}) #{write_option_string}"
           execute_cql statement, *insert_attributes.values
         end
 
         if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
-          execute_cql "DELETE #{nil_attributes.keys * ','} FROM #{column_family} WHERE KEY = ?", id
+          execute_cql "DELETE #{nil_attributes.keys * ','} FROM #{column_family} #{write_option_string} WHERE KEY = ?", id
         end
       end
 
@@ -52,6 +52,14 @@ module CassandraObject
       def typecast_attributes(object, attributes)
         attributes = attributes.symbolize_keys
         Hash[attribute_definitions.map { |k, attribute_definition| [k.to_s, attribute_definition.instantiate(object, attributes[k])] }]
+      end
+
+      private
+      def write_option_string
+        consistency = base_class.default_consistency
+        if consistency
+          "USING CONSISTENCY #{consistency}"
+        end
       end
     end
 
