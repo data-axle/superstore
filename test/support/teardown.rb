@@ -7,7 +7,12 @@ CassandraObject::Base.class_eval do
   end
 
   def self.delete_after_test
-    created_records.reject(&:destroyed?).each(&:destroy)
+    # created_records.reject(&:destroyed?).each(&:destroy)
+    cql = CassandraCQL::Database.new(connection_config.servers, {keyspace: connection_config.keyspace}, connection_config.thrift_options)
+    begin
+      cql.execute "TRUNCATE Issues"
+    rescue
+    end
     created_records.clear
   end
 end
@@ -16,7 +21,7 @@ module ActiveSupport
   class TestCase
     teardown do
       if CassandraObject::Base.created_records.any?
-        Issue.delete_all
+        CassandraObject::Base.delete_after_test
       end
     end
   end

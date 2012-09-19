@@ -1,6 +1,7 @@
 CassandraObject::Base.establish_connection(
   keyspace: 'cassandra_object_test',
-  servers: '127.0.0.1:9160'
+  servers: '127.0.0.1:9160',
+  thrift: {timeout: 200}
 )
 
 begin
@@ -8,5 +9,7 @@ begin
 rescue Exception => e
 end
 
+sleep 1
 CassandraObject::Schema.create_keyspace 'cassandra_object_test'
 CassandraObject::Schema.create_column_family 'Issues'
+CassandraObject::Base.default_consistency = 'QUORUM'

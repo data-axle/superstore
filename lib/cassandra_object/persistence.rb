@@ -4,7 +4,7 @@ module CassandraObject
 
     module ClassMethods
       def remove(id)
-        execute_cql "DELETE FROM #{column_family} #{write_option_string} WHERE KEY = ?", id
+        execute_batchable_cql "DELETE FROM #{column_family}#{write_option_string} WHERE KEY = ?", id
       end
 
       def delete_all
@@ -20,13 +20,31 @@ module CassandraObject
       def write(id, attributes)
         if (encoded = encode_attributes(attributes)).any?
           insert_attributes = {'KEY' => id}.update encode_attributes(attributes)
-          statement = "INSERT INTO #{column_family} (#{insert_attributes.keys * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','}) #{write_option_string}"
-          execute_cql statement, *insert_attributes.values
+          statement = "INSERT INTO #{column_family} (#{insert_attributes.keys * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
+          execute_batchable_cql statement, *insert_attributes.values
         end
 
         if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
-          execute_cql "DELETE #{nil_attributes.keys * ','} FROM #{column_family} #{write_option_string} WHERE KEY = ?", id
+          execute_batchable_cql "DELETE #{nil_attributes.keys * ','} FROM #{column_family}#{write_option_string} WHERE KEY = ?", id
         end
+      end
+
+      def batch
+        @batch = []
+
+        with_consistency nil do
+          yield
+        end
+
+        if @batch.any?
+          execute_cql [
+            "BEGIN BATCH #{write_option_string}",
+            @batch * "\n",
+            'APPLY BATCH'
+          ] * "\n"
+        end
+      ensure
+        @batch = nil
       end
 
       def instantiate(id, attributes)
@@ -41,7 +59,6 @@ module CassandraObject
       def encode_attributes(attributes)
         encoded = {}
         attributes.each do |column_name, value|
-          # The ruby thrift gem expects all strings to be encoded as ascii-8bit.
           unless value.nil?
             encoded[column_name.to_s] = attribute_definitions[column_name.to_sym].coder.encode(value)
           end
@@ -49,18 +66,25 @@ module CassandraObject
         encoded
       end
 
-      def typecast_attributes(object, attributes)
-        attributes = attributes.symbolize_keys
-        Hash[attribute_definitions.map { |k, attribute_definition| [k.to_s, attribute_definition.instantiate(object, attributes[k])] }]
-      end
-
       private
-      def write_option_string
-        consistency = base_class.default_consistency
-        if consistency
-          "USING CONSISTENCY #{consistency}"
+        def execute_batchable_cql(cql_string, *bind_vars)
+          if @batch
+            @batch << CassandraCQL::Statement.sanitize(cql_string, bind_vars)
+          else
+            execute_cql cql_string, *bind_vars
+          end
         end
-      end
+      
+        def typecast_attributes(object, attributes)
+          attributes = attributes.symbolize_keys
+          Hash[attribute_definitions.map { |k, attribute_definition| [k.to_s, attribute_definition.instantiate(object, attributes[k])] }]
+        end
+
+        def write_option_string
+          if base_class.default_consistency
+            " USING CONSISTENCY #{base_class.default_consistency}"
+          end
+        end
     end
 
     def new_record?

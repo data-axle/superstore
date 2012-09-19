@@ -22,6 +22,21 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     )
   end
 
+  test "batch" do
+    first_issue = second_issue = nil
+
+    Issue.batch do
+      first_issue = Issue.create
+      second_issue = Issue.create
+
+      assert_raise(CassandraObject::RecordNotFound) { Issue.find first_issue.id }
+      assert_raise(CassandraObject::RecordNotFound) { Issue.find second_issue.id }
+    end
+
+    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find first_issue.id }
+    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find second_issue.id }
+  end
+
   test 'persistance inquiries' do
     issue = Issue.new
     assert issue.new_record?
