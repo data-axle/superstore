@@ -41,7 +41,7 @@ module CassandraObject
         attributes = cql_row.to_hash
         key = attributes.delete('KEY')
         if attributes.any?
-          instantiate(key, attributes)
+          klass.instantiate(key, attributes)
         end
       end
   end
