@@ -38,7 +38,7 @@ module CassandraObject
 
         if @batch.any?
           execute_cql [
-            "BEGIN BATCH #{write_option_string}",
+            "BEGIN BATCH#{write_option_string}",
             @batch * "\n",
             'APPLY BATCH'
           ] * "\n"
