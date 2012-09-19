@@ -8,11 +8,7 @@ CassandraObject::Base.class_eval do
 
   def self.delete_after_test
     # created_records.reject(&:destroyed?).each(&:destroy)
-    cql = CassandraCQL::Database.new(connection_config.servers, {keyspace: connection_config.keyspace}, connection_config.thrift_options)
-    begin
-      cql.execute "TRUNCATE Issues"
-    rescue
-    end
+    Issue.delete_all
     created_records.clear
   end
 end
