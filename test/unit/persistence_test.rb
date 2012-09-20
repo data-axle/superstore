@@ -29,12 +29,30 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
       first_issue = Issue.create
       second_issue = Issue.create
 
-      assert_raise(CassandraObject::RecordNotFound) { Issue.find first_issue.id }
-      assert_raise(CassandraObject::RecordNotFound) { Issue.find second_issue.id }
+      assert_raise(CassandraObject::RecordNotFound) { Issue.find(first_issue.id) }
+      assert_raise(CassandraObject::RecordNotFound) { Issue.find(second_issue.id) }
     end
 
-    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find first_issue.id }
-    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find second_issue.id }
+    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find(first_issue.id) }
+    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find(second_issue.id) }
+  end
+
+  test "batch state" do
+    first_issue = Issue.create
+
+    assert !Issue.batching?
+    Issue.batch_start
+
+    second_issue = Issue.create
+    assert Issue.batching?
+
+    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find(first_issue.id) }
+    assert_raise(CassandraObject::RecordNotFound) { Issue.find(second_issue.id) }
+
+    Issue.batch_end
+
+    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find(second_issue.id) }
+
   end
 
   test 'persistance inquiries' do

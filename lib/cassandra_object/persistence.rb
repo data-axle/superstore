@@ -29,22 +29,39 @@ module CassandraObject
         end
       end
 
-      def batch
+      def batch_start
         @batch = []
+      end
 
-        with_consistency nil do
-          yield
-        end
+      def batch_statement
+        return nil unless @batch.any?
 
-        if @batch.any?
-          execute_cql [
-            "BEGIN BATCH#{write_option_string}",
+        [
+            "BEGIN BATCH#{write_option_string(true)}",
             @batch * "\n",
             'APPLY BATCH'
-          ] * "\n"
+        ] * "\n"
+      end
+
+      def batch_end
+        if @batch.any?
+          execute_cql batch_statement
         end
       ensure
         @batch = nil
+      end
+
+      def batching?
+        !@batch.nil?
+      end
+
+      def batch
+        batch_start
+
+        yield
+
+      ensure
+        batch_end
       end
 
       def instantiate(id, attributes)
@@ -74,14 +91,14 @@ module CassandraObject
             execute_cql cql_string, *bind_vars
           end
         end
-      
+
         def typecast_attributes(object, attributes)
           attributes = attributes.symbolize_keys
           Hash[attribute_definitions.map { |k, attribute_definition| [k.to_s, attribute_definition.instantiate(object, attributes[k])] }]
         end
 
-        def write_option_string
-          if base_class.default_consistency
+        def write_option_string(ignore_batching = false)
+          if (ignore_batching || !batching?) && base_class.default_consistency
             " USING CONSISTENCY #{base_class.default_consistency}"
           end
         end
