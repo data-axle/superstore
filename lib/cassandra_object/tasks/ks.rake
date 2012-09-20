@@ -1,11 +1,27 @@
 ks_namespace = namespace :ks do
   desc 'Create the keyspace in cassandra_config/cassandra.yml for the current environment'
   task create: :environment do
-    CassandraObject::Schema.create_keyspace cassandra_config['keyspace']
+    begin
+      CassandraObject::Schema.create_keyspace cassandra_config['keyspace']
+    rescue Exception => e
+      if e.message =~ /conflicts/
+        p "Keyspace #{cassandra_config['keyspace']} already exists"
+      else
+        raise e
+      end
+    end
   end
 
   task drop: :environment do
-    CassandraObject::Schema.drop_keyspace cassandra_config['keyspace']
+    begin
+      CassandraObject::Schema.drop_keyspace cassandra_config['keyspace']
+    rescue Exception => e
+      if e.message =~ /non existing keyspace/
+        p "Keyspace #{cassandra_config['keyspace']} does not exist"
+      else
+        raise e
+      end
+    end
   end
 
   task reset: [:drop, :setup]
