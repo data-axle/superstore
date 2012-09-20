@@ -15,9 +15,18 @@ module CassandraObject
         system_execute "DROP KEYSPACE #{keyspace}"
       end
 
-      def create_column_family(column_family)
-        execute "CREATE COLUMNFAMILY #{column_family} " +
-                "(KEY varchar PRIMARY KEY)"
+      def create_column_family(column_family, options = {})
+        stmt = "CREATE COLUMNFAMILY #{column_family} " +
+               "(KEY varchar PRIMARY KEY)"
+
+        if options.any?
+          with_stmt = options.map do |k,v|
+            "#{k} = #{CassandraCQL::Statement.quote(v)}"
+          end.join(' AND ')
+          stmt << " WITH #{with_stmt}"
+        end
+
+        execute stmt
       end
 
       def alter_column_family_with(with)
