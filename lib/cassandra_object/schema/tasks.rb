@@ -8,8 +8,19 @@ module CassandraObject
         end
       end
 
-      def load(filename)
-        `cqlsh -k #{keyspace} -f #{filename} #{server}`
+      def load(io)
+        current_cql = ''
+
+        io.each_line do |line|
+          next if line.blank?
+
+          current_cql << line.rstrip
+
+          if current_cql =~ /;$/
+            CassandraObject::Base.execute_cql current_cql
+            current_cql = ''
+          end
+        end
       end
 
       def column_families

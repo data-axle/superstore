@@ -13,4 +13,17 @@ class CassandraObject::Schema::TasksTest < CassandraObject::TestCase
 
     assert_match /Issues/, io.read
   end
+
+  test "load" do
+    CassandraObject::Base.expects(:execute_cql).with("DO STUFF;")
+    CassandraObject::Base.expects(:execute_cql).with("AND MORE;")
+
+    CassandraObject::Schema.load StringIO.new(
+      "DO\n" +
+      " STUFF;\n" +
+      "\n" +
+      "AND\n" +
+      " MORE;\n"
+    )
+  end
 end

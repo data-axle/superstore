@@ -38,7 +38,9 @@ ks_namespace = namespace :ks do
 
     task load: :environment do
       filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structure.cql"
-      CassandraObject::Schema.load(filename)
+      File.open(filename) do |file|
+        CassandraObject::Schema.load(file)
+      end
     end
   end
 
