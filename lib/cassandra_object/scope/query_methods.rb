@@ -46,7 +46,7 @@ module CassandraObject
       private
         def select_string
           if select_values.any?
-            select_values * ','
+            (['KEY'] | select_values) * ','
           else
             '*'
           end

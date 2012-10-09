@@ -2,12 +2,13 @@ require 'test_helper'
 
 class CassandraObject::Scope::QueryMethodsTest < CassandraObject::TestCase
   test "select" do
-    issue = Issue.create title: 'foo', description: 'bar'
+    original_issue = Issue.create title: 'foo', description: 'bar'
 
-    issue = Issue.select(:title).find(issue.id)
+    found_issue = Issue.select(:title).find(original_issue.id)
 
-    assert_equal 'foo', issue.title
-    assert_nil issue.description
+    assert_equal 'foo', found_issue.title
+    assert_equal original_issue.id, found_issue.id
+    assert_nil found_issue.description
   end
 
   test "select with block" do
