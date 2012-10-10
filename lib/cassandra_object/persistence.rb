@@ -37,9 +37,9 @@ module CassandraObject
         return nil unless @batch.any?
 
         [
-            "BEGIN BATCH#{write_option_string(true)}",
-            @batch * "\n",
-            'APPLY BATCH'
+          "BEGIN BATCH#{write_option_string(true)}",
+          @batch * "\n",
+          'APPLY BATCH'
         ] * "\n"
       end
 
