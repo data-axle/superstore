@@ -5,23 +5,24 @@ require 'cassandra-cql'
 module CassandraObject
   extend ActiveSupport::Autoload
 
+  autoload :AttributeMethods
   autoload :Base
+  autoload :BelongsTo
+  autoload :Callbacks
   autoload :Connection
   autoload :Consistency
-  autoload :AttributeMethods
-  autoload :BelongsTo
-  autoload :Persistence
-  autoload :Callbacks
-  autoload :Validations
+  autoload :Core
   autoload :Identity
   autoload :Inspect
-  autoload :Serialization
+  autoload :Persistence
   autoload :Savepoints
   autoload :Schema
   autoload :Scope
   autoload :Scoping
+  autoload :Serialization
   autoload :Timestamps
   autoload :Type
+  autoload :Validations
 
   module BelongsTo
     extend ActiveSupport::Autoload

@@ -26,11 +26,11 @@ module CassandraObject
       def define_attribute_methods
         return if attribute_methods_generated?
         super(attribute_definitions.keys)
-        @attribute_methods_generated = true
+        @@attribute_methods_generated = true
       end
 
       def attribute_methods_generated?
-        @attribute_methods_generated ||= false
+        @@attribute_methods_generated ||= false
       end
     end
 
