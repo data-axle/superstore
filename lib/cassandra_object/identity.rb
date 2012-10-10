@@ -6,7 +6,7 @@ module CassandraObject
       class_attribute :key_generator
 
       key do
-        SimpleUUID::UUID.new.to_guid
+        SimpleUUID::UUID.new.to_guid.tr('-','')
       end
     end
 
