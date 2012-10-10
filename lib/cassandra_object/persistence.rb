@@ -142,6 +142,14 @@ module CassandraObject
       save!
     end
 
+    def becomes(klass)
+      became = klass.new
+      became.instance_variable_set("@attributes", @attributes)
+      became.instance_variable_set("@new_record", new_record?)
+      became.instance_variable_set("@destroyed", destroyed?)
+      became
+    end
+
     def reload
       @attributes.update(self.class.find(id).instance_variable_get('@attributes'))
     end

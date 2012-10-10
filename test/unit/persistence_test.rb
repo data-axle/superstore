@@ -136,6 +136,13 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     assert_nil issue.title
   end
 
+  test 'becomes' do
+    klass = temp_object do
+    end
+
+    assert_kind_of klass, Issue.new.becomes(klass)
+  end
+
   test 'reload' do
     persisted_issue = Issue.create
     fresh_issue = Issue.find(persisted_issue.id)
