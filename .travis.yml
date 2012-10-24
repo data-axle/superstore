@@ -1,5 +1,7 @@
+language: ruby
 services:
   - cassandra
 rvm:
   - 1.9.2
   - 1.9.3
+env: CQLSH=/usr/local/cassandra/bin/cqlsh
