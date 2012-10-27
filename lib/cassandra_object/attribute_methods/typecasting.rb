@@ -22,10 +22,10 @@ module CassandraObject
           child.attribute_definitions = attribute_definitions.dup
         end
 
-        # 
+        #
         # attribute :name, type: :string
         # attribute :ammo, type: Ammo, coder: AmmoCodec
-        # 
+        #
         def attribute(name, options)
           type  = options[:type]
           coder = options[:coder]

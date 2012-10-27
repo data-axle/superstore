@@ -9,7 +9,7 @@ module CassandraObject
       else
         attribute_method_suffix("=")
       end
-      
+
       # (Alias for the protected read_attribute method).
       def [](attr_name)
         read_attribute(attr_name)
@@ -79,7 +79,7 @@ module CassandraObject
       def attribute(name)
         read_attribute(name)
       end
-    
+
       def attribute=(name, value)
         write_attribute(name, value)
       end

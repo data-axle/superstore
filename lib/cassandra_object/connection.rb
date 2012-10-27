@@ -28,7 +28,7 @@ module CassandraObject
 
   module Connection
     extend ActiveSupport::Concern
-    
+
     included do
       class_attribute :connection_config
     end

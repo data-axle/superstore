@@ -12,7 +12,7 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
     rescue => e
       assert_equal "Couldn't find Issue with key nil", e.message
     end
-    
+
     assert_raise CassandraObject::RecordNotFound do
       Issue.find('what')
     end
@@ -45,7 +45,7 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
   test 'first' do
     first_issue = Issue.create
     second_issue = Issue.create
-    
+
     assert [first_issue, second_issue].include?(Issue.first)
   end
 end

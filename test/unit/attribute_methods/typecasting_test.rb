@@ -3,7 +3,7 @@ require 'test_helper'
 class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::TestCase
   class CustomType
   end
-  
+
   class CustomCoder < CassandraObject::Types::BaseType
   end
 

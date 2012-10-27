@@ -5,7 +5,7 @@ class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
     record = temp_object do
       string :name
     end.new name: 'foo'
-    
+
     assert record.changed?
 
     record.save!
@@ -42,7 +42,7 @@ class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
     record = temp_object do
       boolean :awesome
     end.create(awesome: false)
-    
+
     record.awesome = false
     assert !record.changed?
 

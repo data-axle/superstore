@@ -23,7 +23,7 @@ module CassandraObject
       end
 
       def class_name
-        options[:class_name] || name.to_s.classify 
+        options[:class_name] || name.to_s.classify
       end
     end
   end

@@ -14,7 +14,7 @@ class CassandraObject::ConnectionTest < CassandraObject::TestCase
       servers: '192.168.0.100:9160',
       thrift: {'timeout' => 10}
     )
-    # 
+
     assert_equal ['192.168.0.100:9160'], TestObject.connection_config.servers
     assert_equal 'place_directory_development', TestObject.connection_config.keyspace
     assert_equal 10, TestObject.connection_config.thrift_options[:timeout]

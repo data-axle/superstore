@@ -10,11 +10,11 @@ module CassandraObject
   module Validations
     extend ActiveSupport::Concern
     include ActiveModel::Validations
-    
+
     included do
       define_callbacks :validate, scope: :name
     end
-    
+
     module ClassMethods
       def create!(attributes = {})
         new(attributes).tap do |object|
@@ -31,7 +31,7 @@ module CassandraObject
         false
       end
     end
-    
+
     def save!
       save || raise(RecordInvalid.new(self))
     end

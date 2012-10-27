@@ -5,7 +5,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     klass = temp_object do
       string :description
     end
-    
+
     assert_equal(
       {},
       klass.encode_attributes({})
@@ -77,7 +77,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
       string :description
       validates :description, presence: true
     end
-    
+
     record = klass.new(description: 'bad')
     record.save!
 
@@ -90,7 +90,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
   test 'destroy' do
     issue = Issue.create
     issue.destroy
- 
+
     assert issue.destroyed?
     assert !issue.persisted?
     assert !issue.new_record?
@@ -103,7 +103,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     assert !issue.changed?
     assert_equal 'lol', issue.description
   end
-  
+
   test 'update_attributes' do
     issue = Issue.create
     issue.update_attributes(description: 'lol')
@@ -118,7 +118,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
 
       issue = Issue.new(description: 'bad')
       issue.save!
-      
+
       assert_raise CassandraObject::RecordInvalid do
         issue.update_attributes! description: ''
       end
@@ -164,5 +164,4 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
       Issue.create
     end
   end
-
 end

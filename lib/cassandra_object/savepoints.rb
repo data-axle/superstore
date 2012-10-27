@@ -73,7 +73,7 @@ module CassandraObject
 
       def update
         self.class.add_savepoint_rollback(:update, self)
-        super        
+        super
       end
   end
 end
