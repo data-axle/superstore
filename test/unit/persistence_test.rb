@@ -148,13 +148,9 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     fresh_issue = Issue.find(persisted_issue.id)
     fresh_issue.update_attribute(:description, 'say what')
 
-    persisted_issue.reload
+    reloaded_issue = persisted_issue.reload
     assert_equal 'say what', persisted_issue.description
-  end
-
-  test 'reload returns self' do
-    persisted_issue = Issue.create
-    assert_equal persisted_issue, persisted_issue.reload
+    assert_equal persisted_issue, reloaded_issue
   end
 
   test 'delete with consistency' do
