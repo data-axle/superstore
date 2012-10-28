@@ -27,7 +27,7 @@ module CassandraObject
     extend ActiveModel::Naming
     include ActiveModel::Conversion
     extend ActiveSupport::DescendantsTracker
-    
+
     include Connection
     include Consistency
     include Identity

@@ -3,7 +3,7 @@ require 'test_helper'
 class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::TestCase
   class CustomType
   end
-  
+
   class CustomCoder < CassandraObject::Types::BaseType
   end
 
@@ -82,5 +82,31 @@ class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::Test
 
     issue = TestIssue.find issue.id
     assert_equal('hola', issue.name)
+  end
+
+  test 'multiple attributes definition' do
+    class MultipleAttributesIssue < CassandraObject::Base
+      self.column_family = 'Issues'
+    end
+
+    assert_nothing_raised {
+      MultipleAttributesIssue.string :hello, :greetings, :bye
+    }
+    issue = MultipleAttributesIssue.new :hello => 'hey', :greetings => 'how r u', :bye => 'see ya'
+
+    assert_equal 'how r u', issue.greetings
+  end
+
+  test 'multiple attributes with options' do
+    class MultipleAttributesIssue < CassandraObject::Base
+      self.column_family = 'Issues'
+    end
+
+    MultipleAttributesIssue.expects(:attribute).with(:hello, { :unique => :true, :type => :string })
+    MultipleAttributesIssue.expects(:attribute).with(:world, { :unique => :true, :type => :string })
+
+    class MultipleAttributesIssue < CassandraObject::Base
+      string :hello, :world, :unique => :true
+    end
   end
 end

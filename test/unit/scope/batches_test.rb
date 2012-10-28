@@ -2,8 +2,8 @@ require 'test_helper'
 
 class CassandraObject::BatchesTest < CassandraObject::TestCase
   test 'find_each' do
-    Issue.create 
-    Issue.create 
+    Issue.create
+    Issue.create
 
     issues = []
     Issue.find_each do |issue|
@@ -14,7 +14,7 @@ class CassandraObject::BatchesTest < CassandraObject::TestCase
   end
 
   test 'find_in_batches' do
-    Issue.create 
+    Issue.create
     Issue.create
     Issue.create
 

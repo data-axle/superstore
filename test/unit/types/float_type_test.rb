@@ -3,7 +3,7 @@ require 'test_helper'
 class CassandraObject::Types::FloatTypeTest < CassandraObject::Types::TestCase
   test 'encode' do
     assert_equal '5.01', coder.encode(5.01)
-    
+
     assert_raise ArgumentError do
       coder.encode('x')
     end

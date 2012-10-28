@@ -3,7 +3,7 @@ require 'test_helper'
 class CassandraObject::CoreTest < CassandraObject::TestCase
   test 'initialiaze' do
     issue = Issue.new
-    
+
     assert issue.new_record?
     assert !issue.destroyed?
   end
@@ -37,7 +37,7 @@ class CassandraObject::CoreTest < CassandraObject::TestCase
     issue = Issue.new
     assert_equal issue.id, issue.to_param
   end
-  
+
   test 'hash' do
     issue = Issue.create
     assert_equal issue.id.hash, issue.hash

@@ -4,7 +4,7 @@ module CassandraObject
 
   class RecordNotSaved < CasssandraObjectError
   end
-  
+
   class RecordNotFound < CasssandraObjectError
   end
 end

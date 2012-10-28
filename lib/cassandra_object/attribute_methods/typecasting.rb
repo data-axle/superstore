@@ -9,9 +9,12 @@ module CassandraObject
 
         %w(array boolean date float integer json string time).each do |type|
           instance_eval <<-EOV, __FILE__, __LINE__ + 1
-            def #{type}(name, options = {})                             # def string(name, options = {})
-              attribute(name, options.update(type: :#{type}))           #   attribute(name, options.update(type: :string))
-            end                                                         # end
+            def #{type}(*args)
+              options = args.extract_options!
+              args.each do |name|
+                attribute(name, options.merge(:type => :#{type}))
+              end
+            end
           EOV
         end
       end
@@ -22,10 +25,10 @@ module CassandraObject
           child.attribute_definitions = attribute_definitions.dup
         end
 
-        # 
+        #
         # attribute :name, type: :string
         # attribute :ammo, type: Ammo, coder: AmmoCodec
-        # 
+        #
         def attribute(name, options)
           type  = options[:type]
           coder = options[:coder]

@@ -3,7 +3,7 @@ require 'test_helper'
 class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
   test 'encode' do
     assert_equal ['1', '2'].to_json, coder.encode(['1', '2'])
-    
+
     assert_raise ArgumentError do
       coder.encode('wtf')
     end
@@ -49,10 +49,10 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
 
   test 'unique array uniquifies' do
     issue = TestIssue.create favorite_colors: ['blue', 'red']
-    
+
     issue.favorite_colors = ['red', 'red', 'blue']
     assert !issue.changed?
-    
+
     issue.favorite_colors = ['red', 'green']
     assert issue.changed?
   end

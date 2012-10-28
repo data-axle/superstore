@@ -45,7 +45,7 @@ module CassandraObject
 
   module Types
     extend ActiveSupport::Autoload
-    
+
     autoload :BaseType
     autoload :ArrayType
     autoload :BooleanType
