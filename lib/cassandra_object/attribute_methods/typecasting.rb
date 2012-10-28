@@ -9,9 +9,9 @@ module CassandraObject
 
         %w(array boolean date float integer json string time).each do |type|
           instance_eval <<-EOV, __FILE__, __LINE__ + 1
-            def #{type}(*names_or_options)
-              options = names_or_options.last.is_a?(Hash) ? names_or_options.pop : {}
-              names_or_options.each do |name|
+            def #{type}(*args)
+              options = args.extract_options!
+              args.each do |name|
                 attribute(name, options.merge(:type => :#{type}))
               end
             end
