@@ -20,12 +20,12 @@ module CassandraObject
       def write(id, attributes)
         if (encoded = encode_attributes(attributes)).any?
           insert_attributes = {'KEY' => id}.update encode_attributes(attributes)
-          statement = "INSERT INTO #{column_family} (#{insert_attributes.keys.map{|k| "'#{k}'"} * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
+          statement = "INSERT INTO #{column_family} (#{quote_columns(insert_attributes.keys) * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
           execute_batchable_cql statement, *insert_attributes.values
         end
 
         if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
-          execute_batchable_cql "DELETE #{nil_attributes.keys.map{|k| "'#{k}'"} * ','} FROM #{column_family}#{write_option_string} WHERE KEY = ?", id
+          execute_batchable_cql "DELETE #{quote_columns(nil_attributes.keys) * ','} FROM #{column_family}#{write_option_string} WHERE KEY = ?", id
         end
       end
 
@@ -84,6 +84,11 @@ module CassandraObject
       end
 
       private
+
+        def quote_columns(column_names)
+          column_names.map { |name| "'#{name}'" }
+        end
+
         def execute_batchable_cql(cql_string, *bind_vars)
           if @batch
             @batch << CassandraCQL::Statement.sanitize(cql_string, bind_vars)
