@@ -152,6 +152,11 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     assert_equal 'say what', persisted_issue.description
   end
 
+  test 'reload returns self' do
+    persisted_issue = Issue.create
+    assert_equal persisted_issue, persisted_issue.reload
+  end
+
   test 'delete with consistency' do
     issue = Issue.create
     Issue.with_consistency 'QUORUM' do

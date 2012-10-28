@@ -152,6 +152,7 @@ module CassandraObject
 
     def reload
       @attributes.update(self.class.find(id).instance_variable_get('@attributes'))
+      self
     end
 
     private
