@@ -10,6 +10,8 @@ module CassandraObject
           @attributes[attr.to_s] = self.class.typecast_attribute(self, attr, nil)
         end
       end
+
+      yield self if block_given?
     end
 
     def initialize_dup(other)

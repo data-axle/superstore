@@ -65,6 +65,12 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     assert !issue.new_record?
   end
 
+  test 'create' do
+    issue = Issue.create { |i| i.description = 'foo' }
+    assert_equal 'foo', issue.description
+    assert_equal 'foo', Issue.find(issue.id).description
+  end
+
   test 'save' do
     issue = Issue.new
     issue.save

@@ -11,8 +11,8 @@ module CassandraObject
         execute_cql "TRUNCATE #{column_family}"
       end
 
-      def create(attributes = {})
-        new(attributes).tap do |object|
+      def create(attributes = {}, &block)
+        new(attributes, &block).tap do |object|
           object.save
         end
       end

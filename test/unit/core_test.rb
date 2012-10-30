@@ -8,6 +8,11 @@ class CassandraObject::CoreTest < CassandraObject::TestCase
     assert !issue.destroyed?
   end
 
+  test 'initialize yields self' do
+    issue = Issue.new { |i| i.description = 'bar' }
+    assert_equal 'bar', issue.description
+  end
+
   test 'dup' do
     issue = Issue.create description: 'foo'
 
