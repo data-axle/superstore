@@ -165,4 +165,20 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
       Issue.create
     end
   end
+
+  test 'allow CQL keyword in column name' do
+    assert_nothing_raised do
+      Issue.string :text
+      issue = Issue.create :text => 'hello'
+      issue.text = 'world'
+      issue.save!
+      issue.text = nil
+      issue.save!
+    end
+  end
+
+  test 'quote_columns' do
+    klass = Class.new { include CassandraObject::Persistence }
+    assert_equal %w{'a' 'b'}, klass.__send__(:quote_columns, %w{a b})
+  end
 end
