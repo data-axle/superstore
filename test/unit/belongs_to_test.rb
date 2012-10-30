@@ -49,4 +49,13 @@ class CassandraObject::BelongsToTest < CassandraObject::TestCase
     record = TestObject.find(record.id)
     assert_equal issue, record.target
   end
+
+  test 'Reflection#class_name' do
+    class ::Status < CassandraObject::Base; end
+    class ::User < CassandraObject::Base
+      belongs_to :status
+    end
+
+    assert_equal 'Status', User.new.belongs_to_reflections[:status].class_name
+  end
 end
