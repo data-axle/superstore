@@ -31,8 +31,9 @@ module CassandraObject
         execute statement_with_options(stmt, options)
       end
 
-      def alter_column_family_with(with)
-        execute "ALTER TABLE users WITH #{with}"
+      def alter_column_family(column_family, options)
+        stmt = "ALTER TABLE #{column_family}"
+        execute statement_with_options(stmt, options)
       end
 
       def add_index()
