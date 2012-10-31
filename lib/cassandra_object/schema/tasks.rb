@@ -37,11 +37,11 @@ module CassandraObject
         end
 
         def keyspace
-          CassandraObject::Base.connection_config.keyspace
+          CassandraObject::Base.config.keyspace
         end
 
         def server
-          CassandraObject::Base.connection_config.servers.first.gsub(/:.*/, '')
+          CassandraObject::Base.config.servers.first.gsub(/:.*/, '')
         end
     end
   end

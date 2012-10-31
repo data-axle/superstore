@@ -16,30 +16,12 @@ module CassandraCQL
 end
 
 module CassandraObject
-  class Config
-    attr_accessor :servers, :keyspace, :thrift_options
-
-    def initialize(options)
-      self.servers  = Array.wrap(options[:servers] || "127.0.0.1:9160")
-      self.keyspace = options[:keyspace]
-      self.thrift_options = (options[:thrift] || {}).symbolize_keys
-    end
-  end
-
   module Connection
     extend ActiveSupport::Concern
 
-    included do
-      class_attribute :connection_config
-    end
-
     module ClassMethods
-      def establish_connection(spec)
-        self.connection_config = Config.new(spec)
-      end
-
       def cql
-        @@cql ||= CassandraCQL::Database.new(connection_config.servers, {keyspace: connection_config.keyspace}, connection_config.thrift_options)
+        @@cql ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
       end
 
       def execute_cql(cql_string, *bind_vars)

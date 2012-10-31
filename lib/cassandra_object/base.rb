@@ -22,6 +22,14 @@ module CassandraObject
         end
         klass
       end
+
+      def config=(config)
+        @@config = config.is_a?(Hash) ? CassandraObject::Config.new(config) : config
+      end
+
+      def config
+        @@config
+      end
     end
 
     extend ActiveModel::Naming

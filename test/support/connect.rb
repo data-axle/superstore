@@ -1,8 +1,8 @@
-CassandraObject::Base.establish_connection(
+CassandraObject::Base.config = {
   keyspace: 'cassandra_object_test',
   servers: '127.0.0.1:9160',
   thrift: {timeout: 10000}
-)
+}
 
 begin
   CassandraObject::Schema.drop_keyspace 'cassandra_object_test'
