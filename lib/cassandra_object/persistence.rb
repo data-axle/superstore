@@ -98,10 +98,8 @@ module CassandraObject
         end
 
         def typecast_attributes(object, attributes)
-          #attributes = attributes.symbolize_keys
-          Hash[attribute_definitions.map { |k, attribute_definition|
-            [k.to_s, attribute_definition.instantiate(object, attributes[k.to_sym])]
-         }]
+          attributes = attributes.symbolize_keys
+          Hash[attribute_definitions.map { |k, attribute_definition| [k.to_s, attribute_definition.instantiate(object, attributes[k])] }]
         end
 
         def write_option_string(ignore_batching = false)
