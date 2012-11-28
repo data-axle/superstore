@@ -29,39 +29,16 @@ module CassandraObject
         end
       end
 
-      def batch_start
-        @batch = []
-      end
-
-      def batch_statement
-        return nil unless @batch.any?
-
-        [
-          "BEGIN BATCH#{write_option_string(true)}",
-          @batch * "\n",
-          'APPLY BATCH'
-        ] * "\n"
-      end
-
-      def batch_end
-        if @batch.any?
-          execute_cql batch_statement
-        end
-      ensure
-        @batch = nil
-      end
-
       def batching?
         !@batch.nil?
       end
 
       def batch
-        batch_start
-
+        @batch = []
         yield
-
+        execute_cql(batch_statement) if @batch.any?
       ensure
-        batch_end
+        @batch = nil
       end
 
       def instantiate(id, attributes)
@@ -87,6 +64,16 @@ module CassandraObject
 
         def quote_columns(column_names)
           column_names.map { |name| "'#{name}'" }
+        end
+
+        def batch_statement
+          return nil unless @batch.any?
+
+          [
+            "BEGIN BATCH#{write_option_string(true)}",
+            @batch * "\n",
+            'APPLY BATCH'
+          ] * "\n"
         end
 
         def execute_batchable_cql(cql_string, *bind_vars)
