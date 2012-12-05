@@ -2,7 +2,6 @@ require 'set'
 
 require 'cassandra_object/log_subscriber'
 require 'cassandra_object/types'
-require 'cassandra_object/errors'
 
 module CassandraObject
   class Base
