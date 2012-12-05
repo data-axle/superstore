@@ -51,7 +51,7 @@ module CassandraObject
 
           stmt
         end
-      
+
         def execute(cql)
           CassandraObject::Base.execute_cql cql
         end

@@ -14,7 +14,7 @@ class CassandraObject::ConfigTest < CassandraObject::TestCase
     assert_equal 10, config.thrift_options[:timeout]
     assert_equal 'NetworkTopologyStrategy', config.keyspace_options[:placement_strategy]
   end
-  
+
   test 'defaults' do
     config = CassandraObject::Config.new(keyspace: 'widget_factory')
 
