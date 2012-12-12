@@ -2,6 +2,7 @@ module CassandraObject
   module BelongsTo
     class Association
       attr_reader :owner, :reflection
+      attr_accessor :record_variable
       delegate :options, to: :reflection
 
       def initialize(owner, reflection)
@@ -16,6 +17,7 @@ module CassandraObject
           else
             self.record_variable = nil
           end
+          @loaded = true
         end
 
         record_variable
@@ -23,6 +25,7 @@ module CassandraObject
 
       def writer(record)
         self.record_variable = record
+        @loaded = true
         owner.send("#{reflection.foreign_key}=", record.try(:id))
         if reflection.polymorphic?
           owner.send("#{reflection.polymorphic_column}=", record.class.name)
@@ -37,16 +40,8 @@ module CassandraObject
         reflection.polymorphic? ? owner.send(reflection.polymorphic_column) : reflection.class_name
       end
 
-      def record_variable
-        owner.instance_variable_get(reflection.instance_variable_name)
-      end
-
-      def record_variable=(record)
-        owner.instance_variable_set(reflection.instance_variable_name, record)
-      end
-
       def loaded?
-        owner.instance_variable_defined?(reflection.instance_variable_name)
+        @loaded
       end
     end
   end

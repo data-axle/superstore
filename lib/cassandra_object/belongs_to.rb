@@ -44,6 +44,10 @@ module CassandraObject
     end
 
     private
+      def clear_belongs_to_cache
+        belongs_to_cache.clear if persisted?
+      end
+
       def belongs_to_cache
         @belongs_to_cache ||= {}
       end

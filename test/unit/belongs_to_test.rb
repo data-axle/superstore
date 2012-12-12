@@ -49,4 +49,14 @@ class CassandraObject::BelongsToTest < CassandraObject::TestCase
     record = TestObject.find(record.id)
     assert_equal issue, record.target
   end
+
+  test 'belongs_to clear cache after reload' do
+    issue = Issue.create
+    record = TestObject.create(issue: issue)
+    issue.destroy
+
+    assert_not_nil record.issue
+    assert_nil TestObject.find(record.id).issue
+    assert_nil record.reload.issue
+  end
 end

@@ -143,6 +143,7 @@ module CassandraObject
     end
 
     def reload
+      clear_belongs_to_cache
       @attributes.update(self.class.find(id).instance_variable_get('@attributes'))
       self
     end
