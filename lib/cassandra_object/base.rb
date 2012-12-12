@@ -34,7 +34,7 @@ module CassandraObject
           if klass.superclass == Base
             klass
           elsif klass.superclass.nil?
-            raise "#{name} doesn't belong in a hierarchy descending from ActiveRecord"
+            raise "#{name} doesn't belong in a hierarchy descending from CassandraObject"
           else
             class_of_active_record_descendant(klass.superclass)
           end
