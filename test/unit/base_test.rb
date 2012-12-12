@@ -8,6 +8,7 @@ class CassandraObject::BaseTest < CassandraObject::TestCase
   end
 
   test 'base_class' do
+    assert_equal CassandraObject::Base, CassandraObject::Base
     assert_equal Son, Son.base_class
     assert_equal Son, Grandson.base_class
   end

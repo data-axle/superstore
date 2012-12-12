@@ -15,11 +15,7 @@ module CassandraObject
       end
 
       def base_class
-        klass = self
-        while klass.superclass != Base
-          klass = klass.superclass
-        end
-        klass
+        class_of_active_record_descendant(self)
       end
 
       def config=(config)
@@ -29,6 +25,20 @@ module CassandraObject
       def config
         @@config
       end
+
+      private
+
+        # Returns the class descending directly from ActiveRecord::Base or an
+        # abstract class, if any, in the inheritance hierarchy.
+        def class_of_active_record_descendant(klass)
+          if klass.superclass == Base
+            klass
+          elsif klass.superclass.nil?
+            raise "#{name} doesn't belong in a hierarchy descending from ActiveRecord"
+          else
+            class_of_active_record_descendant(klass.superclass)
+          end
+        end
     end
 
     extend ActiveModel::Naming
