@@ -31,12 +31,25 @@ module CassandraObject
         execute statement_with_options(stmt, options)
       end
 
-      def alter_column_family(column_family, options)
-        stmt = "ALTER TABLE #{column_family}"
+      def alter_column_family(column_family, instruction, options = {})
+        stmt = "ALTER TABLE #{column_family} #{instruction}"
         execute statement_with_options(stmt, options)
       end
 
-      def add_index()
+      def drop_column_family(column_family)
+        stmt = "DROP TABLE #{column_family}"
+        execute stmt
+      end
+
+      def add_index(column_family, column, index_name = nil)
+        stmt = "CREATE INDEX #{index_name.nil? ? '' : index_name} ON #{column_family} (#{column})"
+        execute stmt
+      end
+
+      def drop_index(index_name)
+        # If the index was not given a name during creation, the index name is <columnfamily_name>_<column_name>_idx.
+        stmt = "DROP INDEX #{index_name}"
+        execute stmt
       end
 
       private
