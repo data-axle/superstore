@@ -9,7 +9,6 @@ module CassandraObject
 
       def decode(str)
         return nil if str.empty?
-        raise ArgumentError.new("Cannot convert #{str} into a Float") unless str.kind_of?(String) && str.match(REGEX)
         str.to_f
       end
     end

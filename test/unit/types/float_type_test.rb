@@ -10,11 +10,8 @@ class CassandraObject::Types::FloatTypeTest < CassandraObject::Types::TestCase
   end
 
   test 'decode' do
+    assert_equal 0.0, coder.decode('xyz')
     assert_equal 3.14, coder.decode('3.14')
     assert_equal 5, coder.decode('5')
-
-    assert_raise ArgumentError do
-      coder.decode('xyz')
-    end
   end
 end

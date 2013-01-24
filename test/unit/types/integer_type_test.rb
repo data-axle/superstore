@@ -12,6 +12,7 @@ class CassandraObject::Types::IntegerTypeTest < CassandraObject::Types::TestCase
 
   test 'decode' do
     assert_nil coder.decode('')
+    assert_equal 0, coder.decode('abc')
     assert_equal 3, coder.decode('3')
     assert_equal -3, coder.decode('-3')
   end
