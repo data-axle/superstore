@@ -32,15 +32,17 @@ module CassandraObject
         clone.limit! value
       end
 
-      def to_a
-        statement = [
-          "SELECT #{select_string} FROM #{klass.column_family}",
-          consistency_string,
-          where_string,
-          limit_string
+      def as_query
+        [
+            "SELECT #{select_string} FROM #{klass.column_family}",
+            consistency_string,
+            where_string,
+            limit_string
         ].delete_if(&:blank?) * ' '
+      end
 
-        instantiate_from_cql(statement)
+      def to_a
+        instantiate_from_cql(as_query)
       end
 
       private
