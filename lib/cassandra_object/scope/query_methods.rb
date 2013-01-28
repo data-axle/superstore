@@ -32,7 +32,7 @@ module CassandraObject
         clone.limit! value
       end
 
-      def as_query
+      def to_cql
         [
             "SELECT #{select_string} FROM #{klass.column_family}",
             consistency_string,
@@ -42,7 +42,7 @@ module CassandraObject
       end
 
       def to_a
-        instantiate_from_cql(as_query)
+        instantiate_from_cql(to_cql)
       end
 
       private
