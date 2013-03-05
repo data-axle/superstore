@@ -2,6 +2,10 @@ module CassandraObject
   module Persistence
     extend ActiveSupport::Concern
 
+    included do
+      class_attribute :batch_statements
+    end
+
     module ClassMethods
       def remove(id)
         execute_batchable_cql "DELETE FROM #{column_family}#{write_option_string} WHERE KEY = ?", id
@@ -30,15 +34,15 @@ module CassandraObject
       end
 
       def batching?
-        !@batch.nil?
+        !batch_statements.nil?
       end
 
       def batch
-        @batch = []
+        self.batch_statements = []
         yield
-        execute_cql(batch_statement) if @batch.any?
+        execute_cql(batch_statement) if batch_statements.any?
       ensure
-        @batch = nil
+        self.batch_statements = nil
       end
 
       def instantiate(id, attributes)
@@ -67,18 +71,18 @@ module CassandraObject
         end
 
         def batch_statement
-          return nil unless @batch.any?
+          return nil unless batch_statements.any?
 
           [
             "BEGIN BATCH#{write_option_string(true)}",
-            @batch * "\n",
+            batch_statements * "\n",
             'APPLY BATCH'
           ] * "\n"
         end
 
         def execute_batchable_cql(cql_string, *bind_vars)
-          if @batch
-            @batch << CassandraCQL::Statement.sanitize(cql_string, bind_vars)
+          if batch_statements
+            batch_statements << CassandraCQL::Statement.sanitize(cql_string, bind_vars)
           else
             execute_cql cql_string, *bind_vars
           end
