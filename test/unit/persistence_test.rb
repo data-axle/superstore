@@ -1,3 +1,6 @@
+#!/bin/env ruby
+# encoding: utf-8
+
 require 'test_helper'
 
 class CassandraObject::PersistenceTest < CassandraObject::TestCase
@@ -54,6 +57,15 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     issue = Issue.create { |i| i.description = 'foo' }
     assert_equal 'foo', issue.description
     assert_equal 'foo', Issue.find(issue.id).description
+  end
+
+  test 'read and write UTF' do
+    utf = "\ucba1\ucba2\ucba3 ƒ´∑ƒ©√åµ≈√ˆअनुच्छेद´µøµø¬≤ 汉语漢語".force_encoding(Encoding::UTF_8)
+
+    issue = Issue.create { |i| i.description = utf }
+    assert_equal utf, issue.description
+    reloaded = Issue.find(issue.id).description
+    assert_equal utf, reloaded
   end
 
   test 'save' do
