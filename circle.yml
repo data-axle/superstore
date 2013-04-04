@@ -1,0 +1,9 @@
+machine:
+  ruby:
+    version:
+      - 1.9.2-p320
+      - 1.9.3-p392
+  services:
+    - cassandra
+environment: 
+  CQLSH: /usr/local/cassandra/bin/cqlsh
