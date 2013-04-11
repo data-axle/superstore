@@ -13,7 +13,6 @@ module CassandraObject
       end
 
       def decode(str)
-        raise ArgumentError.new("Cannot convert #{str} into a boolean") unless VALID_VALS.include?(str)
         TRUE_VALS.include?(str)
       end
     end
