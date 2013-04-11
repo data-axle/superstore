@@ -119,7 +119,6 @@ module CassandraObject
     def destroy
       self.class.remove(id)
       @destroyed = true
-      freeze
     end
 
     def update_attribute(name, value)
