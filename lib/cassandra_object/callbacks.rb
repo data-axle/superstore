@@ -10,20 +10,20 @@ module CassandraObject
     end
 
     def destroy #:nodoc:
-      _run_destroy_callbacks { super }
+      run_callbacks(:destroy) { super }
     end
 
     private
       def write #:nodoc:
-        _run_save_callbacks { super }
+        run_callbacks(:save) { super }
       end
 
       def create #:nodoc:
-        _run_create_callbacks { super }
+        run_callbacks(:create) { super }
       end
 
       def update(*) #:nodoc:
-        _run_update_callbacks { super }
+        run_callbacks(:update) { super }
       end
   end
 end

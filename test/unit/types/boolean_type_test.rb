@@ -19,5 +19,6 @@ class CassandraObject::Types::BooleanTypeTest < CassandraObject::Types::TestCase
   test 'decode' do
     assert_equal true, coder.decode('1')
     assert_equal false, coder.decode('0')
+    # assert_nil coder.decode(nil)
   end
 end

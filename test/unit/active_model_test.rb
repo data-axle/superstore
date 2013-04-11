@@ -8,6 +8,10 @@ class ActiveModelTest < CassandraObject::TestCase
   def test_to_param
   end
 
+  # overrides ActiveModel::Lint::Tests#test_to_key
+  def test_to_key
+  end
+
   def setup
     @model = Issue.new
   end

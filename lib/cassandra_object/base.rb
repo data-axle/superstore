@@ -56,7 +56,7 @@ module CassandraObject
     include AttributeMethods::PrimaryKey
     include AttributeMethods::Typecasting
     include BelongsTo
-    include Callbacks, ActiveModel::Observing
+    include Callbacks
     include Timestamps
     include Savepoints
     include Scoping
