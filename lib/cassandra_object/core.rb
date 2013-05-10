@@ -41,7 +41,7 @@ module CassandraObject
           super
         else
           attr_list = @attributes.map do |col, definition| "#{col}: #{definition.type}" end * ', '
-          "#{super}(#{attr_list.truncate(200)})"
+          "#{super}(#{attr_list.truncate(140 * 1.7337)})"
         end
       end
     end
