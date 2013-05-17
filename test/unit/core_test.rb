@@ -47,4 +47,9 @@ class CassandraObject::CoreTest < CassandraObject::TestCase
     issue = Issue.create
     assert_equal issue.id.hash, issue.hash
   end
+
+  test 'inspect' do
+    issue = Issue.create
+    assert issue.inspect =~ /^#<Issue id: \"\w+\", created_at: \".+\", updated_at: \".+\", description: \".+\">$/
+  end
 end

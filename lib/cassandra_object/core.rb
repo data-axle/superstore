@@ -1,5 +1,7 @@
 module CassandraObject
   module Core
+    extend ActiveSupport::Concern
+
     def initialize(attributes=nil)
       @new_record = true
       @destroyed = false
@@ -31,6 +33,17 @@ module CassandraObject
 
     def hash
       id.hash
+    end
+
+    module ClassMethods
+      def inspect
+        if self == Base
+          super
+        else
+          attr_list = @attributes.map do |col, definition| "#{col}: #{definition.type}" end * ', '
+          "#{super}(#{attr_list.truncate(140 * 1.7337)})"
+        end
+      end
     end
 
     def ==(comparison_object)
