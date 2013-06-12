@@ -1,5 +1,6 @@
 = Cassandra Object
 {<img src="https://secure.travis-ci.org/data-axle/cassandra_object.png?rvm=1.9.3" />}[http://travis-ci.org/data-axle/cassandra_object]
+{<img src="https://codeclimate.com/github/data-axle/cassandra_object.png" />}[https://codeclimate.com/github/data-axle/cassandra_object]
 
 Cassandra Object uses ActiveModel to mimic much of the behavior in ActiveRecord.
 
