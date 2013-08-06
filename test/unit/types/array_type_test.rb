@@ -62,4 +62,10 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
 
     assert_equal [1, 'red'], issue.favorite_colors
   end
+
+  test 'write non array' do
+    issue = TestIssue.create favorite_colors: true
+
+    assert_equal [true], issue.favorite_colors
+  end
 end

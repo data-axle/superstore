@@ -69,7 +69,7 @@ module CassandraObject
       end
 
       def wrap(record, name, value)
-        DirtyArray.new(record, name, value, options)
+        DirtyArray.new(record, name, Array(value), options)
       end
     end
   end
