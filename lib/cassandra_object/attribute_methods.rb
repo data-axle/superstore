@@ -23,6 +23,11 @@ module CassandraObject
     end
 
     module ClassMethods
+      def inherited(child_class)
+        child_class.define_attribute_methods
+        super
+      end
+
       def define_attribute_methods
         return if attribute_methods_generated?
         super(attribute_definitions.keys)
