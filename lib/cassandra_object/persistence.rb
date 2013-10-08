@@ -8,7 +8,13 @@ module CassandraObject
 
     module ClassMethods
       def remove(id)
-        execute_batchable_cql "DELETE FROM #{column_family}#{write_option_string} WHERE KEY = ?", id
+        statement = "DELETE FROM #{column_family}#{write_option_string} WHERE "
+        if id.is_a?(Array)
+          statement += "KEY IN (?)"
+        else
+          statement += "KEY = ?"
+        end
+        execute_batchable_cql statement, id
       end
 
       def delete_all

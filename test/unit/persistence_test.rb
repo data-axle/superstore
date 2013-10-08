@@ -184,4 +184,40 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     klass = Class.new { include CassandraObject::Persistence }
     assert_equal %w{'a' 'b'}, klass.__send__(:quote_columns, %w{a b})
   end
+
+  test 'remove' do
+    klass = temp_object do
+      string :name
+    end
+
+    record = klass.new(name: 'cool')
+    record.save!
+
+    id = record.id
+    assert_equal id, klass.find(id).id
+
+    klass.remove(id)
+
+    assert_raise CassandraObject::RecordNotFound do
+      klass.find(id)
+    end
+  end
+
+  test 'remove multiple' do
+    klass = temp_object do
+      string :name
+    end
+
+    ids = []
+    (1..10).each do
+      record = klass.new(name: 'cool')
+      record.save!
+      ids << record.id
+    end
+
+    klass.remove(ids)
+
+    assert_equal [], klass.find(ids)
+  end
+
 end
