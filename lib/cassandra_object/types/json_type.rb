@@ -9,24 +9,30 @@ module CassandraObject
           @options  = options
 
           self.merge!(hash)
-          @init_hash = self.hash
-          @init_value = hash
         end
 
         def []=(obj, val)
-          modifying do super end
+          modifying do
+            super
+          end
         end
 
         def delete(obj)
-          modifying do super end
+          modifying do
+            super
+          end
         end
 
         private
         def modifying
+          unless record.changed_attributes.include?(name)
+            original = dup
+          end
+
           result = yield
 
-          if !record.changed_attributes.key?(name) && @init_hash != self.hash
-            record.changed_attributes[name] = @init_value
+          if !record.changed_attributes.key?(name) && original != self
+            record.changed_attributes[name] = original
           end
 
           record.send("#{name}=", self)
