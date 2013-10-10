@@ -14,11 +14,11 @@ module CassandraObject
         end
 
         def []=(obj, val)
-          modifying do super end
+          modifying { super }
         end
 
         def delete(obj)
-          modifying do super end
+          modifying { super }
         end
 
         private
