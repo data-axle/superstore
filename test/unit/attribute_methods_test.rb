@@ -30,11 +30,14 @@ class CassandraObject::AttributeMethodsTest < CassandraObject::TestCase
     assert_equal 'foo', issue.description
   end
 
-  # class ChildIssue < Issue
-  # end
+  class ChildIssue < Issue
+    def title=(val)
+      self[:title] = val + ' lol'
+    end
+  end
 
-  test 'inheritence' do
-    issue = Issue.new(title: 'hey')
+  test 'override' do
+    issue = ChildIssue.new(title: 'hey')
 
     assert_equal 'hey lol', issue.title
   end
