@@ -18,9 +18,17 @@ module CassandraObject
     end
 
     private
+
+      def scoping
+        previous, klass.current_scope = klass.current_scope, self
+        yield
+      ensure
+        klass.current_scope = previous
+      end
+
       def method_missing(method_name, *args, &block)
         if klass.respond_to?(method_name)
-          klass.send(method_name, *args, &block)
+          scoping { klass.send(method_name, *args, &block) }
         elsif Array.method_defined?(method_name)
           to_a.send(method_name, *args, &block)
         else
