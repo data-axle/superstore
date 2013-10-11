@@ -11,8 +11,10 @@ module CassandraObject
     end
 
     module ClassMethods
+      attr_accessor :current_scope
+
       def scope
-        Scope.new(self)
+        self.current_scope ||= Scope.new(self)
       end
     end
   end

@@ -23,4 +23,10 @@ class CassandraObject::Scope::QueryMethodsTest < CassandraObject::TestCase
       Issue.all
     end
   end
+
+  test "chaining where with scope" do
+    issue = Issue.create title: 'abc', description: 'def'
+    query = Issue.select(:title).for_key(issue.id)
+    assert_match /^SELECT KEY,title/, query.to_cql
+  end
 end
