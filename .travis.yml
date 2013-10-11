@@ -1,9 +1,7 @@
 language: ruby
-services:
-  - cassandra
 rvm:
-  - 1.9.2
   - 1.9.3
+  - 2.0.0
 env: CQLSH=/usr/local/cassandra/bin/cqlsh
 before_install:
   - echo "127.0.0.1 "hostname | sudo tee /etc/hosts
