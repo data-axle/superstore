@@ -12,7 +12,7 @@ module CassandraObject
             def #{type}(*args)
               options = args.extract_options!
               args.each do |name|
-                attribute(name, options.merge(:type => :#{type}))
+                attribute(name, options.merge(:type => :#{type == 'hash_t' ? 'hash' : type}))
               end
             end
           EOV
