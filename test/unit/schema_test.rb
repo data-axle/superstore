@@ -1,6 +1,21 @@
 require 'test_helper'
 
 class CassandraObject::SchemaTest < CassandraObject::TestCase
+  test "create_keyspace" do
+    CassandraObject::Schema.create_keyspace 'Blah'
+
+    existing_keyspace = false
+    begin
+      CassandraObject::Schema.create_keyspace 'Blah'
+    rescue Exception => e
+      existing_keyspace = true
+    ensure
+      CassandraObject::Schema.drop_keyspace 'Blah'
+    end
+
+    assert existing_keyspace
+  end
+
   test "create_column_family" do
     CassandraObject::Schema.create_column_family 'TestRecords', 'compression_parameters:sstable_compression' => 'SnappyCompressor'
 

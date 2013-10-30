@@ -28,28 +28,26 @@ module CassandraObject
         stmt = "CREATE COLUMNFAMILY #{column_family} " +
                "(KEY varchar PRIMARY KEY)"
 
-        execute statement_with_options(stmt, options)
+        keyspace_execute statement_with_options(stmt, options)
       end
 
       def alter_column_family(column_family, instruction, options = {})
         stmt = "ALTER TABLE #{column_family} #{instruction}"
-        execute statement_with_options(stmt, options)
+        keyspace_execute statement_with_options(stmt, options)
       end
 
       def drop_column_family(column_family)
-        stmt = "DROP TABLE #{column_family}"
-        execute stmt
+        keyspace_execute "DROP TABLE #{column_family}"
       end
 
       def add_index(column_family, column, index_name = nil)
         stmt = "CREATE INDEX #{index_name.nil? ? '' : index_name} ON #{column_family} (#{column})"
-        execute stmt
+        keyspace_execute stmt
       end
 
+      # If the index was not given a name during creation, the index name is <columnfamily_name>_<column_name>_idx.
       def drop_index(index_name)
-        # If the index was not given a name during creation, the index name is <columnfamily_name>_<column_name>_idx.
-        stmt = "DROP INDEX #{index_name}"
-        execute stmt
+        keyspace_execute "DROP INDEX #{index_name}"
       end
 
       private
@@ -65,13 +63,18 @@ module CassandraObject
           stmt
         end
 
-        def execute(cql)
-          CassandraObject::Base.execute_cql cql
+        def db
+          @db ||= CassandraCQL::Database.new(CassandraObject::Base.config.servers, {keyspace: 'system'}, {connect_timeout: 30, timeout: 30})
+        end
+
+        def keyspace_execute(cql)
+          db.execute "USE #{CassandraObject::Base.config.keyspace}"
+          db.execute cql
         end
 
         def system_execute(cql)
-          @system_cql ||= CassandraCQL::Database.new(CassandraObject::Base.config.servers, keyspace: 'system')
-          @system_cql.execute cql
+          db.execute "USE system"
+          db.execute cql
         end
     end
   end
