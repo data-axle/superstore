@@ -17,6 +17,7 @@ module CassandraObject
   autoload :CounterBase
   autoload :Identity
   autoload :Inspect
+  autoload :Model
   autoload :Persistence
   autoload :Savepoints
   autoload :Schema
