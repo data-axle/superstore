@@ -14,6 +14,7 @@ module CassandraObject
   autoload :Connection
   autoload :Consistency
   autoload :Core
+  autoload :CounterBase
   autoload :Identity
   autoload :Inspect
   autoload :Persistence
