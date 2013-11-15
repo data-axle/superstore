@@ -20,10 +20,6 @@ class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
     array :favorite_colors, unique: true
   end
 
-  test 'default' do
-    assert_equal [], TestIssue.new.favorite_colors
-  end
-
   test 'append marks dirty' do
     issue = TestIssue.create favorite_colors: []
     assert !issue.changed?

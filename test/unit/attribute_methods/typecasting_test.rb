@@ -29,7 +29,7 @@ class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::Test
   end
 
   test 'custom attribute definer' do
-    model_attribute = TestIssue.attribute_definitions[:custom_column]
+    model_attribute = TestIssue.attribute_definitions['custom_column']
 
     assert_kind_of CustomCoder, model_attribute.coder
     assert_equal 'custom_column', model_attribute.name

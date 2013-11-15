@@ -51,9 +51,9 @@ module CassandraObject
           end
       end
 
-      def default
-        []
-      end
+      # def default
+      #   []
+      # end
 
       def encode(array)
         raise ArgumentError.new("#{array.inspect} is not an Array") unless array.kind_of?(Array)

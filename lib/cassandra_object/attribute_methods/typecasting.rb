@@ -39,11 +39,11 @@ module CassandraObject
             raise "Must supply a :coder for #{name}"
           end
 
-          attribute_definitions[name.to_sym] = AttributeMethods::Definition.new(name, coder, options)
+          attribute_definitions[name.to_s] = AttributeMethods::Definition.new(name, coder, options)
         end
 
         def typecast_attribute(record, name, value)
-          if attribute_definition = attribute_definitions[name.to_sym]
+          if attribute_definition = attribute_definitions[name.to_s]
             attribute_definition.instantiate(record, value)
           else
             raise NoMethodError, "Unknown attribute #{name.inspect}"
@@ -51,7 +51,7 @@ module CassandraObject
         end
 
         def coder_for(attribute)
-          attribute_definitions[attribute.to_sym].coder
+          attribute_definitions[attribute.to_s].coder
         end
       end
     end
