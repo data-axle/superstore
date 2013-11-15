@@ -12,6 +12,10 @@ module CassandraObject
       def decode(str)
         Date.parse(str)
       end
+
+      def wrap(record, name, value)
+        value.to_date
+      end
     end
   end
 end
