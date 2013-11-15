@@ -7,9 +7,9 @@ module CassandraObject
       @destroyed = false
       @attributes = {}
       self.attributes = attributes || {}
-      attribute_definitions.each_key do |attr|
-        unless attribute_exists?(attr)
-          @attributes[attr.to_s] = self.class.typecast_attribute(self, attr, nil)
+      attribute_definitions.each_value do |definition|
+        unless definition.default.nil? || attribute_exists?(definition.name)
+          @attributes[definition.name] = definition.default
         end
       end
 

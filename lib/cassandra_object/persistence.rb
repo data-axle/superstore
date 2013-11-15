@@ -53,7 +53,7 @@ module CassandraObject
           object.instance_variable_set("@id", id) if id
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
-          object.instance_variable_set("@attributes", typecast_attributes(object, attributes))
+          object.instance_variable_set("@attributes", typecast_persisted_attributes(object, attributes))
         end
       end
 
@@ -61,7 +61,7 @@ module CassandraObject
         encoded = {}
         attributes.each do |column_name, value|
           unless value.nil?
-            encoded[column_name.to_s] = attribute_definitions[column_name.to_sym].coder.encode(value)
+            encoded[column_name] = attribute_definitions[column_name].coder.encode(value)
           end
         end
         encoded
@@ -91,9 +91,19 @@ module CassandraObject
           end
         end
 
-        def typecast_attributes(object, attributes)
-          attributes = attributes.symbolize_keys
-          Hash[attribute_definitions.map { |k, attribute_definition| [k.to_s, attribute_definition.instantiate(object, attributes[k])] }]
+        def typecast_persisted_attributes(object, attributes)
+          attributes.each do |key, value|
+            next unless definition = attribute_definitions[key]
+            attributes[key] = definition.instantiate(object, value)
+          end
+
+          attribute_definitions.each_value do |definition|
+            unless definition.default.nil? || attributes.has_key?(definition.name)
+              attributes[definition.name] = definition.default
+            end
+          end
+
+          attributes
         end
 
         def write_option_string(ignore_batching = false)
@@ -150,7 +160,7 @@ module CassandraObject
 
     def reload
       clear_belongs_to_cache
-      @attributes.update(self.class.find(id).instance_variable_get('@attributes'))
+      @attributes = self.class.find(id).instance_variable_get('@attributes')
       self
     end
 

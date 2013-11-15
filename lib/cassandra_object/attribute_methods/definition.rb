@@ -7,6 +7,10 @@ module CassandraObject
         @coder  = coder.new(options)
       end
 
+      def default
+        coder.default
+      end
+
       def instantiate(record, value)
         value = value.nil? ? coder.default : value
         return if value.nil?

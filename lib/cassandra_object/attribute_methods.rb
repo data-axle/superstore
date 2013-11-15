@@ -52,7 +52,11 @@ module CassandraObject
     end
 
     def attributes
-      Hash[@attributes.map { |name, _| [name, read_attribute(name)] }]
+      results = {}
+      @attributes.each_key do |key|
+        results[key] = read_attribute(key)
+      end
+      results
     end
 
     def attributes=(attributes)
@@ -77,7 +81,7 @@ module CassandraObject
 
     protected
       def attribute_method?(name)
-        !!attribute_definitions[name.to_sym]
+        !!attribute_definitions[name.to_s]
       end
 
     private
