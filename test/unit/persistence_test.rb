@@ -4,6 +4,10 @@
 require 'test_helper'
 
 class CassandraObject::PersistenceTest < CassandraObject::TestCase
+  test 'instantiate removes unknowns' do
+    assert_nil Issue.instantiate('theid', 'z' => 'nooo').attributes['z']
+  end
+
   test 'encode_attributes' do
     klass = temp_object do
       string :description
@@ -210,8 +214,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
 
     ids = []
     (1..10).each do
-      record = klass.new(name: 'cool')
-      record.save!
+      record = klass.create!(name: 'cool')
       ids << record.id
     end
 

@@ -93,8 +93,11 @@ module CassandraObject
 
         def typecast_persisted_attributes(object, attributes)
           attributes.each do |key, value|
-            next unless definition = attribute_definitions[key]
-            attributes[key] = definition.instantiate(object, value)
+            if definition = attribute_definitions[key]
+              attributes[key] = definition.instantiate(object, value)
+            else
+              attributes.delete(key)
+            end
           end
 
           attribute_definitions.each_value do |definition|
