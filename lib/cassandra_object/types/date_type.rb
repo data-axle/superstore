@@ -15,7 +15,7 @@ module CassandraObject
       end
 
       def wrap(record, name, value)
-        value.to_date
+        value.to_date if value
       end
     end
   end
