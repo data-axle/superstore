@@ -19,7 +19,6 @@ module CassandraObject
   autoload :Inspect
   autoload :Model
   autoload :Persistence
-  autoload :Savepoints
   autoload :Schema
   autoload :Scope
   autoload :Scoping

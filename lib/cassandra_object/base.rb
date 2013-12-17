@@ -23,7 +23,6 @@ module CassandraObject
     include BelongsTo
     include Callbacks
     include Timestamps
-    include Savepoints
     include Scoping
     include Core
     extend  Model
