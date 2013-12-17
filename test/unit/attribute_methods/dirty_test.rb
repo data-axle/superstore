@@ -10,6 +10,7 @@ class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
 
     record.save!
 
+    assert_equal [nil, 'foo'], record.previous_changes['name']
     assert !record.changed?
   end
 

@@ -8,17 +8,9 @@ module CassandraObject
       def save(*) #:nodoc:
         if status = super
           @previously_changed = changes
-          @changed_attributes.clear
+          @changed_attributes = {}
         end
         status
-      end
-
-      # Attempts to <tt>save!</tt> the record and clears changed attributes if successful.
-      def save!(*) #:nodoc:
-        super.tap do
-          @previously_changed = changes
-          @changed_attributes.clear
-        end
       end
 
       # <tt>reload</tt> the record and clears changed attributes.
