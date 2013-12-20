@@ -29,7 +29,7 @@ module CassandraObject
 
       private
         def run_command(command)
-          `echo "#{command};" | #{cqlsh} -k #{keyspace} #{server}`.sub(/^(.*)$/, '').strip
+          `echo "#{command};" | #{cqlsh} -2 -k #{keyspace} #{server}`.sub(/^(.*)$/, '').strip
         end
 
         def cqlsh
