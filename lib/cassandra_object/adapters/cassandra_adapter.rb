@@ -38,7 +38,7 @@ module CassandraObject
         if (not_nil_attributes = attributes.reject { |key, value| value.nil? }).any?
           insert_attributes = {'KEY' => id}.update(not_nil_attributes)
           statement = "INSERT INTO #{table} (#{quote_columns(insert_attributes.keys) * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
-          execute_batchable sanitize(statement, insert_attributes.values)
+          execute_batchable sanitize(statement, *insert_attributes.values)
         end
 
         if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
@@ -75,8 +75,8 @@ module CassandraObject
 
       private
 
-        def sanitize(statement, bind_vars)
-          CassandraCQL::Statement.sanitize(statement, Array.wrap(bind_vars))
+        def sanitize(statement, *bind_vars)
+          CassandraCQL::Statement.sanitize(statement, bind_vars).force_encoding(Encoding::UTF_8)
         end
 
         def quote_columns(column_names)
