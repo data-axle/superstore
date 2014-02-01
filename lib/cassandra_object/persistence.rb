@@ -7,15 +7,12 @@ module CassandraObject
     end
 
     module ClassMethods
-      def remove(id)
-        statement = "DELETE FROM #{column_family}#{write_option_string} WHERE "
-        statement += id.is_a?(Array) ? "KEY IN (?)" : "KEY = ?"
-
-        execute_batchable_cql statement, id
+      def remove(ids)
+        adapter.delete ids
       end
 
       def delete_all
-        execute_cql "TRUNCATE #{column_family}"
+        adapter.execute "TRUNCATE #{column_family}"
       end
 
       def create(attributes = {}, &block)
@@ -25,27 +22,15 @@ module CassandraObject
       end
 
       def write(id, attributes)
-        if (encoded = encode_attributes(attributes)).any?
-          insert_attributes = {'KEY' => id}.update encode_attributes(attributes)
-          statement = "INSERT INTO #{column_family} (#{quote_columns(insert_attributes.keys) * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
-          execute_batchable_cql statement, *insert_attributes.values
-        end
-
-        if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
-          execute_batchable_cql "DELETE #{quote_columns(nil_attributes.keys) * ','} FROM #{column_family}#{write_option_string} WHERE KEY = ?", id
-        end
+        adapter.write id, encode_attributes(attributes)
       end
 
       def batching?
-        !batch_statements.nil?
+        adapter.batching?
       end
 
-      def batch
-        self.batch_statements = []
-        yield
-        execute_cql(batch_statement) if batch_statements.any?
-      ensure
-        self.batch_statements = nil
+      def batch(&block)
+        adapter.batch(&block)
       end
 
       def instantiate(id, attributes)
@@ -73,24 +58,6 @@ module CassandraObject
           column_names.map { |name| "'#{name}'" }
         end
 
-        def batch_statement
-          return nil unless batch_statements.any?
-
-          [
-            "BEGIN BATCH#{write_option_string(true)}",
-            batch_statements * "\n",
-            'APPLY BATCH'
-          ] * "\n"
-        end
-
-        def execute_batchable_cql(cql_string, *bind_vars)
-          if batch_statements
-            batch_statements << CassandraCQL::Statement.sanitize(cql_string, bind_vars)
-          else
-            execute_cql cql_string, *bind_vars
-          end
-        end
-
         def typecast_persisted_attributes(object, attributes)
           attributes.each do |key, value|
             if definition = attribute_definitions[key]
@@ -107,12 +74,6 @@ module CassandraObject
           end
 
           attributes
-        end
-
-        def write_option_string(ignore_batching = false)
-          if (ignore_batching || !batching?) && base_class.default_consistency
-            " USING CONSISTENCY #{base_class.default_consistency}"
-          end
         end
     end
 

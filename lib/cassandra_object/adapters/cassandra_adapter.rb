@@ -1,6 +1,16 @@
 module CassandraObject
-  module ConnectionAdapters
+  module Adapters
     class CassandraAdapter < AbstractAdapter
+      def cql
+        @cql ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
+      end
+
+      def execute(stmt)
+        ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: stmt) do
+          cql.execute statement
+        end
+      end
+
       # def escape_where_value(value)
       #   if value.is_a?(Array)
       #     value.map { |v| escape_where_value(v) }.join(",")
@@ -25,8 +35,8 @@ module CassandraObject
       end
 
       def write(id, attributes)
-        if (encoded = encode_attributes(attributes)).any?
-          insert_attributes = {'KEY' => id}.update encode_attributes(attributes)
+        if (not_nil_attributes = attributes.reject { |key, value| value.nil? }).any?
+          insert_attributes = {'KEY' => id}.update(not_nil_attributes)
           statement = "INSERT INTO #{column_family} (#{quote_columns(insert_attributes.keys) * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
           execute_batchable sanitize(statement, insert_attributes.values)
         end
@@ -42,6 +52,17 @@ module CassandraObject
 
         execute_batchable sanitize(statement, ids)
       end
+
+      def execute_batch(statements)
+        raise 'No can do' if statements.empty?
+
+        [
+          "BEGIN BATCH#{write_option_string(true)}",
+          statements * "\n",
+          'APPLY BATCH'
+        ] * "\n"
+      end
+
 
       private
 
@@ -62,6 +83,7 @@ module CassandraObject
             " USING CONSISTENCY #{consistency}"
           end
         end
+
     end
   end
 end

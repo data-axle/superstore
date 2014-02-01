@@ -38,20 +38,20 @@ module CassandraObject
     end
   end
 
+  module Adapters
+    extend ActiveSupport::Autoload
+
+    autoload :AbstractAdapter
+    autoload :CassandraAdapter
+    autoload :HstoreAdapter
+  end
+
   module BelongsTo
     extend ActiveSupport::Autoload
 
     autoload :Association
     autoload :Builder
     autoload :Reflection
-  end
-
-  module ConnectionAdapters
-    extend ActiveSupport::Autoload
-
-    autoload :AbstractAdapter
-    autoload :CassandraAdapter
-    autoload :HstoreAdapter
   end
 
   module Types

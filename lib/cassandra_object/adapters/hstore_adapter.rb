@@ -1,6 +1,6 @@
 module CassandraObject
   module ConnectionAdapters
-    class HstoreAdapter < AbstractAdapter
+    class Adapter < AbstractAdapter
     end
   end
 end

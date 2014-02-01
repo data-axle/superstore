@@ -1,6 +1,6 @@
 module CassandraObject
   module ConnectionAdapters
-    class DynamoAdapter < AbstractAdapter
+    class Adapter < AbstractAdapter
     end
   end
 end
