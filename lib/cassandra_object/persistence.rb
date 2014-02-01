@@ -26,7 +26,7 @@ module CassandraObject
 
       def write(id, attributes)
         if (encoded = encode_attributes(attributes)).any?
-          insert_attributes = {'KEY' => id}.update encode_attributes(attributes)
+          insert_attributes = {'KEY' => id}.update(encoded)
           statement = "INSERT INTO #{column_family} (#{quote_columns(insert_attributes.keys) * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
           execute_batchable_cql statement, *insert_attributes.values
         end
