@@ -8,7 +8,7 @@ module CassandraObject
 
     module ClassMethods
       def remove(ids)
-        adapter.delete ids
+        adapter.delete column_family, ids
       end
 
       def delete_all
@@ -22,7 +22,7 @@ module CassandraObject
       end
 
       def write(id, attributes)
-        adapter.write id, encode_attributes(attributes)
+        adapter.write column_family, id, encode_attributes(attributes)
       end
 
       def batching?
