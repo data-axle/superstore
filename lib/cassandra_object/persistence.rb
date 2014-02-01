@@ -45,7 +45,9 @@ module CassandraObject
       def encode_attributes(attributes)
         encoded = {}
         attributes.each do |column_name, value|
-          unless value.nil?
+          if value.nil?
+            encoded[column_name] = nil
+          else
             encoded[column_name] = attribute_definitions[column_name].coder.encode(value)
           end
         end
