@@ -27,14 +27,6 @@ module CassandraObject
   autoload :Type
   autoload :Validations
 
-  module BelongsTo
-    extend ActiveSupport::Autoload
-
-    autoload :Association
-    autoload :Builder
-    autoload :Reflection
-  end
-
   module AttributeMethods
     extend ActiveSupport::Autoload
 
@@ -44,6 +36,22 @@ module CassandraObject
       autoload :PrimaryKey
       autoload :Typecasting
     end
+  end
+
+  module BelongsTo
+    extend ActiveSupport::Autoload
+
+    autoload :Association
+    autoload :Builder
+    autoload :Reflection
+  end
+
+  module ConnectionAdapters
+    extend ActiveSupport::Autoload
+
+    autoload :AbstractAdapter
+    autoload :CassandraAdapter
+    autoload :HstoreAdapter
   end
 
   module Types
