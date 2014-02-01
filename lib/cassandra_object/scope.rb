@@ -36,9 +36,9 @@ module CassandraObject
         end
       end
 
-      def instantiate_from_cql(cql_string, *args)
+      def instantiate_from_cql(cql_string)
         results = []
-        klass.execute_cql(cql_string, *args).fetch do |cql_row|
+        klass.adapter.execute(cql_string).fetch do |cql_row|
           results << instantiate_cql_row(cql_row)
         end
         results.compact!

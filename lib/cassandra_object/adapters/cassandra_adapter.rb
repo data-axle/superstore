@@ -21,17 +21,19 @@ module CassandraObject
       #     value
       #   end
       # end
-      def select(table, ids, options ={})
+      def read(table, ids, options ={})
         select_string = options[:select] ? (['KEY'] | select_values) * ',' : '*'
         where_string  = sanitize(ids.is_a?(Array) ? "KEY IN (?)" : "KEY = ?", ids)
         limit_string  = options[:limit] ? sanitize("LIMIT ?", limit[:limit]) : nil
 
-        [
+        statement = [
           "SELECT #{select_string} FROM #{table}",
           consistency_string,
           where_string,
           limit_string
         ].delete_if(&:blank?) * ' '
+
+        execute statement
       end
 
       def write(table, id, attributes)
