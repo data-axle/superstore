@@ -34,10 +34,10 @@ module CassandraObject
 
       def to_cql
         [
-            "SELECT #{select_string} FROM #{klass.column_family}",
-            consistency_string,
-            where_string,
-            limit_string
+          "SELECT #{select_string} FROM #{klass.column_family}",
+          consistency_string,
+          where_string,
+          limit_string
         ].delete_if(&:blank?) * ' '
       end
 
