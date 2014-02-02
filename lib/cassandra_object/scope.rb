@@ -38,19 +38,11 @@ module CassandraObject
 
       def instantiate_from_cql(cql_string)
         results = []
-        klass.adapter.execute(cql_string).fetch do |cql_row|
-          results << instantiate_cql_row(cql_row)
+        klass.adapter.select(cql_string) do |key, attributes|
+          results << klass.instantiate(key, attributes)
         end
         results.compact!
         results
-      end
-
-      def instantiate_cql_row(cql_row)
-        attributes = cql_row.to_hash
-        key = attributes.delete('KEY')
-        if attributes.any?
-          klass.instantiate(key, attributes)
-        end
       end
   end
 end

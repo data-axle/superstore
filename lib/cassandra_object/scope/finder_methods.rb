@@ -24,6 +24,7 @@ module CassandraObject
       end
 
       private
+
         def find_one(id)
           if id.blank?
             raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{id.inspect}"

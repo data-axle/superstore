@@ -11,19 +11,17 @@ module CassandraObject
         end
       end
 
-      # def escape_where_value(value)
-      #   if value.is_a?(Array)
-      #     value.map { |v| escape_where_value(v) }.join(",")
-      #   elsif value.is_a?(String)
-      #     value = value.gsub("'", "''")
-      #     "'#{value}'"
-      #   else
-      #     value
-      #   end
-      # end
+      def select(statement)
+        execute(statement).fetch do |cql_row|
+          attributes = cql_row.to_hash
+          key = attributes.delete(primary_key_column)
+          yield(key, attributes) unless attributes.empty?
+        end
+      end
+
       def read(table, ids, options ={})
-        select_string = options[:select] ? (['KEY'] | select_values) * ',' : '*'
-        where_string  = sanitize(ids.is_a?(Array) ? "KEY IN (?)" : "KEY = ?", ids)
+        select_string = options[:select] ? ([primary_key_column] | options[:select]) * ',' : '*'
+        where_string  = sanitize(ids.is_a?(Array) ? "#{primary_key_column} IN (?)" : "#{primary_key_column} = ?", ids)
         limit_string  = options[:limit] ? sanitize("LIMIT ?", limit[:limit]) : nil
 
         statement = [
@@ -38,19 +36,19 @@ module CassandraObject
 
       def write(table, id, attributes)
         if (not_nil_attributes = attributes.reject { |key, value| value.nil? }).any?
-          insert_attributes = {'KEY' => id}.update(not_nil_attributes)
+          insert_attributes = {primary_key_column => id}.update(not_nil_attributes)
           statement = "INSERT INTO #{table} (#{quote_columns(insert_attributes.keys) * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
           execute_batchable sanitize(statement, *insert_attributes.values)
         end
 
         if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
-          execute_batchable sanitize("DELETE #{quote_columns(nil_attributes.keys) * ','} FROM #{table}#{write_option_string} WHERE KEY = ?", id)
+          execute_batchable sanitize("DELETE #{quote_columns(nil_attributes.keys) * ','} FROM #{table}#{write_option_string} WHERE #{primary_key_column} = ?", id)
         end
       end
 
       def delete(table, ids)
         statement = "DELETE FROM #{table}#{write_option_string} WHERE "
-        statement += ids.is_a?(Array) ? "KEY IN (?)" : "KEY = ?"
+        statement += ids.is_a?(Array) ? "#{primary_key_column} IN (?)" : "#{primary_key_column} = ?"
 
         execute_batchable sanitize(statement, ids)
       end
@@ -73,6 +71,10 @@ module CassandraObject
 
       def consistency=(val)
         @consistency = val
+      end
+
+      def primary_key_column
+        'KEY'
       end
 
       private
