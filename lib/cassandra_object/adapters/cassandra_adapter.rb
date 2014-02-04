@@ -19,19 +19,85 @@ module CassandraObject
         end
       end
 
-      def read(table, ids, options ={})
-        select_string = options[:select] ? ([primary_key_column] | options[:select]) * ',' : '*'
-        where_string  = sanitize(ids.is_a?(Array) ? "#{primary_key_column} IN (?)" : "#{primary_key_column} = ?", ids)
-        limit_string  = options[:limit] ? sanitize("LIMIT ?", limit[:limit]) : nil
+      def build_query(scope)
+        QueryBuilder.new(self, scope).to_query
+      end
 
-        statement = [
-          "SELECT #{select_string} FROM #{table}",
-          consistency_string,
-          where_string,
-          limit_string
-        ].delete_if(&:blank?) * ' '
+      class QueryBuilder
+        def initialize(adapter, scope)
+          @adapter  = adapter
+          @scope    = scope
+        end
 
-        execute statement
+        def to_query
+          [
+            "SELECT #{select_string} FROM #{@scope.klass.column_family}",
+            consistency_string,
+            where_string,
+            limit_string
+          ].delete_if(&:blank?) * ' '
+        end
+
+        def select_string
+          if @scope.select_values.any?
+            (['KEY'] | @scope.select_values) * ','
+          else
+            '*'
+          end
+        end
+
+        def where_string
+          if @scope.where_values.any?
+            wheres = []
+
+            @scope.where_values.map do |where_value|
+              wheres.concat format_where_statement(where_value)
+            end
+
+            "WHERE #{wheres * ' AND '}"
+          else
+            ''
+          end
+        end
+
+        def format_where_statement(where_value)
+          if where_value.is_a?(String)
+            [where_value]
+          elsif where_value.is_a?(Hash)
+            where_value.map do |column, value|
+              if value.is_a?(Array)
+                "#{column} IN (#{escape_where_value(value)})"
+              else
+                "#{column} = #{escape_where_value(value)}"
+              end
+            end
+          end
+        end
+
+        def escape_where_value(value)
+          if value.is_a?(Array)
+            value.map { |v| escape_where_value(v) }.join(",")
+          elsif value.is_a?(String)
+            value = value.gsub("'", "''")
+            "'#{value}'"
+          else
+            value
+          end
+        end
+
+        def limit_string
+          if @scope.limit_value
+            "LIMIT #{@scope.limit_value}"
+          else
+            ""
+          end
+        end
+
+        def consistency_string
+          if @adapter.consistency
+            "USING CONSISTENCY #{@adapter.consistency}"
+          end
+        end
       end
 
       def write(table, id, attributes)
