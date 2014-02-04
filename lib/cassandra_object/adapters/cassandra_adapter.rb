@@ -32,7 +32,7 @@ module CassandraObject
         def to_query
           [
             "SELECT #{select_string} FROM #{@scope.klass.column_family}",
-            consistency_string,
+            @adapter.write_option_string,
             where_string,
             limit_string
           ].delete_if(&:blank?) * ' '
@@ -92,12 +92,6 @@ module CassandraObject
             ""
           end
         end
-
-        def consistency_string
-          if @adapter.consistency
-            "USING CONSISTENCY #{@adapter.consistency}"
-          end
-        end
       end
 
       def write(table, id, attributes)
@@ -143,6 +137,12 @@ module CassandraObject
         'KEY'
       end
 
+      def write_option_string(ignore_batching = false)
+        if (ignore_batching || !batching?) && consistency
+          " USING CONSISTENCY #{consistency}"
+        end
+      end
+
       private
 
         def sanitize(statement, *bind_vars)
@@ -151,12 +151,6 @@ module CassandraObject
 
         def quote_columns(column_names)
           column_names.map { |name| "'#{name}'" }
-        end
-
-        def write_option_string(ignore_batching = false)
-          if (ignore_batching || !batching?) && consistency
-            " USING CONSISTENCY #{consistency}"
-          end
         end
 
     end
