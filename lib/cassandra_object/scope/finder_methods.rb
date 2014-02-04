@@ -28,7 +28,7 @@ module CassandraObject
         def find_one(id)
           if id.blank?
             raise CassandraObject::RecordNotFound, "Couldn't find #{self.name} with key #{id.inspect}"
-          elsif record = where('KEY' => id).first
+          elsif record = where(adapter.primary_key_column => id).first
             record
           else
             raise CassandraObject::RecordNotFound
@@ -41,7 +41,7 @@ module CassandraObject
 
           ids = ids.compact.map(&:to_s).uniq
 
-          where("KEY" => ids).to_a
+          where(adapter.primary_key_column => ids).to_a
         end
     end
   end
