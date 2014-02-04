@@ -19,7 +19,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     )
 
     assert_equal(
-      {},
+      {'description' => nil},
       klass.encode_attributes({'description' => nil})
     )
 

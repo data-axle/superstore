@@ -24,7 +24,7 @@ module CassandraObject
           yield records
           break if next_record.nil?
 
-          records = scope.where("KEY >= '#{next_record.id}'").to_a
+          records = scope.where("#{adapter.primary_key_column} >= '#{next_record.id}'").to_a
         end
       end
     end

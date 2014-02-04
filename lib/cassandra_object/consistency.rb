@@ -9,10 +9,14 @@ module CassandraObject
       ensure
         self.default_consistency = previous
       end
-    end
 
-    included do
-      class_attribute :default_consistency
+      def default_consistency=(value)
+        adapter.consistency = value
+      end
+
+      def default_consistency
+        adapter.consistency
+      end
     end
   end
 end

@@ -24,6 +24,10 @@ module CassandraObject
         @@cql ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
       end
 
+      def adapter
+        @@adapter ||= CassandraObject::Adapters::CassandraAdapter.new(config)
+      end
+
       def execute_cql(cql_string, *bind_vars)
         statement = CassandraCQL::Statement.sanitize(cql_string, bind_vars).force_encoding(Encoding::UTF_8)
 

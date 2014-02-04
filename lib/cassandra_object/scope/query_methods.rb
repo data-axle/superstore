@@ -33,79 +33,12 @@ module CassandraObject
       end
 
       def to_cql
-        [
-          "SELECT #{select_string} FROM #{klass.column_family}",
-          consistency_string,
-          where_string,
-          limit_string
-        ].delete_if(&:blank?) * ' '
+        adapter.build_query(self)
       end
 
       def to_a
-        instantiate_from_cql(to_cql)
+        instantiate_from_cql(adapter.build_query(self))
       end
-
-      private
-        def select_string
-          if select_values.any?
-            (['KEY'] | select_values) * ','
-          else
-            '*'
-          end
-        end
-
-        def where_string
-          if where_values.any?
-            wheres = []
-
-            where_values.map do |where_value|
-              wheres.concat format_where_statement(where_value)
-            end
-
-            "WHERE #{wheres * ' AND '}"
-          else
-            ''
-          end
-        end
-
-        def format_where_statement(where_value)
-          if where_value.is_a?(String)
-            [where_value]
-          elsif where_value.is_a?(Hash)
-            where_value.map do |column, value|
-              if value.is_a?(Array)
-                "#{column} IN (#{escape_where_value(value)})"
-              else
-                "#{column} = #{escape_where_value(value)}"
-              end
-            end
-          end
-        end
-
-        def escape_where_value(value)
-          if value.is_a?(Array)
-            value.map { |v| escape_where_value(v) }.join(",")
-          elsif value.is_a?(String)
-            value = value.gsub("'", "''")
-            "'#{value}'"
-          else
-            value
-          end
-        end
-
-        def limit_string
-          if limit_value
-            "LIMIT #{limit_value}"
-          else
-            ""
-          end
-        end
-
-        def consistency_string
-          if klass.default_consistency
-            "USING CONSISTENCY #{klass.default_consistency}"
-          end
-        end
     end
   end
 end
