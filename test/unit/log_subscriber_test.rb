@@ -19,4 +19,8 @@ class CassandraObject::LogSubscriberTest < CassandraObject::TestCase
     assert_equal 1, @logger.logged(:debug).size
     assert_match "SELECT * FROM Issues", @logger.logged(:debug)[0]
   end
+
+  def test_initializes_runtime
+    Thread.new { assert_equal 0, CassandraObject::LogSubscriber.runtime }.join
+  end
 end
