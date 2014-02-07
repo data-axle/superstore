@@ -5,7 +5,6 @@ rvm:
   - 2.1.0
 env: CQLSH=/usr/local/cassandra/bin/cqlsh
 before_install:
-  - echo "127.0.0.1 "hostname | sudo tee /etc/hosts
   - wget http://archive.apache.org/dist/cassandra/1.2.9/apache-cassandra-1.2.9-bin.tar.gz
   - tar xfz apache-cassandra-1.2.9-bin.tar.gz
   - sh -c "echo 'JVM_OPTS=\"\${JVM_OPTS} -Xss256k -Djava.net.preferIPv4Stack=false\"' >> apache-cassandra-1.2.9/conf/cassandra-env.sh"
