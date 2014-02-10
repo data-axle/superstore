@@ -23,6 +23,15 @@ module CassandraObject
         clone.where! values
       end
 
+      def where_ids!(*ids)
+        self.id_values += ids.flatten
+        self
+      end
+
+      def where_ids(*ids)
+        clone.where_ids! ids
+      end
+
       def limit!(value)
         self.limit_value = value
         self

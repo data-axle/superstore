@@ -25,23 +25,71 @@ module CassandraObject
         QueryBuilder.new(self, scope).to_query
       end
 
+      class QueryBuilder
+        def initialize(adapter, scope)
+          @adapter  = adapter
+          @scope    = scope
+        end
+
+        def to_query
+          [
+            "SELECT #{select_string} FROM #{@scope.klass.column_family}",
+            where_string,
+            order_string,
+            limit_string,
+          ].delete_if(&:blank?) * ' '
+        end
+
+        def select_string
+          if @scope.select_values.any?
+            '*'
+          else
+            '*'
+          end
+        end
+
+        def where_string
+          if @scope.where_values.any?
+            wheres = []
+
+            @scope.where_values.map do |where_value|
+              wheres.concat format_where_statement(where_value)
+            end
+
+            "WHERE #{wheres * ' AND '}"
+          else
+            ''
+          end
+        end
+
+        def order_string
+          if @scope.id_values.many?
+            @scope.id_values.map { |id| "ID=#{@adapter.quote(id)} DESC" }.join(',')
+          end
+        end
+
+        def limit_string
+          if @scope.limit_value
+            "LIMIT #{@scope.limit_value}"
+          end
+        end
+      end
+
+      INSERT_SQL = 'insert into places_tmp (id, attribute_store) values ($1, $2)'
       def write(table, id, attributes)
         if (not_nil_attributes = attributes.reject { |key, value| value.nil? }).any?
-          insert_attributes = {primary_key_column => id}.update(not_nil_attributes)
-          statement = "INSERT INTO #{table} (#{quote_columns(insert_attributes.keys) * ','}) VALUES (#{Array.new(insert_attributes.size, '?') * ','})#{write_option_string}"
-          execute_batchable sanitize(statement, *insert_attributes.values)
+          statement = "INSERT INTO #{table} (id, attribute_store) VALUES ('#{id}', #{attributes_to_hstore(not_nil_attributes)})"
+          execute_batchable statement
         end
 
         if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
-          execute_batchable sanitize("DELETE #{quote_columns(nil_attributes.keys) * ','} FROM #{table}#{write_option_string} WHERE #{primary_key_column} = ?", id)
         end
       end
 
       def delete(table, ids)
-        statement = "DELETE FROM #{table} WHERE "
-        statement += ids.is_a?(Array) ? "#{primary_key_column} IN (?)" : "#{primary_key_column} = ?"
+        statement = "DELETE FROM #{table} WHERE #{create_ids_where_clause(ids)}"
 
-        execute_batchable sanitize(statement, ids)
+        execute_batchable statement
       end
 
       def execute_batch(statements)
@@ -53,6 +101,27 @@ module CassandraObject
 
         execute stmt
       end
+
+      def create_ids_where_clause(ids)
+        ids = ids.first if ids.is_a?(Array) && ids.one?
+
+        if ids.is_a?(Array)
+          id_list = ids.map { |id| quote(id) }.join(',')
+          "#{primary_key_column} IN (#{id_list})"
+        else
+          "#{primary_key_column} = #{quote(ids)}"
+        end
+      end
+
+      def quote(value)
+        connection.quote(value)
+      end
+
+      private
+
+        def attributes_to_hstore(attributes)
+          ConnectionAdapters::PostgreSQLColumn.hstore_to_string(attributes)
+        end
     end
   end
 end

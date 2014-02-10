@@ -51,41 +51,13 @@ module CassandraObject
         end
 
         def where_string
-          if @scope.where_values.any?
-            wheres = []
+          wheres = @scope.where_values.dup
+          if @scope.id_values.any?
+            wheres << @adapter.create_ids_where_clause(@scope.id_values)
+          end
 
-            @scope.where_values.map do |where_value|
-              wheres.concat format_where_statement(where_value)
-            end
-
+          if wheres.any?
             "WHERE #{wheres * ' AND '}"
-          else
-            ''
-          end
-        end
-
-        def format_where_statement(where_value)
-          if where_value.is_a?(String)
-            [where_value]
-          elsif where_value.is_a?(Hash)
-            where_value.map do |column, value|
-              if value.is_a?(Array)
-                "#{column} IN (#{escape_where_value(value)})"
-              else
-                "#{column} = #{escape_where_value(value)}"
-              end
-            end
-          end
-        end
-
-        def escape_where_value(value)
-          if value.is_a?(Array)
-            value.map { |v| escape_where_value(v) }.join(",")
-          elsif value.is_a?(String)
-            value = value.gsub("'", "''")
-            "'#{value}'"
-          else
-            value
           end
         end
 
@@ -111,10 +83,9 @@ module CassandraObject
       end
 
       def delete(table, ids)
-        statement = "DELETE FROM #{table}#{write_option_string} WHERE "
-        statement += ids.is_a?(Array) ? "#{primary_key_column} IN (?)" : "#{primary_key_column} = ?"
+        statement = "DELETE FROM #{table}#{write_option_string} WHERE #{create_ids_where_clause(ids)}"
 
-        execute_batchable sanitize(statement, ids)
+        execute_batchable statement
       end
 
       def execute_batch(statements)
@@ -141,6 +112,12 @@ module CassandraObject
         if (ignore_batching || !batching?) && consistency
           " USING CONSISTENCY #{consistency}"
         end
+      end
+
+      def create_ids_where_clause(ids)
+        ids = ids.first if ids.is_a?(Array) && ids.one?
+        sql = ids.is_a?(Array) ? "#{primary_key_column} IN (?)" : "#{primary_key_column} = ?"
+        sanitize(sql, ids)
       end
 
       private
