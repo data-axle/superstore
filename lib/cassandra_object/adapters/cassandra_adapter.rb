@@ -1,13 +1,17 @@
 module CassandraObject
   module Adapters
     class CassandraAdapter < AbstractAdapter
-      def cql
-        @cql ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
+      def primary_key_column
+        'KEY'
+      end
+
+      def connection
+        @connection ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
       end
 
       def execute(statement)
         ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
-          cql.execute statement
+          connection.execute statement
         end
       end
 
@@ -131,10 +135,6 @@ module CassandraObject
 
       def consistency=(val)
         @consistency = val
-      end
-
-      def primary_key_column
-        'KEY'
       end
 
       def write_option_string(ignore_batching = false)
