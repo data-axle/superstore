@@ -1,34 +1,6 @@
 module CassandraObject
   module Adapters
     class HstoreAdapter < AbstractAdapter
-      def primary_key_column
-        'id'
-      end
-
-      def connection
-        conf = {:adapter=>"postgresql", :encoding=>"unicode", :database=>"content_system_development", :pool=>5, :username=>"postgres", :password=>nil}
-        @connection ||= ActiveRecord::Base.postgresql_connection(conf)
-        # @connection ||= ActiveRecord::Base.postgresql_connection(config)
-      end
-
-      def execute(statement)
-        ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
-          connection.exec_query statement
-        end
-      end
-
-      def select(scope)
-        statement = QueryBuilder.new(self, scope).to_query
-
-        connection.execute(statement).each do |attributes|
-          yield attributes[primary_key_column], hstore_to_attributes(attributes['attribute_store'])
-        end
-      end
-
-      def build_query(scope)
-        QueryBuilder.new(self, scope).to_query
-      end
-
       class QueryBuilder
         def initialize(adapter, scope)
           @adapter  = adapter
@@ -76,7 +48,30 @@ module CassandraObject
         end
       end
 
-      INSERT_SQL = 'insert into places_tmp (id, attribute_store) values ($1, $2)'
+      def primary_key_column
+        'id'
+      end
+
+      def connection
+        conf = {:adapter=>"postgresql", :encoding=>"unicode", :database=>"content_system_development", :pool=>5, :username=>"postgres", :password=>nil}
+        @connection ||= ActiveRecord::Base.postgresql_connection(conf)
+        # @connection ||= ActiveRecord::Base.postgresql_connection(config)
+      end
+
+      def execute(statement)
+        ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
+          connection.exec_query statement
+        end
+      end
+
+      def select(scope)
+        statement = QueryBuilder.new(self, scope).to_query
+
+        connection.execute(statement).each do |attributes|
+          yield attributes[primary_key_column], hstore_to_attributes(attributes['attribute_store'])
+        end
+      end
+
       def insert(table, id, attributes)
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
         statement = "INSERT INTO #{table} (#{primary_key_column}, attribute_store) VALUES (#{quote(id)}, #{attributes_to_hstore(not_nil_attributes)})"

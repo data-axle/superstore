@@ -1,34 +1,6 @@
 module CassandraObject
   module Adapters
     class CassandraAdapter < AbstractAdapter
-      def primary_key_column
-        'KEY'
-      end
-
-      def connection
-        @connection ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
-      end
-
-      def execute(statement)
-        ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
-          connection.execute statement
-        end
-      end
-
-      def select(scope)
-        statement = QueryBuilder.new(self, scope).to_query
-
-        execute(statement).fetch do |cql_row|
-          attributes = cql_row.to_hash
-          key = attributes.delete(primary_key_column)
-          yield(key, attributes) unless attributes.empty?
-        end
-      end
-
-      def build_query(scope)
-        QueryBuilder.new(self, scope).to_query
-      end
-
       class QueryBuilder
         def initialize(adapter, scope)
           @adapter  = adapter
@@ -69,6 +41,30 @@ module CassandraObject
           else
             ""
           end
+        end
+      end
+
+      def primary_key_column
+        'KEY'
+      end
+
+      def connection
+        @connection ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
+      end
+
+      def execute(statement)
+        ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
+          connection.execute statement
+        end
+      end
+
+      def select(scope)
+        statement = QueryBuilder.new(self, scope).to_query
+
+        execute(statement).fetch do |cql_row|
+          attributes = cql_row.to_hash
+          key = attributes.delete(primary_key_column)
+          yield(key, attributes) unless attributes.empty?
         end
       end
 

@@ -13,6 +13,16 @@ module CassandraObject
         )
       end
 
+      def select(scope)
+        dynamo_table.items[key_string].attributes.to_h
+        dynamo_table.batch_get(:all, keys.map(&:to_s))
+      end
+
+      def insert(table, id, attributes)
+        attributes = {primary_key => id}.update(attributes)
+        self.class.dynamo_table.items.create(attributes)
+      end
+
       def update(table, id, attributes)
         dynamo_db_item = self.class.dynamo_table.items[id]
 
@@ -25,11 +35,6 @@ module CassandraObject
             end
           end
         end
-      end
-
-      def write(table, id, attributes)
-        attributes = {primary_key => id}.update(attributes)
-        self.class.dynamo_table.items.create(attributes)
       end
 
       def delete(table, ids)

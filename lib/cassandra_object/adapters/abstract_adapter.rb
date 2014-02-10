@@ -6,21 +6,20 @@ module CassandraObject
         @config = config
       end
 
-      # === Options
-      # [:select]
-      #   Only select certain fields
-      # [:limit]
-      #   Limit the results
-      def select(ids, options ={}) # abstract
+      # Read records from a instance of CassandraObject::Scope
+      def select(scope) # abstract
       end
 
+      # Insert a new row
       def insert(table, id, attributes) # abstract
       end
 
+      # Update an existing row
       def update(table, id, attributes) # abstract
       end
 
-      def delete(ids) # abstract
+      # Delete rows by an array of ids
+      def delete(table, ids) # abstract
       end
 
       def execute_batch(statements) # abstract
