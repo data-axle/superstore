@@ -44,7 +44,7 @@ module CassandraObject
 
         def select_string
           if @scope.select_values.any?
-            "id, slice(attribute_store, #{fields_to_postgres_array(@scope.select_values)}) as attribute_store"
+            "id, slice(attribute_store, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as attribute_store"
           else
             '*'
           end
@@ -130,6 +130,11 @@ module CassandraObject
         connection.quote(value)
       end
 
+      def fields_to_postgres_array(fields)
+        quoted_fields = fields.map { |field| "'#{field}'" }.join(',')
+        "ARRAY[#{quoted_fields}]"
+      end
+
       private
 
         def attributes_to_hstore(attributes)
@@ -138,11 +143,6 @@ module CassandraObject
 
         def hstore_to_attributes(string)
           ActiveRecord::ConnectionAdapters::PostgreSQLColumn.string_to_hstore(string)
-        end
-
-        def fields_to_postgres_array(fields)
-          quoted_fields = fields.map { |field| "'#{field}'" }.join(',')
-          "ARRAY[#{quoted_fields}]"
         end
     end
   end
