@@ -70,6 +70,14 @@ module CassandraObject
         end
       end
 
+      def insert(table, id, attributes)
+        write(table, id, attributes)
+      end
+
+      def update(table, id, attributes)
+        write(table, id, attributes)
+      end
+
       def write(table, id, attributes)
         if (not_nil_attributes = attributes.reject { |key, value| value.nil? }).any?
           insert_attributes = {primary_key_column => id}.update(not_nil_attributes)

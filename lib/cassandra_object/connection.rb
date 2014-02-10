@@ -25,7 +25,8 @@ module CassandraObject
       end
 
       def adapter
-        @@adapter ||= CassandraObject::Adapters::CassandraAdapter.new(config)
+        # @@adapter ||= CassandraObject::Adapters::CassandraAdapter.new(config)
+        @@adapter ||= CassandraObject::Adapters::HstoreAdapter.new(config)
       end
 
       def execute_cql(cql_string, *bind_vars)

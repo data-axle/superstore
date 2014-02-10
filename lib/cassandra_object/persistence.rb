@@ -21,8 +21,12 @@ module CassandraObject
         end
       end
 
-      def write(id, attributes)
-        adapter.write column_family, id, encode_attributes(attributes)
+      def insert_record(id, attributes)
+        adapter.insert column_family, id, encode_attributes(attributes)
+      end
+
+      def update_record(id, attributes)
+        adapter.update column_family, id, encode_attributes(attributes)
       end
 
       def batching?
@@ -131,18 +135,19 @@ module CassandraObject
     end
 
     private
-      def update
-        write
-      end
 
       def create
         @new_record = false
-        write
+        write :insert_record
       end
 
-      def write
+      def update
+        write :update_record
+      end
+
+      def write(method)
         changed_attributes = Hash[changed.map { |attr| [attr, read_attribute(attr)] }]
-        self.class.write(id, changed_attributes)
+        self.class.send(method, id, changed_attributes)
       end
   end
 end

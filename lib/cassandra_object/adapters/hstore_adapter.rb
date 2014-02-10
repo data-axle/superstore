@@ -1,12 +1,14 @@
 module CassandraObject
-  module ConnectionAdapters
+  module Adapters
     class HstoreAdapter < AbstractAdapter
       def primary_key_column
         'id'
       end
 
       def connection
-        @connection ||= ActiveRecord::Base.postgresql_connection(configuration)
+        conf = {:adapter=>"postgresql", :encoding=>"unicode", :database=>"content_system_development", :pool=>5, :username=>"postgres", :password=>nil}
+        @connection ||= ActiveRecord::Base.postgresql_connection(conf)
+        # @connection ||= ActiveRecord::Base.postgresql_connection(config)
       end
 
       def execute(statement)
@@ -17,7 +19,7 @@ module CassandraObject
 
       def select(statement)
         connection.execute(statement).each do |attributes|
-          yield attributes[primary_key_column], attributes['attribute_store']
+          yield attributes[primary_key_column], hstore_to_attributes(attributes['attribute_store'])
         end
       end
 
@@ -42,8 +44,7 @@ module CassandraObject
 
         def select_string
           if @scope.select_values.any?
-            quoted_fields = @scope.select_values.map { |field| "'#{field}'" }.join(',')
-            "id, slice(attribute_store, ARRAY[#{quoted_fields}]) as attribute_store"
+            "id, slice(attribute_store, #{fields_to_postgres_array(@scope.select_values)}) as attribute_store"
           else
             '*'
           end
@@ -74,14 +75,28 @@ module CassandraObject
       end
 
       INSERT_SQL = 'insert into places_tmp (id, attribute_store) values ($1, $2)'
-      def write(table, id, attributes)
-        if (not_nil_attributes = attributes.reject { |key, value| value.nil? }).any?
-          statement = "INSERT INTO #{table} (id, attribute_store) VALUES ('#{id}', #{attributes_to_hstore(not_nil_attributes)})"
-          execute_batchable statement
+      def insert(table, id, attributes)
+        not_nil_attributes = attributes.reject { |key, value| value.nil? }
+        statement = "INSERT INTO #{table} (#{primary_key_column}, attribute_store) VALUES (#{quote(id)}, #{attributes_to_hstore(not_nil_attributes)})"
+        execute_batchable statement
+      end
+
+      def update(table, id, attributes)
+        return if attributes.empty?
+
+        not_nil_attributes = attributes.reject { |key, value| value.nil? }
+        nil_attributes = attributes.select { |key, value| value.nil? }
+
+        if not_nil_attributes.any? && nil_attributes.any?
+          value_update = "(attribute_store - #{fields_to_postgres_array(nil_attributes.keys)}) || #{attributes_to_hstore(not_nil_attributes)}"
+        elsif not_nil_attributes.any?
+          value_update = "attribute_store || #{attributes_to_hstore(not_nil_attributes)}"
+        elsif nil_attributes.any?
+          value_update = "attribute_store - #{fields_to_postgres_array(nil_attributes.keys)}"
         end
 
-        if (nil_attributes = attributes.select { |key, value| value.nil? }).any?
-        end
+        statement = "UPDATE #{table} SET attribute_store = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
+        execute_batchable statement
       end
 
       def delete(table, ids)
@@ -118,7 +133,16 @@ module CassandraObject
       private
 
         def attributes_to_hstore(attributes)
-          ConnectionAdapters::PostgreSQLColumn.hstore_to_string(attributes)
+          quote ActiveRecord::ConnectionAdapters::PostgreSQLColumn.hstore_to_string(attributes)
+        end
+
+        def hstore_to_attributes(string)
+          ActiveRecord::ConnectionAdapters::PostgreSQLColumn.string_to_hstore(string)
+        end
+
+        def fields_to_postgres_array(fields)
+          quoted_fields = fields.map { |field| "'#{field}'" }.join(',')
+          "ARRAY[#{quoted_fields}]"
         end
     end
   end
