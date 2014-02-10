@@ -15,8 +15,8 @@ class CassandraObject::Schema::TasksTest < CassandraObject::TestCase
   end
 
   test "load" do
-    CassandraObject::Base.expects(:execute_cql).with("DO STUFF;")
-    CassandraObject::Base.expects(:execute_cql).with("AND MORE;")
+    CassandraObject::Schema.expects(:keyspace_execute).with("DO STUFF;")
+    CassandraObject::Schema.expects(:keyspace_execute).with("AND MORE;")
 
     CassandraObject::Schema.load StringIO.new(
       "DO\n" +

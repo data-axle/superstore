@@ -17,7 +17,7 @@ module CassandraObject
           current_cql << line.rstrip
 
           if current_cql =~ /;$/
-            CassandraObject::Base.execute_cql current_cql
+            keyspace_execute current_cql
             current_cql = ''
           end
         end
