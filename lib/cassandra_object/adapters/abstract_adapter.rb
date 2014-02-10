@@ -14,7 +14,10 @@ module CassandraObject
       def select(ids, options ={}) # abstract
       end
 
-      def write(id, attributes) # abstract
+      def insert(table, id, attributes) # abstract
+      end
+
+      def update(table, id, attributes) # abstract
       end
 
       def delete(ids) # abstract
