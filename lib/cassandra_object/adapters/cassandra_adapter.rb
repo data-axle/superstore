@@ -15,7 +15,9 @@ module CassandraObject
         end
       end
 
-      def select(statement)
+      def select(scope)
+        statement = QueryBuilder.new(self, scope).to_query
+
         execute(statement).fetch do |cql_row|
           attributes = cql_row.to_hash
           key = attributes.delete(primary_key_column)

@@ -46,7 +46,7 @@ module CassandraObject
       end
 
       def to_a
-        instantiate_from_cql(adapter.build_query(self))
+        select_records
       end
     end
   end

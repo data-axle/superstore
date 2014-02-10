@@ -37,9 +37,9 @@ module CassandraObject
         end
       end
 
-      def instantiate_from_cql(cql_string)
+      def select_records
         results = []
-        klass.adapter.select(cql_string) do |key, attributes|
+        klass.adapter.select(self) do |key, attributes|
           results << klass.instantiate(key, attributes)
         end
         results.compact!

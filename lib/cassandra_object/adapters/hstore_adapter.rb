@@ -17,7 +17,9 @@ module CassandraObject
         end
       end
 
-      def select(statement)
+      def select(scope)
+        statement = QueryBuilder.new(self, scope).to_query
+
         connection.execute(statement).each do |attributes|
           yield attributes[primary_key_column], hstore_to_attributes(attributes['attribute_store'])
         end
