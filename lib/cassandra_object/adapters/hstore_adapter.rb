@@ -42,23 +42,21 @@ module CassandraObject
 
         def select_string
           if @scope.select_values.any?
-            '*'
+            quoted_fields = @scope.select_values.map { |field| "'#{field}'" }.join(',')
+            "id, slice(attribute_store, ARRAY[#{quoted_fields}]) as attribute_store"
           else
             '*'
           end
         end
 
         def where_string
-          if @scope.where_values.any?
-            wheres = []
+          wheres = @scope.where_values.dup
+          if @scope.id_values.any?
+            wheres << @adapter.create_ids_where_clause(@scope.id_values)
+          end
 
-            @scope.where_values.map do |where_value|
-              wheres.concat format_where_statement(where_value)
-            end
-
+          if wheres.any?
             "WHERE #{wheres * ' AND '}"
-          else
-            ''
           end
         end
 
