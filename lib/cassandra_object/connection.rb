@@ -20,21 +20,9 @@ module CassandraObject
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def cql
-        @@cql ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
-      end
-
       def adapter
         @@adapter ||= CassandraObject::Adapters::CassandraAdapter.new(config)
         # @@adapter ||= CassandraObject::Adapters::HstoreAdapter.new(config)
-      end
-
-      def execute_cql(cql_string, *bind_vars)
-        statement = CassandraCQL::Statement.sanitize(cql_string, bind_vars).force_encoding(Encoding::UTF_8)
-
-        ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
-          cql.execute statement
-        end
       end
     end
   end

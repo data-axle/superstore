@@ -4,6 +4,6 @@ class Issue < CassandraObject::Base
   before_create { self.description ||= 'funny' }
 
   def self.for_key key
-    where('KEY' => key)
+    where_ids(key)
   end
 end

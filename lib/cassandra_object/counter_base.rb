@@ -30,6 +30,18 @@ module CassandraObject
         execute_cql "UPDATE #{column_family} SET #{counter_updates(counter, count)} WHERE KEY = '#{group}'"
       end
 
+      def cql
+        @@cql ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
+      end
+
+      def execute_cql(cql_string, *bind_vars)
+        statement = CassandraCQL::Statement.sanitize(cql_string, bind_vars).force_encoding(Encoding::UTF_8)
+
+        ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
+          cql.execute statement
+        end
+      end
+
       private
 
       def counter_updates(counter, count=nil)
@@ -68,6 +80,5 @@ module CassandraObject
     include Identity
     include Inspect
     extend  Model
-
   end
 end

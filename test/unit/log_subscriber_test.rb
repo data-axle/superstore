@@ -12,7 +12,7 @@ class CassandraObject::LogSubscriberTest < CassandraObject::TestCase
   end
 
   def test_cql_notification
-    Issue.execute_cql "SELECT * FROM Issues"
+    Issue.adapter.execute "SELECT * FROM Issues"
 
     wait
 

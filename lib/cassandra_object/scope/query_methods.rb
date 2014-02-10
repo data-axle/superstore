@@ -41,10 +41,6 @@ module CassandraObject
         clone.limit! value
       end
 
-      def to_cql
-        adapter.build_query(self)
-      end
-
       def to_a
         select_records
       end
