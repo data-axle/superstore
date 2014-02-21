@@ -37,7 +37,8 @@ module CassandraObject
 
         def order_string
           if @scope.id_values.many?
-            @scope.id_values.map { |id| "ID=#{@adapter.quote(id)} DESC" }.join(',')
+            id_orders = @scope.id_values.map { |id| "ID=#{@adapter.quote(id)} DESC" }.join(',')
+            "ORDER BY #{id_orders}"
           end
         end
 
@@ -53,7 +54,7 @@ module CassandraObject
       end
 
       def connection
-        conf = {:adapter=>"postgresql", :encoding=>"unicode", :database=>"content_system_development", :pool=>5, :username=>"postgres", :password=>nil}
+        conf = {:adapter=>"postgresql", :encoding=>"unicode", :database=>"axle_place_test", :pool=>5, :username=>"postgres"}
         @connection ||= ActiveRecord::Base.postgresql_connection(conf)
         # @connection ||= ActiveRecord::Base.postgresql_connection(config)
       end
