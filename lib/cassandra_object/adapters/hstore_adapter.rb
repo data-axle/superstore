@@ -54,8 +54,9 @@ module CassandraObject
       end
 
       def connection
-        conf = {:adapter=>"postgresql", :encoding=>"unicode", :database=>"axle_place_test", :pool=>5, :username=>"postgres"}
-        @connection ||= ActiveRecord::Base.postgresql_connection(conf)
+        # conf = {:adapter=>"postgresql", :encoding=>"unicode", :database=>"axle_place_test", :pool=>5, :username=>"postgres"}
+        # @connection ||= ActiveRecord::Base.postgresql_connection(conf)
+        ActiveRecord::Base.connection
         # @connection ||= ActiveRecord::Base.postgresql_connection(config)
       end
 

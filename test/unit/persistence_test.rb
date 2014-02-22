@@ -160,19 +160,6 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     assert_equal persisted_issue, reloaded_issue
   end
 
-  test 'delete with consistency' do
-    issue = Issue.create
-    Issue.with_consistency 'QUORUM' do
-      issue.destroy
-    end
-  end
-
-  test 'insert with consistency' do
-    Issue.with_consistency 'QUORUM' do
-      Issue.create
-    end
-  end
-
   test 'allow CQL keyword in column name' do
     assert_nothing_raised do
       Issue.string :text

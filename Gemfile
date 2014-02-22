@@ -2,9 +2,14 @@ source "http://rubygems.org"
 gemspec
 
 gem 'rake'
-gem 'mocha'
 gem 'thin'
 
-# group :development, :test do
-#   gem 'pry'
-# end
+group :test do
+  gem 'rails'
+  gem 'mocha', require: false
+end
+
+group :hstore do
+  gem 'activerecord'
+  gem 'pg'
+end
