@@ -1,8 +1,8 @@
 require 'test_helper'
 
 class CassandraObject::Schema::TasksTest < CassandraObject::TestCase
-  test "column_families" do
-    assert_equal ['Issues'], CassandraObject::Schema.column_families
+  test "table_names" do
+    assert_equal ['Issues'], CassandraObject::Schema.table_names
   end
 
   test "dump" do

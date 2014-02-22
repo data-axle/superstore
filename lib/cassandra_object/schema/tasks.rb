@@ -2,7 +2,7 @@ module CassandraObject
   class Schema
     module Tasks
       def dump(io)
-        column_families.each do |column_family|
+        table_names.each do |column_family|
           io.puts run_command("DESCRIBE COLUMNFAMILY #{column_family}")
           io.puts
         end
@@ -23,7 +23,7 @@ module CassandraObject
         end
       end
 
-      def column_families
+      def table_names
         run_command('DESCRIBE COLUMNFAMILIES').split.sort
       end
 

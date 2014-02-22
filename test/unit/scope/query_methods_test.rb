@@ -18,12 +18,6 @@ class CassandraObject::Scope::QueryMethodsTest < CassandraObject::TestCase
     assert_equal [foo_issue], Issue.select { |issue| issue.title == 'foo' }
   end
 
-  test "select with consistency" do
-    Issue.with_consistency 'ONE' do
-      Issue.all
-    end
-  end
-
   test "chaining where with scope" do
     issue = Issue.create title: 'abc', description: 'def'
     query = Issue.select(:title).for_key(issue.id)

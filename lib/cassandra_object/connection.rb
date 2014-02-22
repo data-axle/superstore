@@ -21,8 +21,10 @@ module CassandraObject
 
     module ClassMethods
       def adapter
-        @@adapter ||= CassandraObject::Adapters::CassandraAdapter.new(config)
-        # @@adapter ||= CassandraObject::Adapters::HstoreAdapter.new(config)
+        @@adapter ||= begin
+          CassandraObject::Adapters::CassandraAdapter.new(config)
+          # CassandraObject::Adapters::HstoreAdapter.new(config)
+        end
       end
     end
   end

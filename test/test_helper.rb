@@ -1,9 +1,11 @@
 require 'bundler/setup'
-require 'minitest/autorun'
 Bundler.require(:default, :test)
 
-require 'support/connect'
-require 'support/teardown'
+require 'rails/test_help'
+require 'mocha/setup'
+
+# require 'support/hstore'
+require 'support/cassandra'
 require 'support/issue'
 
 module CassandraObject
