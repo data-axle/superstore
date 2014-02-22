@@ -13,7 +13,7 @@ module CassandraObject
     end
 
     def config=(config)
-      @@config = config.is_a?(Hash) ? CassandraObject::Config.new(config) : config
+      @@config = config.deep_symbolize_keys
     end
 
     def config

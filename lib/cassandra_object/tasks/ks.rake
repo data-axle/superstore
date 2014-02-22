@@ -1,11 +1,11 @@
 ks_namespace = namespace :ks do
-  desc 'Create the keyspace in cassandra_config/cassandra.yml for the current environment'
+  desc 'Create the keyspace in config/cassandra.yml for the current environment'
   task create: :environment do
     begin
-      CassandraObject::Schema.create_keyspace cassandra_config.keyspace, cassandra_config.keyspace_options
+      CassandraObject::Schema.create_keyspace CassandraObject::Base.config[:keyspace], CassandraObject::Base.config[:keyspace_options]
     rescue Exception => e
       if e.message =~ /conflicts/
-        p "Keyspace #{cassandra_config.keyspace} already exists"
+        p "Keyspace #{CassandraObject::Base.config[:keyspace]} already exists"
       else
         raise e
       end
@@ -14,10 +14,10 @@ ks_namespace = namespace :ks do
 
   task drop: :environment do
     begin
-      CassandraObject::Schema.drop_keyspace cassandra_config.keyspace
+      CassandraObject::Schema.drop_keyspace CassandraObject::Base.config[:keyspace]
     rescue Exception => e
       if e.message =~ /non existing keyspace/
-        p "Keyspace #{cassandra_config.keyspace} does not exist"
+        p "Keyspace #{CassandraObject::Base.config[:keyspace]} does not exist"
       else
         raise e
       end
@@ -51,12 +51,4 @@ ks_namespace = namespace :ks do
   task :_load do
     ks_namespace["structure:load"].invoke
   end
-
-  private
-    def cassandra_config
-      @cassandra_config ||= begin
-        cassandra_configs = YAML.load_file(Rails.root.join('config', 'cassandra.yml'))
-        CassandraObject::Config.new cassandra_configs[Rails.env || 'development']
-      end
-    end
 end

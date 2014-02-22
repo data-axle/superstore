@@ -64,11 +64,11 @@ module CassandraObject
         end
 
         def db
-          @db ||= CassandraCQL::Database.new(CassandraObject::Base.config.servers, {keyspace: 'system'}, {connect_timeout: 30, timeout: 30})
+          @db ||= CassandraCQL::Database.new(CassandraObject::Base.adapter.servers, {keyspace: 'system'}, {connect_timeout: 30, timeout: 30})
         end
 
         def keyspace_execute(cql)
-          db.execute "USE #{CassandraObject::Base.config.keyspace}"
+          db.execute "USE #{CassandraObject::Base.config[:keyspace]}"
           db.execute cql
         end
 

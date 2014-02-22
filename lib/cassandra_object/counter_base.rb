@@ -31,7 +31,7 @@ module CassandraObject
       end
 
       def cql
-        @@cql ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
+        @@cql ||= CassandraObject::Base.adapter.connection
       end
 
       def execute_cql(cql_string, *bind_vars)

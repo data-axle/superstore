@@ -49,7 +49,14 @@ module CassandraObject
       end
 
       def connection
-        @connection ||= CassandraCQL::Database.new(config.servers, {keyspace: config.keyspace}, config.thrift_options)
+        @connection ||= begin
+          thrift_options = (config[:thrift] || {})
+          CassandraCQL::Database.new(servers, {keyspace: config[:keyspace]}, thrift_options)
+        end
+      end
+
+      def servers
+        Array.wrap(config[:servers] || "127.0.0.1:9160")
       end
 
       def execute(statement)

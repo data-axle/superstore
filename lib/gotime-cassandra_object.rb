@@ -10,7 +10,6 @@ module CassandraObject
   autoload :Base
   autoload :BelongsTo
   autoload :Callbacks
-  autoload :Config
   autoload :Connection
   autoload :Core
   autoload :CounterBase
