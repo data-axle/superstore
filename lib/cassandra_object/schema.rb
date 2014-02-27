@@ -10,12 +10,10 @@ module CassandraObject
         'strategy_options:replication_factor' => 1
       }
 
-      def create_keyspace(keyspace, options = {})
+      def create_keyspace(keyspace, options = nil)
         stmt = "CREATE KEYSPACE #{keyspace}"
 
-        if options.empty?
-          options = DEFAULT_CREATE_KEYSPACE
-        end
+        options ||= DEFAULT_CREATE_KEYSPACE
 
         system_execute statement_with_options(stmt, options)
       end
@@ -25,7 +23,11 @@ module CassandraObject
       end
 
       def create_column_family(column_family, options = {})
-        stmt = "CREATE COLUMNFAMILY #{column_family} " +
+        create_table column_family, options
+      end
+
+      def create_table(table_name, options = {})
+        stmt = "CREATE COLUMNFAMILY #{table_name} " +
                "(KEY varchar PRIMARY KEY)"
 
         keyspace_execute statement_with_options(stmt, options)
