@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module CassandraObject
   module Identity
     extend ActiveSupport::Concern
@@ -6,7 +8,7 @@ module CassandraObject
       class_attribute :key_generator
 
       key do
-        SimpleUUID::UUID.new.to_guid.tr('-','')
+        SecureRandom.uuid.tr('-','')
       end
     end
 
