@@ -12,7 +12,6 @@ module CassandraObject
   autoload :Callbacks
   autoload :Connection
   autoload :Core
-  autoload :CounterBase
   autoload :Identity
   autoload :Inspect
   autoload :Model
