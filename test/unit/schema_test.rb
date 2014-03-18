@@ -16,23 +16,24 @@ class CassandraObject::SchemaTest < CassandraObject::TestCase
     assert existing_keyspace
   end
 
-  test "create_column_family" do
-    CassandraObject::Schema.create_column_family 'TestRecords', 'compression_parameters:sstable_compression' => 'SnappyCompressor'
+  # SELECT columnfamily_name FROM System.schema_columnfamilies WHERE keyspace_name='myKeyspaceName';
+  test "create_table" do
+    CassandraObject::Schema.create_table 'TestRecords', 'compression_parameters:sstable_compression' => 'SnappyCompressor'
 
     begin
-      CassandraObject::Schema.create_column_family 'TestRecords'
+      CassandraObject::Schema.create_table 'TestRecords'
       assert false, 'TestRecords should already exist'
     rescue Exception => e
     end
   end
 
-  test "drop_column_family" do
-    CassandraObject::Schema.create_column_family 'TestCFToDrop'
+  test "drop_table" do
+    CassandraObject::Schema.create_table 'TestCFToDrop'
 
-    CassandraObject::Schema.drop_column_family 'TestCFToDrop'
+    CassandraObject::Schema.drop_table 'TestCFToDrop'
 
     begin
-      CassandraObject::Schema.drop_column_family 'TestCFToDrop'
+      CassandraObject::Schema.drop_table 'TestCFToDrop'
       assert false, 'TestCFToDrop should not exist'
     rescue Exception => e
     end

@@ -119,7 +119,11 @@ module CassandraObject
           t.string :id, null: false
           t.hstore :attribute_store, null: false
         end
-        connection.execute "ALTER TABLE #{table_name} ADD CONSTRAINT #{table_name}_pkey PRIMARY KEY (id)"
+        connection.execute "ALTER TABLE \"#{table_name}\" ADD CONSTRAINT #{table_name}_pkey PRIMARY KEY (id)"
+      end
+
+      def drop_table(table_name)
+        ActiveRecord::Migration.drop_table table_name
       end
 
       def create_ids_where_clause(ids)

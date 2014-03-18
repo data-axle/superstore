@@ -113,6 +113,24 @@ module CassandraObject
         execute stmt
       end
 
+      # SCHEMA
+      def create_table(table_name, options = {})
+        stmt = "CREATE COLUMNFAMILY #{table_name} " +
+               "(KEY varchar PRIMARY KEY)"
+
+        schema_execute statement_with_options(stmt, options), config[:keyspace]
+      end
+
+      def drop_table(table_name)
+        schema_execute "DROP TABLE #{table_name}", config[:keyspace]
+      end
+
+      def schema_execute(cql, keyspace)
+        schema_db = CassandraCQL::Database.new(CassandraObject::Base.adapter.servers, {keyspace: keyspace}, {connect_timeout: 30, timeout: 30})
+        schema_db.execute cql
+      end
+      # /SCHEMA
+
       def consistency
         @consistency
       end
@@ -124,6 +142,18 @@ module CassandraObject
       def write_option_string(ignore_batching = false)
         if (ignore_batching || !batching?) && consistency
           " USING CONSISTENCY #{consistency}"
+        end
+      end
+
+      def statement_with_options(stmt, options)
+        if options.any?
+          with_stmt = options.map do |k,v|
+            "#{k} = #{CassandraCQL::Statement.quote(v)}"
+          end.join(' AND ')
+
+          "#{stmt} WITH #{with_stmt}"
+        else
+          stmt
         end
       end
 

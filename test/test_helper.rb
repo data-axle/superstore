@@ -8,6 +8,10 @@ require 'mocha/setup'
 require 'support/cassandra'
 require 'support/issue'
 
+def MiniTest.filter_backtrace(bt)
+  bt
+end
+
 module CassandraObject
   class TestCase < ActiveSupport::TestCase
     def temp_object(&block)

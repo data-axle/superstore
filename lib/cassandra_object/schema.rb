@@ -15,7 +15,7 @@ module CassandraObject
 
         options ||= DEFAULT_CREATE_KEYSPACE
 
-        system_execute statement_with_options(stmt, options)
+        system_execute adapter.statement_with_options(stmt, options)
       end
 
       def drop_keyspace(keyspace)
@@ -27,19 +27,20 @@ module CassandraObject
       end
 
       def create_table(table_name, options = {})
-        stmt = "CREATE COLUMNFAMILY #{table_name} " +
-               "(KEY varchar PRIMARY KEY)"
-
-        keyspace_execute statement_with_options(stmt, options)
+        adapter.create_table table_name, options
       end
 
       def alter_column_family(column_family, instruction, options = {})
         stmt = "ALTER TABLE #{column_family} #{instruction}"
-        keyspace_execute statement_with_options(stmt, options)
+        keyspace_execute adapter.statement_with_options(stmt, options)
       end
 
       def drop_column_family(column_family)
-        keyspace_execute "DROP TABLE #{column_family}"
+        drop_table column_family
+      end
+
+      def drop_table(table_name)
+        adapter.drop_table table_name
       end
 
       def add_index(column_family, column, index_name = nil)
@@ -53,30 +54,17 @@ module CassandraObject
       end
 
       private
-        def statement_with_options(stmt, options)
-          if options.any?
-            with_stmt = options.map do |k,v|
-              "#{k} = #{CassandraCQL::Statement.quote(v)}"
-            end.join(' AND ')
 
-            stmt << " WITH #{with_stmt}"
-          end
-
-          stmt
-        end
-
-        def db
-          @db ||= CassandraCQL::Database.new(CassandraObject::Base.adapter.servers, {keyspace: 'system'}, {connect_timeout: 30, timeout: 30})
+        def adapter
+          CassandraObject::Base.adapter
         end
 
         def keyspace_execute(cql)
-          db.execute "USE #{CassandraObject::Base.config[:keyspace]}"
-          db.execute cql
+          adapter.schema_execute cql, CassandraObject::Base.config[:keyspace]
         end
 
         def system_execute(cql)
-          db.execute "USE system"
-          db.execute cql
+          adapter.schema_execute cql, 'system'
         end
     end
   end
