@@ -9,6 +9,10 @@ group :test do
   gem 'mocha', require: false
 end
 
+group :cassandra do
+  gem 'cassandra-cql'
+end
+
 group :hstore do
   gem 'activerecord'
   gem 'pg'
