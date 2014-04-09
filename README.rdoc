@@ -27,16 +27,36 @@ Change the version of Cassandra accordingly. Recent versions have not been backw
     end
   end
 
-== Connecting to the Server
+== Using with Cassandra
 
-  CassandraObject::Base.config = {
-    keyspace: 'my_app_development',
-    servers: '127.0.0.1:9160',
-    thrift: {
-      timeout: 20,
+Add the cassandra-cql gem to Gemfile:
+
+  gem 'cassandra-cql'
+  
+Add a config/cassandra.yml:
+
+```yaml
+  development:
+    adapter: cassandra
+    keyspace: my_app_development
+    servers: 127.0.0.1:9160
+    thrift:
+      timeout: 20
       retries: 2
-    }
-  }
+```
+
+== Using with Postgres HStore
+
+Add the pg gem to your Gemfile:
+
+  gem 'pg'
+  
+And a config/cassandra.yml:
+
+```yaml
+  development:
+    adapter: hstore
+```
 
 == Creating and updating records
 
