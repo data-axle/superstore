@@ -6,7 +6,7 @@ Cassandra Object uses ActiveModel to mimic much of the behavior in ActiveRecord.
 ## Installation
 
 Add the following to your Gemfile:
-```
+```ruby
 gem 'gotime-cassandra_object'
 ```
 

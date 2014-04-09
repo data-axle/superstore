@@ -1,3 +1,6 @@
+gem 'cassandra-cql'
+require 'cassandra-cql'
+
 module CassandraObject
   module Adapters
     class CassandraAdapter < AbstractAdapter

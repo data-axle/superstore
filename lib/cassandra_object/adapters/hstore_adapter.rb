@@ -1,3 +1,6 @@
+gem 'pg'
+require 'pg'
+
 module CassandraObject
   module Adapters
     class HstoreAdapter < AbstractAdapter
