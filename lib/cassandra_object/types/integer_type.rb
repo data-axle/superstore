@@ -11,10 +11,6 @@ module CassandraObject
         return nil if str.empty?
         str.to_i
       end
-
-      def wrap(record, name, value)
-        value.to_i
-      end
     end
   end
 end

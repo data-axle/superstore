@@ -13,10 +13,6 @@ module CassandraObject
         return nil if str.empty?
         Date.parse(str)
       end
-
-      def wrap(record, name, value)
-        value.to_date if value
-      end
     end
   end
 end

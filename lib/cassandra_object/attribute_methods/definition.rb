@@ -15,8 +15,7 @@ module CassandraObject
         value = value.nil? ? coder.default : value
         return if value.nil?
 
-        value = value.kind_of?(String) ? coder.decode(value) : value
-        coder.wrap(record, name, value)
+        value.kind_of?(String) ? coder.decode(value) : value
       end
     end
   end

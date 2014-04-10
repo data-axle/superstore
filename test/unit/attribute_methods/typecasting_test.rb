@@ -66,6 +66,9 @@ class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::Test
 
     issue = TestIssue.find issue.id
     assert_equal(101, issue.price)
+
+    issue = TestIssue.new price: ''
+    assert_nil issue.price
   end
 
   test 'json attribute' do

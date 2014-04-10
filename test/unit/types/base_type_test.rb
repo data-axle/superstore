@@ -16,9 +16,4 @@ class CassandraObject::Types::BaseTypeTest < CassandraObject::Types::TestCase
   test 'decode' do
     assert_equal 'abc', coder.decode('abc')
   end
-
-  test 'wrap' do
-    object = Object.new
-    assert_equal object, coder.wrap(nil, nil, object)
-  end
 end

@@ -11,10 +11,6 @@ module CassandraObject
 
         ActiveSupport::JSON.decode(str)
       end
-
-      def wrap(record, name, value)
-        value
-      end
     end
   end
 end

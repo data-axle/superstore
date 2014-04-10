@@ -9,24 +9,17 @@ class CassandraObject::Types::StringTypeTest < CassandraObject::Types::TestCase
     end
   end
 
-  test 'wrap' do
+  test 'encode as utf' do
     assert_equal(
       '123'.force_encoding('UTF-8').encoding,
-      coder.wrap(nil, nil, '123'.force_encoding('ASCII-8BIT')).encoding
+      coder.encode('123'.force_encoding('ASCII-8BIT')).encoding
     )
   end
 
-  test 'wrap when frozen' do
+  test 'encode frozen as utf' do
     assert_equal(
       '123'.force_encoding('UTF-8').encoding,
-      coder.wrap(nil, nil, '123'.force_encoding('ASCII-8BIT').freeze).encoding
-    )
-  end
-
-  test 'wrap when not a string' do
-    assert_equal(
-      "123",
-      coder.wrap(nil, nil, 123)
+      coder.encode('123'.force_encoding('ASCII-8BIT').freeze).encoding
     )
   end
 end

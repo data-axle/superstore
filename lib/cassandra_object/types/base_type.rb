@@ -17,10 +17,6 @@ module CassandraObject
       def decode(str)
         str
       end
-
-      def wrap(record, name, value)
-        value
-      end
     end
   end
 end
