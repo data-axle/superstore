@@ -1,4 +1,4 @@
-# Cassandra Object
+# Superstore
 [![Build Status](https://secure.travis-ci.org/data-axle/superstore.png?rvm=2.0.0)](http://travis-ci.org/data-axle/superstore) [![Code Climate](https://codeclimate.com/github/data-axle/superstore.png)](https://codeclimate.com/github/data-axle/superstore)
 
 Cassandra Object uses ActiveModel to mimic much of the behavior in ActiveRecord.
