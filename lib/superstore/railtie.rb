@@ -4,8 +4,8 @@ module Superstore
       load 'superstore/tasks/ks.rake'
     end
 
-    initializer "cassandra_object.config" do |app|
-      ActiveSupport.on_load :cassandra_object do
+    initializer "superstore.config" do |app|
+      ActiveSupport.on_load :superstore do
         pathname = Rails.root.join('config', 'superstore.yml')
         if pathname.exist?
           config = YAML.load(pathname.read)
@@ -24,7 +24,7 @@ module Superstore
     end
 
     # Expose database runtime to controller for logging.
-    initializer "cassandra_object.log_runtime" do |app|
+    initializer "superstore.log_runtime" do |app|
       require "superstore/railties/controller_runtime"
       ActiveSupport.on_load(:action_controller) do
         include Superstore::Railties::ControllerRuntime
