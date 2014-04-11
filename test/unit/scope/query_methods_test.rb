@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Scope::QueryMethodsTest < CassandraObject::TestCase
+class Superstore::Scope::QueryMethodsTest < Superstore::TestCase
   test "select" do
     original_issue = Issue.create title: 'foo', description: 'bar'
 

@@ -1,13 +1,13 @@
 Bundler.require :hstore
 require 'active_record'
 
-CassandraObject::Base.config = {'adapter' => 'hstore'}
+Superstore::Base.config = {'adapter' => 'hstore'}
 class PGInitializer
   def self.initialize!
     config = {
       'adapter'   => 'postgresql',
       'encoding'  => 'unicode',
-      'database'  => 'cassandra_object_test',
+      'database'  => 'superstore_test',
       'pool'      => 5,
       'username' => 'postgres'
     }

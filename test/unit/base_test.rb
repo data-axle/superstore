@@ -1,20 +1,20 @@
 require 'test_helper'
 
-class CassandraObject::BaseTest < CassandraObject::TestCase
-  class Son < CassandraObject::Base
+class Superstore::BaseTest < Superstore::TestCase
+  class Son < Superstore::Base
   end
 
   class Grandson < Son
   end
 
   test 'base_class' do
-    assert_equal CassandraObject::Base, CassandraObject::Base
+    assert_equal Superstore::Base, Superstore::Base
     assert_equal Son, Son.base_class
     assert_equal Son, Grandson.base_class
   end
 
   test 'column family' do
-    assert_equal 'CassandraObject::BaseTest::Sons', Son.column_family
-    assert_equal 'CassandraObject::BaseTest::Sons', Grandson.column_family
+    assert_equal 'Superstore::BaseTest::Sons', Son.column_family
+    assert_equal 'Superstore::BaseTest::Sons', Grandson.column_family
   end
 end

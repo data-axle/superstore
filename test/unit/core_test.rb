@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::CoreTest < CassandraObject::TestCase
+class Superstore::CoreTest < Superstore::TestCase
   test 'initialiaze' do
     issue = Issue.new
 

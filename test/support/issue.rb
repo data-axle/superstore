@@ -1,4 +1,4 @@
-class Issue < CassandraObject::Base
+class Issue < Superstore::Base
   string :description
   string :title
 

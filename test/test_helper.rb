@@ -12,10 +12,10 @@ def MiniTest.filter_backtrace(bt)
   bt
 end
 
-module CassandraObject
+module Superstore
   class TestCase < ActiveSupport::TestCase
     def temp_object(&block)
-      Class.new(CassandraObject::Base) do
+      Class.new(Superstore::Base) do
         self.column_family = 'Issues'
         string :force_save
         before_save { self.force_save = 'junk' }
@@ -30,7 +30,7 @@ module CassandraObject
   end
 
   module Types
-    class TestCase < CassandraObject::TestCase
+    class TestCase < Superstore::TestCase
       attr_accessor :coder
       setup do
         @coder = self.class.name.sub(/Test$/, '').constantize.new

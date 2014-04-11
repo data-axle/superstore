@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::AttributeMethods::DirtyTest < CassandraObject::TestCase
+class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
   test 'save clears dirty' do
     record = temp_object do
       string :name

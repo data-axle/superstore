@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Types::StringTypeTest < CassandraObject::Types::TestCase
+class Superstore::Types::StringTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal 'abc', coder.encode('abc')
 

@@ -1,13 +1,13 @@
 require 'test_helper'
 
-class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::TestCase
+class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
   class CustomType
   end
 
-  class CustomCoder < CassandraObject::Types::BaseType
+  class CustomCoder < Superstore::Types::BaseType
   end
 
-  class TestIssue < CassandraObject::Base
+  class TestIssue < Superstore::Base
     self.column_family = 'Issues'
 
     attribute :custom_column, type: CustomType, coder: CustomCoder
@@ -91,7 +91,7 @@ class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::Test
   end
 
   test 'multiple attributes definition' do
-    class MultipleAttributesIssue < CassandraObject::Base
+    class MultipleAttributesIssue < Superstore::Base
       self.column_family = 'Issues'
     end
 
@@ -104,14 +104,14 @@ class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::Test
   end
 
   test 'multiple attributes with options' do
-    class MultipleAttributesIssue < CassandraObject::Base
+    class MultipleAttributesIssue < Superstore::Base
       self.column_family = 'Issues'
     end
 
     MultipleAttributesIssue.expects(:attribute).with(:hello, { :unique => :true, :type => :string })
     MultipleAttributesIssue.expects(:attribute).with(:world, { :unique => :true, :type => :string })
 
-    class MultipleAttributesIssue < CassandraObject::Base
+    class MultipleAttributesIssue < Superstore::Base
       string :hello, :world, :unique => :true
     end
   end

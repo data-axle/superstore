@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::BelongsToTest < CassandraObject::TestCase
+class Superstore::BelongsToTest < Superstore::TestCase
   class TestObject < Issue
     string :issue_id
     belongs_to :issue

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::BatchesTest < CassandraObject::TestCase
+class Superstore::BatchesTest < Superstore::TestCase
   test 'find_each' do
     Issue.create
     Issue.create

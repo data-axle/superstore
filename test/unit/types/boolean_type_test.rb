@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Types::BooleanTypeTest < CassandraObject::Types::TestCase
+class Superstore::Types::BooleanTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal '1', coder.encode(true)
     assert_equal '1', coder.encode('true')

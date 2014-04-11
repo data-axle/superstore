@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ActiveModelTest < CassandraObject::TestCase
+class ActiveModelTest < Superstore::TestCase
 
   include ActiveModel::Lint::Tests
 

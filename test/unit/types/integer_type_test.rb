@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Types::IntegerTypeTest < CassandraObject::Types::TestCase
+class Superstore::Types::IntegerTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal '3', coder.encode(3)
     assert_equal '-3', coder.encode(-3)

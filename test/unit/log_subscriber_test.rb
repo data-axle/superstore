@@ -1,14 +1,14 @@
 require "test_helper"
 require "active_support/log_subscriber/test_helper"
-require "cassandra_object/log_subscriber"
+require "superstore/log_subscriber"
 
-class CassandraObject::LogSubscriberTest < CassandraObject::TestCase
+class Superstore::LogSubscriberTest < Superstore::TestCase
   include ActiveSupport::LogSubscriber::TestHelper
 
   def setup
     super
 
-    CassandraObject::LogSubscriber.attach_to :cassandra_object
+    Superstore::LogSubscriber.attach_to :cassandra_object
   end
 
   def test_cql_notification
@@ -21,6 +21,6 @@ class CassandraObject::LogSubscriberTest < CassandraObject::TestCase
   end
 
   def test_initializes_runtime
-    Thread.new { assert_equal 0, CassandraObject::LogSubscriber.runtime }.join
+    Thread.new { assert_equal 0, Superstore::LogSubscriber.runtime }.join
   end
 end

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Types::DateTypeTest < CassandraObject::Types::TestCase
+class Superstore::Types::DateTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal '2004-04-25', coder.encode(Date.new(2004, 4, 25))
   end

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Types::FloatTypeTest < CassandraObject::Types::TestCase
+class Superstore::Types::FloatTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal '5.01', coder.encode(5.01)
 

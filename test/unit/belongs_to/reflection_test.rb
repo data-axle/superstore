@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class CassandraObject::BelongsTo::ReflectionTest < CassandraObject::TestCase
-  class ::Status < CassandraObject::Base; end
-  class ::User < CassandraObject::Base
+class Superstore::BelongsTo::ReflectionTest < Superstore::TestCase
+  class ::Status < Superstore::Base; end
+  class ::User < Superstore::Base
     belongs_to :status
   end
 

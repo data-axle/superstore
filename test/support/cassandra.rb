@@ -1,7 +1,7 @@
 Bundler.require :cassandra
 
-CassandraObject::Base.config = {
-  keyspace: 'cassandra_object_test',
+Superstore::Base.config = {
+  keyspace: 'superstore_test',
   servers: '127.0.0.1:9160',
   thrift: {
     timeout: 5
@@ -9,16 +9,16 @@ CassandraObject::Base.config = {
 }
 
 begin
-  CassandraObject::Schema.drop_keyspace 'cassandra_object_test'
+  Superstore::Schema.drop_keyspace 'superstore_test'
 rescue Exception => e
 end
 
 sleep 1
-CassandraObject::Schema.create_keyspace 'cassandra_object_test'
-CassandraObject::Schema.create_column_family 'Issues'
-CassandraObject::Base.adapter.consistency = 'QUORUM'
+Superstore::Schema.create_keyspace 'superstore_test'
+Superstore::Schema.create_column_family 'Issues'
+Superstore::Base.adapter.consistency = 'QUORUM'
 
-CassandraObject::Base.class_eval do
+Superstore::Base.class_eval do
   class_attribute :created_records
   self.created_records = []
 
@@ -36,8 +36,8 @@ end
 module ActiveSupport
   class TestCase
     teardown do
-      if CassandraObject::Base.created_records.any?
-        CassandraObject::Base.delete_after_test
+      if Superstore::Base.created_records.any?
+        Superstore::Base.delete_after_test
       end
     end
   end

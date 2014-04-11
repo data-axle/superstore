@@ -1,5 +1,5 @@
 # Cassandra Object
-[![Build Status](https://secure.travis-ci.org/data-axle/cassandra_object.png?rvm=1.9.3)](http://travis-ci.org/data-axle/cassandra_object) [![Code Climate](https://codeclimate.com/github/data-axle/cassandra_object.png)](https://codeclimate.com/github/data-axle/cassandra_object)
+[![Build Status](https://secure.travis-ci.org/data-axle/superstore.png?rvm=2.0.0)](http://travis-ci.org/data-axle/superstore) [![Code Climate](https://codeclimate.com/github/data-axle/superstore.png)](https://codeclimate.com/github/data-axle/superstore)
 
 Cassandra Object uses ActiveModel to mimic much of the behavior in ActiveRecord.
 
@@ -7,7 +7,7 @@ Cassandra Object uses ActiveModel to mimic much of the behavior in ActiveRecord.
 
 Add the following to your Gemfile:
 ```ruby
-gem 'gotime-cassandra_object'
+gem 'superstore'
 ```
 
 Change the version of Cassandra accordingly. Recent versions have not been backward compatible.
@@ -15,7 +15,7 @@ Change the version of Cassandra accordingly. Recent versions have not been backw
 ## Defining Models
 
 ```ruby
-class Widget < CassandraObject::Base
+class Widget < Superstore::Base
   string :name
   string :description
   integer :price
@@ -36,7 +36,7 @@ Add the cassandra-cql gem to Gemfile:
 gem 'cassandra-cql'
 ```
   
-Add a config/cassandra.yml:
+Add a config/superstore.yml:
 
 ```yaml
 development:
@@ -56,7 +56,7 @@ Add the pg gem to your Gemfile:
 gem 'pg'
 ```
   
-And a config/cassandra.yml:
+And a config/superstore.yml:
 
 ```yaml
 development:

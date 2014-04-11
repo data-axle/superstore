@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::AttributeMethods::PrimaryKeyTest < CassandraObject::TestCase
+class Superstore::AttributeMethods::PrimaryKeyTest < Superstore::TestCase
   test 'get id' do
     model = temp_object do
       key do

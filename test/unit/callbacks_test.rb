@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class CassandraObject::CallbacksTest < CassandraObject::TestCase
-  class TestIssue < CassandraObject::Base
+class Superstore::CallbacksTest < Superstore::TestCase
+  class TestIssue < Superstore::Base
     self.column_family = 'Issues'
     string :description
 

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::TimestampsTest < CassandraObject::TestCase
+class Superstore::TimestampsTest < Superstore::TestCase
   test 'timestamps set on create' do
     issue = Issue.create
 

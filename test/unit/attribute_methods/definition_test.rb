@@ -1,11 +1,11 @@
 require 'test_helper'
 
-class CassandraObject::AttributeMethods::DefinitionTest < CassandraObject::TestCase
-  class TestType < CassandraObject::Types::BaseType
+class Superstore::AttributeMethods::DefinitionTest < Superstore::TestCase
+  class TestType < Superstore::Types::BaseType
   end
 
   test 'typecast' do
-    definition = CassandraObject::AttributeMethods::Definition.new(:foo, TestType, {a: :b})
+    definition = Superstore::AttributeMethods::Definition.new(:foo, TestType, {a: :b})
 
     assert_equal 'foo', definition.name
     assert_kind_of TestType, definition.coder

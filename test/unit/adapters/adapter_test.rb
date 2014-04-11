@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Adapters::AdapterTest < CassandraObject::TestCase
+class Superstore::Adapters::AdapterTest < Superstore::TestCase
   test 'create_table' do
   end
 end

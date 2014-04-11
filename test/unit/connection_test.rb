@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class CassandraObject::ConnectionTest < CassandraObject::TestCase
-  class TestObject < CassandraObject::Base
+class Superstore::ConnectionTest < Superstore::TestCase
+  class TestObject < Superstore::Base
   end
 
   test "sanitize supports question marks" do

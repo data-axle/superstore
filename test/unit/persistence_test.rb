@@ -3,7 +3,7 @@
 
 require 'test_helper'
 
-class CassandraObject::PersistenceTest < CassandraObject::TestCase
+class Superstore::PersistenceTest < Superstore::TestCase
   test 'instantiate removes unknowns' do
     assert_nil Issue.instantiate('theid', 'z' => 'nooo').attributes['z']
   end
@@ -38,13 +38,13 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
       first_issue = Issue.create
       second_issue = Issue.create
 
-      assert_raise(CassandraObject::RecordNotFound) { Issue.find(first_issue.id) }
-      assert_raise(CassandraObject::RecordNotFound) { Issue.find(second_issue.id) }
+      assert_raise(Superstore::RecordNotFound) { Issue.find(first_issue.id) }
+      assert_raise(Superstore::RecordNotFound) { Issue.find(second_issue.id) }
     end
 
     assert !Issue.batching?
-    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find(first_issue.id) }
-    assert_nothing_raised(CassandraObject::RecordNotFound) { Issue.find(second_issue.id) }
+    assert_nothing_raised(Superstore::RecordNotFound) { Issue.find(first_issue.id) }
+    assert_nothing_raised(Superstore::RecordNotFound) { Issue.find(second_issue.id) }
   end
 
   test 'persistance inquiries' do
@@ -88,7 +88,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
     record = klass.new(description: 'bad')
     record.save!
 
-    assert_raise CassandraObject::RecordInvalid do
+    assert_raise Superstore::RecordInvalid do
       record = klass.new
       record.save!
     end
@@ -126,7 +126,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
       issue = Issue.new(description: 'bad')
       issue.save!
 
-      assert_raise CassandraObject::RecordInvalid do
+      assert_raise Superstore::RecordInvalid do
         issue.update_attributes! description: ''
       end
     ensure
@@ -172,7 +172,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
   end
 
   test 'quote_columns' do
-    klass = Class.new { include CassandraObject::Persistence }
+    klass = Class.new { include Superstore::Persistence }
     assert_equal %w{'a' 'b'}, klass.__send__(:quote_columns, %w{a b})
   end
 
@@ -189,7 +189,7 @@ class CassandraObject::PersistenceTest < CassandraObject::TestCase
 
     klass.remove(id)
 
-    assert_raise CassandraObject::RecordNotFound do
+    assert_raise Superstore::RecordNotFound do
       klass.find(id)
     end
   end

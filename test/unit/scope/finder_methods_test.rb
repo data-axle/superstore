@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
+class Superstore::FinderMethodsTest < Superstore::TestCase
   test 'find' do
     Issue.create.tap do |issue|
       assert_equal issue, Issue.find(issue.id)
@@ -13,7 +13,7 @@ class CassandraObject::FinderMethodsTest < CassandraObject::TestCase
       assert_equal "Couldn't find Issue with key nil", e.message
     end
 
-    assert_raise CassandraObject::RecordNotFound do
+    assert_raise Superstore::RecordNotFound do
       Issue.find('what')
     end
   end

@@ -1,7 +1,7 @@
 require 'test_helper'
-require "cassandra_object/railties/controller_runtime"
+require "superstore/railties/controller_runtime"
 
-class CassandraObject::Railties::ControllerRuntimeTest < MiniTest::Unit::TestCase
+class Superstore::Railties::ControllerRuntimeTest < MiniTest::Unit::TestCase
   class TestRuntime
     def self.log_process_action(payload)
       ['sweet']
@@ -17,16 +17,16 @@ class CassandraObject::Railties::ControllerRuntimeTest < MiniTest::Unit::TestCas
   end
 
   class CassandraRuntime < TestRuntime
-    include CassandraObject::Railties::ControllerRuntime
+    include Superstore::Railties::ControllerRuntime
   end
 
   def test_cleanup_view_runtime
     runtime = CassandraRuntime.new
-    CassandraObject::LogSubscriber.runtime = 10
+    Superstore::LogSubscriber.runtime = 10
 
     runtime.cleanup_view_runtime
 
-    assert_equal 0, CassandraObject::LogSubscriber.runtime
+    assert_equal 0, Superstore::LogSubscriber.runtime
   end
 
   def test_append_info_to_payload
@@ -43,6 +43,6 @@ class CassandraObject::Railties::ControllerRuntimeTest < MiniTest::Unit::TestCas
     messages = CassandraRuntime.log_process_action(payload)
 
     assert_equal 2, messages.size
-    assert_equal "CassandraObject: 12.3ms", messages.last
+    assert_equal "Superstore: 12.3ms", messages.last
   end
 end

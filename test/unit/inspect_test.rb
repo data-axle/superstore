@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::InspectTest < CassandraObject::TestCase
+class Superstore::InspectTest < Superstore::TestCase
   test 'attribute_for_inspect' do
     object = temp_object do
       string :long_string

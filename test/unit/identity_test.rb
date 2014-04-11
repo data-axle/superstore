@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::IdentityTest < CassandraObject::TestCase
+class Superstore::IdentityTest < Superstore::TestCase
   test 'primary_key' do
     assert_equal 'id', Issue.primary_key
   end

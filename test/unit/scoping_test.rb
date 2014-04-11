@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class CassandraObject::ScopingTest < CassandraObject::TestCase
+class Superstore::ScopingTest < Superstore::TestCase
   test "scope" do
-    assert_kind_of CassandraObject::Scope, Issue.scope
+    assert_kind_of Superstore::Scope, Issue.scope
   end
 end

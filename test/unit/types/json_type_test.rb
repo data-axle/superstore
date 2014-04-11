@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Types::JsonTypeTest < CassandraObject::Types::TestCase
+class Superstore::Types::JsonTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal({a: 'b'}.to_json, coder.encode(a: 'b'))
     assert_equal '-3', coder.encode(-3)

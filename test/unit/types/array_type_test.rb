@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::Types::ArrayTypeTest < CassandraObject::Types::TestCase
+class Superstore::Types::ArrayTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal ['1', '2'].to_json, coder.encode(['1', '2'])
 

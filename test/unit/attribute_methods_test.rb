@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CassandraObject::AttributeMethodsTest < CassandraObject::TestCase
+class Superstore::AttributeMethodsTest < Superstore::TestCase
   test 'read and write attributes' do
     issue = Issue.new
     assert_nil issue.read_attribute(:description)
