@@ -10,6 +10,10 @@ module CassandraObject
           str
         end
       end
+
+      def typecast(value)
+        value.to_s
+      end
     end
   end
 end

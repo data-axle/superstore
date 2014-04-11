@@ -17,6 +17,10 @@ module CassandraObject
       def decode(str)
         str
       end
+
+      def typecast(value)
+        value
+      end
     end
   end
 end

@@ -11,6 +11,10 @@ module CassandraObject
         return nil if str.empty?
         str.to_i
       end
+
+      def typecast(value)
+        value.to_i
+      end
     end
   end
 end

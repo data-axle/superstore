@@ -13,6 +13,10 @@ module CassandraObject
         return nil if str.empty?
         Date.parse(str)
       end
+
+      def typecast(value)
+        value.to_date
+      end
     end
   end
 end

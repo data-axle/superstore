@@ -85,6 +85,9 @@ class CassandraObject::AttributeMethods::TypecastingTest < CassandraObject::Test
 
     issue = TestIssue.find issue.id
     assert_equal('hola', issue.name)
+
+    issue = TestIssue.create! name: 42
+    assert_equal '42', issue.name
   end
 
   test 'multiple attributes definition' do
