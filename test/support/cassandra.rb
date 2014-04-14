@@ -9,13 +9,13 @@ Superstore::Base.config = {
 }
 
 begin
-  Superstore::Schema.drop_keyspace 'superstore_test'
+  Superstore::CassandraSchema.drop_keyspace 'superstore_test'
 rescue Exception => e
 end
 
 sleep 1
-Superstore::Schema.create_keyspace 'superstore_test'
-Superstore::Schema.create_column_family 'Issues'
+Superstore::CassandraSchema.create_keyspace 'superstore_test'
+Superstore::CassandraSchema.create_column_family 'Issues'
 Superstore::Base.adapter.consistency = 'QUORUM'
 
 Superstore::Base.class_eval do

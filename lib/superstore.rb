@@ -16,6 +16,7 @@ module Superstore
   autoload :Model
   autoload :Persistence
   autoload :Schema
+  autoload :CassandraSchema
   autoload :Scope
   autoload :Scoping
   autoload :Serialization
