@@ -2,6 +2,7 @@ Bundler.require :hstore
 require 'active_record'
 
 Superstore::Base.config = {'adapter' => 'hstore'}
+
 class PGInitializer
   def self.initialize!
     config = {
@@ -12,21 +13,13 @@ class PGInitializer
       'username' => 'postgres'
     }
 
+    ActiveRecord::Base.configurations = { test: config }
+
     ActiveRecord::Tasks::DatabaseTasks.drop config
     ActiveRecord::Tasks::DatabaseTasks.create config
     ActiveRecord::Base.establish_connection config
 
-    ActiveRecord::Base.connection.execute 'CREATE EXTENSION IF NOT EXISTS hstore'
-
-    table_names.each { |table_name| create_document_table(table_name) }
-  end
-
-  def self.create_document_table(table_name)
-    ActiveRecord::Migration.create_table table_name, id: false do |t|
-      t.string :id, null: false
-      t.hstore :attribute_store, null: false
-    end
-    ActiveRecord::Base.connection.execute "ALTER TABLE #{table_name} ADD CONSTRAINT #{table_name}_pkey PRIMARY KEY (id)"
+    Superstore::Base.adapter.create_table('issues')
   end
 
   def self.table_names
