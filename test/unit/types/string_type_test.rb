@@ -22,4 +22,9 @@ class Superstore::Types::StringTypeTest < Superstore::Types::TestCase
       coder.encode('123'.force_encoding('ASCII-8BIT').freeze).encoding
     )
   end
+
+  test 'typecast' do
+    assert_equal '123', coder.typecast(123)
+    assert_equal '123', coder.typecast('123')
+  end
 end

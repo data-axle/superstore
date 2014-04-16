@@ -14,4 +14,8 @@ class Superstore::Types::ArrayTypeTest < Superstore::Types::TestCase
     assert_equal nil, coder.decode(nil)
     assert_equal nil, coder.decode('')
   end
+
+  test 'typecast' do
+    assert_equal ['x', 'y'], coder.typecast(['x', 'y'].to_set)
+  end
 end

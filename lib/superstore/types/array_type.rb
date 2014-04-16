@@ -11,6 +11,10 @@ module Superstore
 
         ActiveSupport::JSON.decode(str)
       end
+
+      def typecast(value)
+        value.to_a
+      end
     end
   end
 end
