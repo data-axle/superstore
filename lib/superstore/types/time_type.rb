@@ -7,7 +7,7 @@ module Superstore
       end
 
       def decode(str)
-        Time.parse(str).utc if str
+        Time.parse(str) if str
       rescue
 
       end
