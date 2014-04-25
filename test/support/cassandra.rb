@@ -3,6 +3,7 @@ Bundler.require :cassandra
 Superstore::Base.config = {
   keyspace: 'superstore_test',
   servers: '127.0.0.1:9160',
+  consistency: 'QUORUM',
   thrift: {
     timeout: 5
   }
@@ -16,7 +17,6 @@ end
 sleep 1
 Superstore::CassandraSchema.create_keyspace 'superstore_test'
 Superstore::CassandraSchema.create_column_family 'Issues'
-Superstore::Base.adapter.consistency = 'QUORUM'
 
 Superstore::Base.class_eval do
   class_attribute :created_records

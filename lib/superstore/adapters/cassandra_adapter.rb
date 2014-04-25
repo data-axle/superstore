@@ -135,7 +135,7 @@ module Superstore
       # /SCHEMA
 
       def consistency
-        @consistency
+        @consistency ||= config[:consistency]
       end
 
       def consistency=(val)

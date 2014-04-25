@@ -11,11 +11,7 @@ module Superstore
           config = YAML.load(pathname.read)
 
           if config = config[Rails.env]
-            self.config = {
-              keyspace: config['keyspace'],
-              servers: config['servers'],
-              thrift: config['thrift']
-            }
+            self.config = config.symbolize_keys!
           else
             raise "Missing environment #{Rails.env} in superstore.yml"
           end

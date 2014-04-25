@@ -6,8 +6,8 @@ I18n.config.enforce_available_locales = false
 require 'rails/test_help'
 require 'mocha/setup'
 
-require 'support/hstore'
-# require 'support/cassandra'
+# require 'support/hstore'
+require 'support/cassandra'
 require 'support/issue'
 
 def MiniTest.filter_backtrace(bt)
