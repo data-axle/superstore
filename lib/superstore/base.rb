@@ -9,6 +9,7 @@ module Superstore
     extend ActiveModel::Naming
     include ActiveModel::Conversion
     extend ActiveSupport::DescendantsTracker
+    include ActiveModel::Serializers::JSON
 
     include Connection
     include Identity
@@ -26,7 +27,6 @@ module Superstore
     include Core
     extend  Model
 
-    include Serialization
   end
 end
 
