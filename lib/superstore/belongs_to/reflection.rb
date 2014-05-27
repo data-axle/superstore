@@ -11,7 +11,7 @@ module Superstore
       end
 
       def foreign_key
-        "#{name}_id"
+        options[:foreign_key] || "#{name}_id"
       end
 
       def polymorphic_column

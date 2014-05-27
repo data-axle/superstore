@@ -8,6 +8,9 @@ class Superstore::BelongsToTest < Superstore::TestCase
     string :widget_id
     belongs_to :widget, class_name: 'Issue'
 
+    string :other_id
+    belongs_to :other_issue, class_name: 'Issue', foreign_key: :other_id
+
     string :target_id
     string :target_type
     belongs_to :target, polymorphic: true
@@ -35,6 +38,18 @@ class Superstore::BelongsToTest < Superstore::TestCase
 
     record = TestObject.find(record.id)
     assert_equal issue, record.widget
+  end
+
+  test 'belongs_to with foreign_key' do
+    issue = Issue.create
+
+    record = TestObject.create(other_issue: issue)
+
+    assert_equal issue, record.other_issue
+    assert_equal issue.id, record.other_id
+
+    record = TestObject.find(record.id)
+    assert_equal issue, record.other_issue
   end
 
   test 'belongs_to with polymorphic' do
