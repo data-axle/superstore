@@ -10,7 +10,7 @@ group :test do
 end
 
 group :cassandra do
-  gem 'cassandra-cql'
+  gem 'cassandra-cql', "1.1.4"
 end
 
 group :hstore do
