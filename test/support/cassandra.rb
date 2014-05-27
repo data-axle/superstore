@@ -17,6 +17,8 @@ end
 sleep 1
 Superstore::CassandraSchema.create_keyspace 'superstore_test'
 Superstore::CassandraSchema.create_column_family 'Issues'
+Superstore::CassandraSchema.alter_column_family 'Issues', "ADD title varchar"
+Superstore::CassandraSchema.add_index 'Issues', 'title', "issues_title_idx"
 
 Superstore::Base.class_eval do
   class_attribute :created_records
