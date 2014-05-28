@@ -12,7 +12,7 @@ module Superstore
 
       def reader
         unless loaded?
-          self.record_variable = get_record_variable
+          self.record_variable = get_record
           @loaded = true
         end
 
@@ -42,7 +42,7 @@ module Superstore
 
       private
 
-      def get_record_variable
+      def get_record
         record_id = owner.send(reflection.foreign_key).presence
         return unless record_id
 
