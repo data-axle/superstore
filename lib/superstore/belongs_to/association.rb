@@ -51,7 +51,7 @@ module Superstore
         if reflection.default_primary_key?
           association_class.find_by_id(record_id)
         else
-          association_class.where(reflection.primary_key => record_id).first
+          association_class.find_by(reflection.primary_key => record_id)
         end
       end
 
