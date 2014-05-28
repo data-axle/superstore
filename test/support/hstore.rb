@@ -1,24 +1,8 @@
 Bundler.require :hstore
-require 'active_record'
-
 Superstore::Base.config = {'adapter' => 'hstore'}
 
-class PGInitializer
+class HstoreInitializer
   def self.initialize!
-    config = {
-      'adapter'   => 'postgresql',
-      'encoding'  => 'unicode',
-      'database'  => 'superstore_test',
-      'pool'      => 5,
-      'username' => 'postgres'
-    }
-
-    ActiveRecord::Base.configurations = { test: config }
-
-    ActiveRecord::Tasks::DatabaseTasks.drop config
-    ActiveRecord::Tasks::DatabaseTasks.create config
-    ActiveRecord::Base.establish_connection config
-
     Superstore::Base.adapter.create_table('issues')
   end
 
@@ -27,12 +11,12 @@ class PGInitializer
   end
 end
 
-PGInitializer.initialize!
+HstoreInitializer.initialize!
 
 module ActiveSupport
   class TestCase
     teardown do
-      PGInitializer.table_names.each do |table_name|
+      HstoreInitializer.table_names.each do |table_name|
         ActiveRecord::Base.connection.execute "TRUNCATE #{table_name}"
       end
     end

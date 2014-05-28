@@ -11,7 +11,15 @@ module Superstore
       end
 
       def foreign_key
-        "#{name}_id"
+        options[:foreign_key] || "#{name}_id"
+      end
+
+      def primary_key
+        options[:primary_key] || "id"
+      end
+
+      def default_primary_key?
+        primary_key == "id"
       end
 
       def polymorphic_column
