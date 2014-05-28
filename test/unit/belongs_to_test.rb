@@ -14,6 +14,9 @@ class Superstore::BelongsToTest < Superstore::TestCase
     string :user_id
     belongs_to :user, primary_key: :special_id
 
+    string :title_issue_id
+    belongs_to :title_issue, class_name: 'Issue', primary_key: :title
+
     string :target_id
     string :target_type
     belongs_to :target, polymorphic: true
@@ -55,7 +58,7 @@ class Superstore::BelongsToTest < Superstore::TestCase
     assert_equal issue, record.other_issue
   end
 
-  test 'belongs_to with primary_key' do
+  test 'belongs_to with primary_key for ActiveRecord' do
     special_id = 'special_id'
     user = User.create! special_id: special_id
     record = TestObject.create user: user
@@ -65,6 +68,15 @@ class Superstore::BelongsToTest < Superstore::TestCase
 
     record = TestObject.find(record.id)
     assert_equal user, record.user
+  end
+
+  test 'belongs_to with primary_key raises an error for non-ActiveRecord' do
+    issue = Issue.create title: 'title'
+
+    record = TestObject.new
+    record.title_issue_id = issue.title
+    assert_raises(ArgumentError) { record.title_issue }
+    assert_raises(ArgumentError) { record.title_issue = issue }
   end
 
   test 'belongs_to with polymorphic' do

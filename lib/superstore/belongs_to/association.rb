@@ -12,6 +12,7 @@ module Superstore
 
       def reader
         unless loaded?
+          check_appropriate_primary_key!
           self.record_variable = get_record
           @loaded = true
         end
@@ -20,6 +21,7 @@ module Superstore
       end
 
       def writer(record)
+        check_appropriate_primary_key!
         self.record_variable = record
         @loaded = true
         owner.send("#{reflection.foreign_key}=", record.try(reflection.primary_key))
@@ -50,6 +52,12 @@ module Superstore
           association_class.find_by_id(record_id)
         else
           association_class.where(reflection.primary_key => record_id).first
+        end
+      end
+
+      def check_appropriate_primary_key!
+        if !reflection.default_primary_key? && !(association_class <= ActiveRecord::Base)
+          raise ArgumentError, "Association must inherit from ActiveRecord::Base to use custom primary key"
         end
       end
     end
