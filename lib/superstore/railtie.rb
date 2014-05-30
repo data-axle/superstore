@@ -6,8 +6,8 @@ module Superstore
 
     initializer "superstore.config" do |app|
       ActiveSupport.on_load :superstore do
-        pathname = Rails.root.join('config', 'superstore.yml')
-        if pathname.exist?
+        pathnames = [Rails.root.join('config', 'superstore.yml'), Rails.root.join('config', 'cassandra.yml')]
+        if pathname = pathnames.detect(&:exist?)
           config = YAML.load(pathname.read)
 
           if config = config[Rails.env]
