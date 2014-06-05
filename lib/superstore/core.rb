@@ -40,7 +40,7 @@ module Superstore
         if self == Base
           super
         else
-          attr_list = @attributes.map do |col, definition| "#{col}: #{definition.type}" end * ', '
+          attr_list = attribute_definitions.keys * ', '
           "#{super}(#{attr_list.truncate(140 * 1.7337)})"
         end
       end

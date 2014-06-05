@@ -15,7 +15,7 @@ module Superstore
             "SELECT #{select_string} FROM #{@scope.klass.column_family}",
             where_string,
             order_string,
-            limit_string,
+            limit_string
           ].delete_if(&:blank?) * ' '
         end
 
@@ -39,7 +39,10 @@ module Superstore
         end
 
         def order_string
-          if @scope.id_values.many?
+          if @scope.order_values.any?
+            orders = @scope.order_values.join(', ')
+            "ORDER BY #{orders}"
+          elsif @scope.id_values.many?
             id_orders = @scope.id_values.map { |id| "ID=#{@adapter.quote(id)} DESC" }.join(',')
             "ORDER BY #{id_orders}"
           end

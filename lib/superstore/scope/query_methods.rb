@@ -41,6 +41,15 @@ module Superstore
         clone.limit! value
       end
 
+      def order!(*values)
+        self.order_values = values.flatten
+        self
+      end
+
+      def order(*values)
+        clone.order! values
+      end
+
       def to_a
         select_records
       end

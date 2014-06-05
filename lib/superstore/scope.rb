@@ -7,7 +7,7 @@ module Superstore
     include Batches, FinderMethods, QueryMethods
 
     attr_accessor :klass
-    attr_accessor :limit_value, :select_values, :where_values, :id_values
+    attr_accessor :limit_value, :select_values, :where_values, :id_values, :order_values
 
     def initialize(klass)
       @klass = klass
@@ -15,6 +15,7 @@ module Superstore
       @limit_value    = nil
       @select_values  = []
       @where_values   = []
+      @order_values   = []
       @id_values      = []
     end
 

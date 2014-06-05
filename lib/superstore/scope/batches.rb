@@ -11,7 +11,7 @@ module Superstore
         batch_size = options.delete(:batch_size) || 1000
         start_key = nil
 
-        scope = limit(batch_size + 1)
+        scope = limit(batch_size + 1).order(:id)
         records = scope.to_a
 
         while records.any?
