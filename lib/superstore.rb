@@ -8,6 +8,7 @@ module Superstore
   autoload :AttributeMethods
   autoload :Base
   autoload :BelongsTo
+  autoload :Caching
   autoload :Callbacks
   autoload :Connection
   autoload :Core

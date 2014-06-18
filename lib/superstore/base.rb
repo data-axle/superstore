@@ -25,6 +25,7 @@ module Superstore
     include Timestamps
     include Scoping
     include Core
+    include Caching
     extend  Model
 
   end
