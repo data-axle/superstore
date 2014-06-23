@@ -21,6 +21,12 @@ module Superstore
         end
       end
 
+      def unapplied_changes
+        result = {}
+        changed_attributes.each_key { |attr| result[attr] = read_attribute(attr) }
+        result
+      end
+
       def write_attribute(name, value)
         name = name.to_s
         old = read_attribute(name)

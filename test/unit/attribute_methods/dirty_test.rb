@@ -51,6 +51,17 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
     assert record.changed?
   end
 
+  test 'unapplied_changes' do
+    record = temp_object do
+      float :price
+      string :color
+    end.create(price: 5.01, color: 'green')
+
+    record.color = 'blue'
+
+    assert_equal({'color' => 'blue'}, record.unapplied_changes)
+  end
+
   test 'write_attribute' do
     object = temp_object do
       string :name

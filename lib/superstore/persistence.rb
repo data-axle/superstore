@@ -146,8 +146,7 @@ module Superstore
       end
 
       def write(method)
-        changed_attributes = Hash[changed.map { |attr| [attr, read_attribute(attr)] }]
-        self.class.send(method, id, changed_attributes)
+        self.class.send(method, id, unapplied_changes)
       end
   end
 end
