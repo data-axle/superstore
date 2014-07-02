@@ -3,6 +3,10 @@ require 'test_helper'
 class Superstore::Types::TimeTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal '2004-12-24T01:02:03.000000Z', coder.encode(Time.utc(2004, 12, 24, 1, 2, 3))
+    assert_equal '2004-12-24T01:02:03.000000Z', coder.encode(DateTime.new(2004, 12, 24, 1, 2, 3))
+    assert_raise ArgumentError do
+      coder.encode 123
+    end
   end
 
   test 'decode' do
