@@ -12,6 +12,7 @@ ks_namespace = namespace :ks do
     end
   end
 
+  desc 'Remove the keyspace in config/superstore.yml for the current environment'
   task drop: :environment do
     begin
       Superstore::CassandraSchema.drop_keyspace Superstore::Base.config[:keyspace]
@@ -24,11 +25,14 @@ ks_namespace = namespace :ks do
     end
   end
 
+  desc 'Alias for ks:drop and ks:setup'
   task reset: [:drop, :setup]
 
+  desc 'Alias for ks:create and ks:structure:load'
   task setup: [:create, :_load]
 
   namespace :structure do
+    desc 'Serialize the current structure for the keyspace in config/superstore.yml to the SCHEMA environment variable (defaults to "$RAILS_ROOT/ks/structure.cql")'
     task dump: :environment do
       filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structure.cql"
       File.open(filename, "w:utf-8") do |file|
@@ -36,6 +40,7 @@ ks_namespace = namespace :ks do
       end
     end
 
+    desc 'Load the structure for the keyspace in config/superstore.yml from the SCHEMA environment variable (defaults to "$RAILS_ROOT/ks/structure.cql")'
     task load: :environment do
       filename = ENV['SCHEMA'] || "#{Rails.root}/ks/structure.cql"
       File.open(filename) do |file|
