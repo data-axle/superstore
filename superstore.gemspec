@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'superstore'
-  s.version = '1.0.4'
+  s.version = '1.0.5'
   s.description = 'ActiveModel for many attributes'
   s.summary = 'Cassandra ActiveModel'
   s.authors = ["Michael Koziarski", "gotime"]
