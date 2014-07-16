@@ -36,11 +36,11 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
   end
 
   test 'typecast_attribute' do
-    assert_equal 1, TestIssue.typecast_attribute(TestIssue.new, 'price', 1)
-    assert_equal 1, TestIssue.typecast_attribute(TestIssue.new, :price, 1)
+    assert_equal 1, TestIssue.typecast_attribute('price', 1)
+    assert_equal 1, TestIssue.typecast_attribute(:price, 1)
 
     assert_raise NoMethodError do
-      TestIssue.typecast_attribute(TestIssue.new, 'wtf', 1)
+      TestIssue.typecast_attribute('wtf', 1)
     end
   end
 

@@ -32,6 +32,7 @@ class PGInitializer
 end
 
 PGInitializer.initialize!
+ActiveRecord::Migration.verbose = false
 
 module ActiveSupport
   class TestCase

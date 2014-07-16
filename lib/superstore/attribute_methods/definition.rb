@@ -11,7 +11,7 @@ module Superstore
         coder.default
       end
 
-      def instantiate(record, value)
+      def instantiate(value)
         value = value.nil? ? coder.default : value
         return if value.nil?
 

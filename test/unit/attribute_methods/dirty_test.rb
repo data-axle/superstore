@@ -51,6 +51,20 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
     assert record.changed?
   end
 
+  test 'typecast json with times' do
+    record = temp_object do
+      json :stuff
+    end.create(stuff: {'time' => Time.new(2004, 12, 24, 6, 42, 21)})
+
+    record.reload
+
+    record.stuff = {'time' => Time.new(2004, 12, 24, 6, 42, 21)}
+    assert !record.changed?
+
+    record.stuff = {'time' => Time.new(2004, 12, 24, 6, 42, 22)}
+    assert record.changed?
+  end
+
   test 'unapplied_changes' do
     record = temp_object do
       float :price

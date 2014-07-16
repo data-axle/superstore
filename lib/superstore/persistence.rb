@@ -67,7 +67,7 @@ module Superstore
         def typecast_persisted_attributes(object, attributes)
           attributes.each do |key, value|
             if definition = attribute_definitions[key]
-              attributes[key] = definition.instantiate(object, value)
+              attributes[key] = definition.instantiate(value)
             else
               attributes.delete(key)
             end

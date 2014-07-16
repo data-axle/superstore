@@ -12,7 +12,7 @@ module Superstore
       def typecast(data)
         return data if ActiveSupport.parse_json_times
 
-        if data.acts_like?(:time)
+        if data.acts_like?(:time) || data.acts_like?(:date)
           data.as_json
         elsif data.is_a?(Array)
           data.map { |d| typecast(d) }

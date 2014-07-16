@@ -40,7 +40,7 @@ module Superstore
     end
 
     def write_attribute(name, value)
-      @attributes[name.to_s] = self.class.typecast_attribute(self, name, value)
+      @attributes[name.to_s] = self.class.typecast_attribute(name, value)
     end
 
     def read_attribute(name)
