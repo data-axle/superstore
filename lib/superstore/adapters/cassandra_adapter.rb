@@ -169,7 +169,7 @@ module Superstore
       private
 
         def sanitize(statement, *bind_vars)
-          CassandraCQL::Statement.sanitize(statement, bind_vars)
+          CassandraCQL::Statement.sanitize(statement, bind_vars).force_encoding(Encoding::UTF_8)
         end
 
         def quote_columns(column_names)
