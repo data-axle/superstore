@@ -68,7 +68,7 @@ module Superstore
           attributes.each do |key, value|
             if definition = attribute_definitions[key]
               attributes[key] = definition.instantiate(value)
-            else
+            elsif key != primary_key
               attributes.delete(key)
             end
           end
