@@ -42,7 +42,7 @@ module Superstore
           object.instance_variable_set("@id", id) if id
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
-          object.instance_variable_set("@attributes", typecast_persisted_attributes(object, attributes))
+          object.instance_variable_set("@attributes", typecast_persisted_attributes(attributes))
         end
       end
 
@@ -64,7 +64,13 @@ module Superstore
           column_names.map { |name| "'#{name}'" }
         end
 
-        def typecast_persisted_attributes(object, attributes)
+        def typecast_persisted_attributes(attributes)
+          typecast_persisted_attributes! attributes.dup
+        end
+
+        def typecast_persisted_attributes!(attributes)
+          attributes = attributes.dup
+
           attributes.each do |key, value|
             if definition = attribute_definitions[key]
               attributes[key] = definition.instantiate(value)
