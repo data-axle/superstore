@@ -65,27 +65,21 @@ module Superstore
         end
 
         def typecast_persisted_attributes(attributes)
-          typecast_persisted_attributes! attributes.dup
-        end
-
-        def typecast_persisted_attributes!(attributes)
-          attributes = attributes.dup
+          result = {}
 
           attributes.each do |key, value|
             if definition = attribute_definitions[key]
-              attributes[key] = definition.instantiate(value)
-            elsif key != primary_key
-              attributes.delete(key)
+              result[key] = definition.instantiate(value)
             end
           end
 
           attribute_definitions.each_value do |definition|
-            unless definition.default.nil? || attributes.has_key?(definition.name)
-              attributes[definition.name] = definition.default
+            unless definition.default.nil? || result.has_key?(definition.name)
+              result[definition.name] = definition.default
             end
           end
 
-          attributes
+          result
         end
     end
 
