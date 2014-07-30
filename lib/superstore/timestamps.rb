@@ -12,7 +12,7 @@ module Superstore
       end
 
       before_update if: :changed? do
-        self.updated_at = Time.current
+        self.updated_at = Time.current unless self.changed_attributes.key?("updated_at")
       end
     end
   end
