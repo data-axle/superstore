@@ -12,7 +12,7 @@ module Superstore
       end
 
       before_update if: :changed? do
-        self.updated_at = Time.current
+        self.updated_at = Time.current if self.updated_at.nil? || self.changed_attributes["updated_at"].blank?
       end
     end
   end
