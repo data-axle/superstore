@@ -62,14 +62,10 @@ module Superstore
     end
 
     def method_missing(method_id, *args, &block)
-      if !self.class.attribute_methods_generated?
-        self.class.define_attribute_methods
-        send(method_id, *args, &block)
-      else
-        super
-        # match = match_attribute_method?(method_id.to_s)
-        # match ? attribute_missing(match, *args, &block) : super
-      end
+      self.class.define_attribute_methods unless self.class.attribute_methods_generated?
+
+      match = match_attribute_method?(method_id.to_s)
+      match ? attribute_missing(match, *args, &block) : super
     end
 
     def respond_to?(*args)
