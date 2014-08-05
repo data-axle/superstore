@@ -42,6 +42,15 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
     assert_equal 'hey lol', issue.title
   end
 
+  class ReservedWord < Superstore::Base
+    string :system
+  end
+
+  test 'reserved words' do
+    r = ReservedWord.new(system: 'hello')
+    assert_equal 'hello', r.system
+  end
+
   # test 'attribute_exists' do
   #   assert !Issue.new.attribute_exists?(:description)
   #   assert Issue.new(description: nil).attribute_exists?(:description)

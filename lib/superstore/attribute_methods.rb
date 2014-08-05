@@ -4,11 +4,7 @@ module Superstore
     include ActiveModel::AttributeMethods
 
     included do
-      if ActiveModel::VERSION::STRING < '3.2'
-        attribute_method_suffix("", "=")
-      else
-        attribute_method_suffix("=")
-      end
+      attribute_method_suffix("=")
 
       # (Alias for the protected read_attribute method).
       def [](attr_name)
@@ -66,12 +62,10 @@ module Superstore
     end
 
     def method_missing(method_id, *args, &block)
-      if !self.class.attribute_methods_generated?
-        self.class.define_attribute_methods
-        send(method_id, *args, &block)
-      else
-        super
-      end
+      self.class.define_attribute_methods unless self.class.attribute_methods_generated?
+
+      match = match_attribute_method?(method_id.to_s)
+      match ? attribute_missing(match, *args, &block) : super
     end
 
     def respond_to?(*args)
