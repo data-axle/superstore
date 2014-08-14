@@ -28,6 +28,15 @@ class Widget < Superstore::Base
   end
 end
 ```
+
+The table name defaults to the case-sensitive, pluralized name of the model class. To specify a
+custom name, set the ```table_name``` attribute on the class:
+
+```ruby
+class MyWidget < Superstore::Base
+  table_name = 'my_widgets'
+end
+```
 ## Using with Cassandra
 
 Add the cassandra-cql gem to Gemfile:

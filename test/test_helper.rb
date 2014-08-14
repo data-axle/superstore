@@ -20,7 +20,7 @@ module Superstore
   class TestCase < ActiveSupport::TestCase
     def temp_object(&block)
       Class.new(Superstore::Base) do
-        self.column_family = 'Issues'
+        self.table_name = 'Issues'
         string :force_save
         before_save { self.force_save = 'junk' }
 

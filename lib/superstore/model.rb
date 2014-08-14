@@ -1,11 +1,21 @@
 module Superstore
   module Model
-    def column_family=(column_family)
-      @column_family = column_family
+    def table_name=(table_name)
+      @table_name = table_name
+    end
+
+    def table_name
+      @table_name ||= base_class.name.pluralize
     end
 
     def column_family
-      @column_family ||= base_class.name.pluralize
+      warn '`column_family` is deprecated & will be removed in superstore 2.0. Use `table_name` instead.'
+      table_name
+    end
+
+    def column_family=(table_name)
+      warn '`column_family=` is deprecated & will be removed in superstore 2.0. Use `table_name=` instead.'
+      self.table_name = table_name
     end
 
     def base_class
