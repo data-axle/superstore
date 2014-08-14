@@ -35,7 +35,6 @@ custom name, set the ```table_name``` attribute on the class:
 ```ruby
 class MyWidget < Superstore::Base
   table_name = 'my_widgets'
-  # ... same as above
 end
 ```
 ## Using with Cassandra
