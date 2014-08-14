@@ -8,11 +8,11 @@ module Superstore
 
     module ClassMethods
       def remove(ids)
-        adapter.delete column_family, ids
+        adapter.delete table_name, ids
       end
 
       def delete_all
-        adapter.execute "TRUNCATE #{column_family}"
+        adapter.execute "TRUNCATE #{table_name}"
       end
 
       def create(attributes = {}, &block)
@@ -22,11 +22,11 @@ module Superstore
       end
 
       def insert_record(id, attributes)
-        adapter.insert column_family, id, encode_attributes(attributes)
+        adapter.insert table_name, id, encode_attributes(attributes)
       end
 
       def update_record(id, attributes)
-        adapter.update column_family, id, encode_attributes(attributes)
+        adapter.update table_name, id, encode_attributes(attributes)
       end
 
       def batching?

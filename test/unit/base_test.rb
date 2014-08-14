@@ -14,7 +14,7 @@ class Superstore::BaseTest < Superstore::TestCase
   end
 
   test 'column family' do
-    assert_equal 'Superstore::BaseTest::Sons', Son.column_family
-    assert_equal 'Superstore::BaseTest::Sons', Grandson.column_family
+    assert_equal 'Superstore::BaseTest::Sons', Son.table_name
+    assert_equal 'Superstore::BaseTest::Sons', Grandson.table_name
   end
 end

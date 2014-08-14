@@ -12,7 +12,7 @@ module Superstore
 
         def to_query
           [
-            "SELECT #{select_string} FROM #{@scope.klass.column_family}",
+            "SELECT #{select_string} FROM #{@scope.klass.table_name}",
             where_string,
             order_string,
             limit_string

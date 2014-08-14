@@ -8,7 +8,7 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
   end
 
   class TestIssue < Superstore::Base
-    self.column_family = 'Issues'
+    self.table_name = 'Issues'
 
     attribute :custom_column, type: CustomType, coder: CustomCoder
     boolean :enabled
@@ -92,7 +92,7 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
 
   test 'multiple attributes definition' do
     class MultipleAttributesIssue < Superstore::Base
-      self.column_family = 'Issues'
+      self.table_name = 'Issues'
     end
 
     assert_nothing_raised {
@@ -105,7 +105,7 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
 
   test 'multiple attributes with options' do
     class MultipleAttributesIssue < Superstore::Base
-      self.column_family = 'Issues'
+      self.table_name = 'Issues'
     end
 
     MultipleAttributesIssue.expects(:attribute).with(:hello, { :unique => :true, :type => :string })

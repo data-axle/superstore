@@ -7,7 +7,9 @@ class PGInitializer
       'encoding'  => 'unicode',
       'database'  => 'superstore_test',
       'pool'      => 5,
-      'username' => 'postgres'
+      'host'      => 'localhost',
+      'password'  => 'postgres',
+      'username'  => 'postgres'
     }
 
     ActiveRecord::Base.configurations = { test: config }
