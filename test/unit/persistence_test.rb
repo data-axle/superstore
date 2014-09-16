@@ -111,15 +111,15 @@ class Superstore::PersistenceTest < Superstore::TestCase
     assert_equal 'lol', issue.description
   end
 
-  test 'update_attributes' do
+  test 'update' do
     issue = Issue.create
-    issue.update_attributes(description: 'lol')
+    issue.update(description: 'lol')
 
     assert !issue.changed?
     assert_equal 'lol', issue.description
   end
 
-  test 'update_attributes!' do
+  test 'update!' do
     begin
       Issue.validates(:description, presence: true)
 
@@ -127,7 +127,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
       issue.save!
 
       assert_raise Superstore::RecordInvalid do
-        issue.update_attributes! description: ''
+        issue.update! description: ''
       end
     ensure
       Issue.reset_callbacks(:validate)
@@ -137,7 +137,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
   test 'update nil attributes' do
     issue = Issue.create(title: 'I rule', description: 'lololol')
 
-    issue.update_attributes title: nil
+    issue.update title: nil
 
     issue = Issue.find issue.id
     assert_nil issue.title

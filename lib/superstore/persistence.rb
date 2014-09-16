@@ -96,7 +96,7 @@ module Superstore
     end
 
     def save(*)
-      new_record? ? create : update
+      new_record? ? create_self : update_self
     end
 
     def destroy
@@ -110,15 +110,19 @@ module Superstore
       save(validate: false)
     end
 
-    def update_attributes(attributes)
+    def update(attributes)
       self.attributes = attributes
       save
     end
 
-    def update_attributes!(attributes)
+    alias update_attributes update
+
+    def update!(attributes)
       self.attributes = attributes
       save!
     end
+
+    alias update_attributes! update!
 
     def becomes(klass)
       became = klass.new
@@ -136,12 +140,12 @@ module Superstore
 
     private
 
-      def create
+      def create_self
         @new_record = false
         write :insert_record
       end
 
-      def update
+      def update_self
         write :update_record
       end
 

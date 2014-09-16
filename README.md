@@ -44,7 +44,7 @@ Add the cassandra-cql gem to Gemfile:
 ```ruby
 gem 'cassandra-cql'
 ```
-  
+
 Add a config/superstore.yml:
 
 ```yaml
@@ -64,7 +64,7 @@ Add the pg gem to your Gemfile:
 ```ruby
 gem 'pg'
 ```
-  
+
 And a config/superstore.yml:
 
 ```yaml
@@ -81,7 +81,7 @@ widget = Widget.new
 widget.valid?
 widget = Widget.create(name: 'Acme', price: 100)
 widget.update_attribute(:price, 1200)
-widget.update_attributes(price: 1200, name: 'Acme Corporation')
+widget.update(price: 1200, name: 'Acme Corporation')
 widget.attributes = {price: 300}
 widget.price_was
 widget.save

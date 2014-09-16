@@ -18,11 +18,11 @@ module Superstore
         run_callbacks(:save) { super }
       end
 
-      def create #:nodoc:
+      def create_self #:nodoc:
         run_callbacks(:create) { super }
       end
 
-      def update(*) #:nodoc:
+      def update_self(*) #:nodoc:
         run_callbacks(:update) { super }
       end
   end
