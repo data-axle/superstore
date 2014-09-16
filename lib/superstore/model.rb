@@ -9,12 +9,12 @@ module Superstore
     end
 
     def column_family
-      warn '`column_family` is deprecated & will be removed in superstore 2.0. Use `table_name` instead.'
+      ActiveSupport::Deprecation.warn '`column_family` is deprecated & will be removed in superstore 2.0. Use `table_name` instead.'
       table_name
     end
 
     def column_family=(table_name)
-      warn '`column_family=` is deprecated & will be removed in superstore 2.0. Use `table_name=` instead.'
+      ActiveSupport::Deprecation.warn '`column_family=` is deprecated & will be removed in superstore 2.0. Use `table_name=` instead.'
       self.table_name = table_name
     end
 
