@@ -54,7 +54,10 @@ module Superstore
       def connection
         @connection ||= begin
           thrift_options = (config[:thrift] || {})
-          CassandraCQL::Database.new(servers, {keyspace: config[:keyspace]}, thrift_options)
+          CassandraCQL::Database.new(
+            servers,
+            {keyspace: config[:keyspace], username: username, password: password},
+            thrift_options)
         end
       end
 
@@ -129,10 +132,13 @@ module Superstore
       end
 
       def schema_execute(cql, keyspace)
-        schema_db = CassandraCQL::Database.new(Superstore::Base.adapter.servers, {keyspace: keyspace}, {connect_timeout: 30, timeout: 30})
+        schema_db = CassandraCQL::Database.new(
+          servers,
+          {keyspace: keyspace, username: username, password: password},
+          {connect_timeout: 30, timeout: 30}
+        )
         schema_db.execute cql
       end
-      # /SCHEMA
 
       def consistency
         @consistency ||= config[:consistency]
@@ -167,6 +173,14 @@ module Superstore
       end
 
       private
+
+        def username
+          config[:username].presence
+        end
+
+        def password
+          config[:password].presence
+        end
 
         def sanitize(statement, *bind_vars)
           CassandraCQL::Statement.sanitize(statement, bind_vars).force_encoding(Encoding::UTF_8)
