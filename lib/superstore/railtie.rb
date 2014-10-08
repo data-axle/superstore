@@ -8,7 +8,8 @@ module Superstore
       ActiveSupport.on_load :superstore do
         pathnames = [Rails.root.join('config', 'superstore.yml'), Rails.root.join('config', 'cassandra.yml')]
         if pathname = pathnames.detect(&:exist?)
-          config = YAML.load(pathname.read)
+          config = ERB.new(pathname.read).result
+          config = YAML.load(config)
 
           if config = config[Rails.env]
             self.config = config.symbolize_keys!
