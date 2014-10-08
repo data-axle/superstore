@@ -56,7 +56,7 @@ module Superstore
           thrift_options = (config[:thrift] || {})
           CassandraCQL::Database.new(
             servers,
-            {keyspace: config[:keyspace], username: username, password: password},
+            {keyspace: config[:keyspace], username: username, password: password, cql_version: '2.0.0'},
             thrift_options)
         end
       end
@@ -67,6 +67,7 @@ module Superstore
 
       def execute(statement)
         ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
+          p "statement = #{statement}"
           connection.execute statement
         end
       end
@@ -134,7 +135,7 @@ module Superstore
       def schema_execute(cql, keyspace)
         schema_db = CassandraCQL::Database.new(
           servers,
-          {keyspace: keyspace, username: username, password: password},
+          {keyspace: keyspace, username: username, password: password, cql_version: '2.0.0'},
           {connect_timeout: 30, timeout: 30}
         )
         schema_db.execute cql
