@@ -67,7 +67,6 @@ module Superstore
 
       def execute(statement)
         ActiveSupport::Notifications.instrument("cql.cassandra_object", cql: statement) do
-          p "statement = #{statement}"
           connection.execute statement
         end
       end
