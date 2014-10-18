@@ -6,8 +6,14 @@ module Superstore
 
     initializer "superstore.config" do |app|
       ActiveSupport.on_load :superstore do
-        pathnames = [Rails.root.join('config', 'superstore.yml'), Rails.root.join('config', 'cassandra.yml')]
+        pathnames = [Rails.root.join('config', 'cassandra.yml'), Rails.root.join('config', 'superstore.yml')]
         if pathname = pathnames.detect(&:exist?)
+          if pathname.basename.to_s == 'cassandra.yml'
+            warn "***********************"
+            warn "config/cassandra.yml is deprecated. Use config/superstore.yml"
+            warn "***********************"
+          end
+
           config = ERB.new(pathname.read).result
           config = YAML.load(config)
 
