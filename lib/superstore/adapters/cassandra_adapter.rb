@@ -62,7 +62,15 @@ module Superstore
       end
 
       def servers
-        Array.wrap(config[:servers] || "127.0.0.1:9160")
+        @servers ||= begin
+          if config[:servers].is_a?(String)
+            config[:servers].split(',')
+          elsif config[:servers].is_a?(Array)
+            config[:servers]
+          else
+            "127.0.0.1:9160"
+          end
+        end
       end
 
       def execute(statement)
