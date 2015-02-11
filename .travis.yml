@@ -1,11 +1,15 @@
 language: ruby
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.0
-env: CQLSH=/usr/local/cassandra/bin/cqlsh
+- 1.9.3
+- 2.0.0
+- 2.1.0
+sudo: false
+env:
+  global:
+  - CQLSH=/usr/local/cassandra/bin/cqlsh
+  - KS_VERSION=1.2.19
+  - KS_NAME=apache-cassandra-$KS_VERSION
 before_install:
-  - wget http://archive.apache.org/dist/cassandra/1.2.9/apache-cassandra-1.2.9-bin.tar.gz
-  - tar xfz apache-cassandra-1.2.9-bin.tar.gz
-  - sh -c "echo 'JVM_OPTS=\"\${JVM_OPTS} -Xss256k -Djava.net.preferIPv4Stack=false\"' >> apache-cassandra-1.2.9/conf/cassandra-env.sh"
-  - cd apache-cassandra-1.2.9 && sudo ./bin/cassandra 2>&1 >> cassandra.log &
+- if [[ ! -f $KS_NAME/conf/cassandra.yaml ]]; then wget http://archive.apache.org/dist/cassandra/$KS_VERSION/$KS_NAME-bin.tar.gz; tar xf $KS_NAME-bin.tar.gz; sh -c "echo 'JVM_OPTS=\"\${JVM_OPTS} -Xss256k -Djava.net.preferIPv4Stack=false\"' >> $KS_NAME/conf/cassandra-env.sh"; fi
+- sed -i -e 's:/var/.*\?/cassandra:/tmp/cassandra-store:g' $KS_NAME/conf/{cassandra.yaml,log4j-server.properties}
+- (cd $KS_NAME && ./bin/cassandra 2>&1 >> cassandra.log)
