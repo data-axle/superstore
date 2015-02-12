@@ -1,7 +1,7 @@
 require 'test_helper'
 require "superstore/railties/controller_runtime"
 
-class Superstore::Railties::ControllerRuntimeTest < MiniTest::Unit::TestCase
+class Superstore::Railties::ControllerRuntimeTest < MiniTest::Test
   class TestRuntime
     def self.log_process_action(payload)
       ['sweet']
