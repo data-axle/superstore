@@ -154,12 +154,16 @@ module Superstore
 
       private
 
+        def hstore_type
+          @hstore_type ||= ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Hstore.new
+        end
+
         def attributes_to_hstore(attributes)
-          quote ActiveRecord::ConnectionAdapters::PostgreSQLColumn.hstore_to_string(attributes)
+          quote hstore_type.type_cast_for_database(attributes)
         end
 
         def hstore_to_attributes(string)
-          ActiveRecord::ConnectionAdapters::PostgreSQLColumn.string_to_hstore(string)
+          hstore_type.type_cast_from_database(string)
         end
     end
   end
