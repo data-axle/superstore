@@ -10,6 +10,7 @@ module Superstore
     include ActiveModel::Conversion
     extend ActiveSupport::DescendantsTracker
     include ActiveModel::Serializers::JSON
+    include GlobalID::Identification
 
     include Connection
     include Identity
