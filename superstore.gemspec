@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'superstore'
-  s.version = '1.1.4'
+  s.version = '1.2.0'
   s.description = 'ActiveModel for many attributes'
   s.summary = 'Cassandra ActiveModel'
   s.authors = ["Michael Koziarski", "gotime"]
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_runtime_dependency('activemodel', '>= 3.0')
-  s.add_runtime_dependency('globalid')
+  s.add_runtime_dependency('globalid')base
 
   s.add_development_dependency('bundler')
 end
