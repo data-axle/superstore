@@ -1,6 +1,7 @@
 require 'active_support/all'
 require 'active_model'
 require 'global_id/identification'
+require 'oj'
 require 'superstore/errors'
 
 module Superstore

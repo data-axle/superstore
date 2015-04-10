@@ -1,17 +1,16 @@
 module Superstore
   module Types
     class JsonType < BaseType
+      OJ_OPTIONS = {mode: :compat}
       def encode(data)
-        ActiveSupport::JSON.encode(data)
+        Oj.dump(data, OJ_OPTIONS)
       end
 
       def decode(str)
-        ActiveSupport::JSON.decode(str)
+        Oj.compat_load(str)
       end
 
       def typecast(data)
-        return data if ActiveSupport.parse_json_times
-
         if data.acts_like?(:time) || data.acts_like?(:date)
           data.as_json
         elsif data.is_a?(Array)

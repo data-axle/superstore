@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('activemodel', '>= 3.0')
   s.add_runtime_dependency('globalid')
+  s.add_development_dependency('oj')
 
   s.add_development_dependency('bundler')
 end

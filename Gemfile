@@ -2,7 +2,6 @@ source "http://rubygems.org"
 gemspec
 
 gem 'rake'
-gem 'thin'
 
 group :test do
   gem 'rails'
@@ -13,4 +12,5 @@ end
 
 group :cassandra do
   gem 'cassandra-cql', "1.1.4"
+  gem 'thin'
 end
