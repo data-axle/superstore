@@ -3,7 +3,6 @@ require 'test_helper'
 class Superstore::Scope::QueryMethodsTest < Superstore::TestCase
   test "select" do
     original_issue = Issue.create title: 'foo', description: 'bar'
-
     found_issue = Issue.select(:title).find(original_issue.id)
 
     assert_equal 'foo', found_issue.title

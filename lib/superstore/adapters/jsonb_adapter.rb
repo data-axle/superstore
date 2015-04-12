@@ -3,26 +3,26 @@ require 'pg'
 
 module Superstore
   module Adapters
-    class BjsonAdapter < AbstractAdapter
+    class JsonbAdapter < AbstractAdapter
       JSON_FUNCTIONS = {
         # SELECT json_slice('{"b": 2, "c": 3, "a": 4}', '{b, c}');
-        'json_slice(data json, keys text[])' => %w{
-          SELECT json_object_agg(key, value)
+        'jsonb_slice(data jsonb, keys text[])' => %{
+          SELECT json_object_agg(key, value)::jsonb
           FROM (
-            SELECT * FROM json_each(data)
+            SELECT * FROM jsonb_each(data)
           ) t
           WHERE key =ANY(keys);
         },
 
         # SELECT json_merge('{"a": 1}', '{"b": 2, "c": 3, "a": 4}');
-        'json_merge(data json, merge_data json)' => %w{
-          SELECT json_object_agg(key, value)
+        'jsonb_merge(data jsonb, merge_data jsonb)' => %{
+          SELECT json_object_agg(key, value)::jsonb
           FROM (
             WITH to_merge AS (
-              SELECT * FROM json_each(merge_data)
+              SELECT * FROM jsonb_each(merge_data)
             )
             SELECT *
-            FROM json_each(data)
+            FROM jsonb_each(data)
             WHERE key NOT IN (SELECT key FROM to_merge)
             UNION ALL
             SELECT * FROM to_merge
@@ -30,10 +30,10 @@ module Superstore
         },
 
         # SELECT json_delete('{"b": 2, "c": 3, "a": 4}', '{b, c}');
-        'json_delete(data json, keys text[])' => %w{
-          SELECT json_object_agg(key, value)
+        'jsonb_delete(data jsonb, keys text[])' => %{
+          SELECT json_object_agg(key, value)::jsonb
           FROM (
-            SELECT * FROM json_each(data)
+            SELECT * FROM jsonb_each(data)
             WHERE key <>ALL(keys)
           ) t;
         },
@@ -56,7 +56,7 @@ module Superstore
 
         def select_string
           if @scope.select_values.any?
-            "id, json_slice(attribute_store, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as attribute_store"
+            "id, jsonb_slice(attribute_store, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as attribute_store"
           else
             '*'
           end
@@ -116,7 +116,7 @@ module Superstore
 
       def insert(table, id, attributes)
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
-        statement = "INSERT INTO #{table} (#{primary_key_column}, attribute_store) VALUES (#{quote(id)}, #{to_quoted_json(not_nil_attributes)})"
+        statement = "INSERT INTO #{table} (#{primary_key_column}, attribute_store) VALUES (#{quote(id)}, #{to_quoted_jsonb(not_nil_attributes)})"
         execute_batchable statement
       end
 
@@ -127,11 +127,11 @@ module Superstore
         nil_attributes = attributes.select { |key, value| value.nil? }
 
         if not_nil_attributes.any? && nil_attributes.any?
-          value_update = "json_merge(json_delete(attribute_store, #{fields_to_postgres_array(nil_attributes.keys)}), #{to_quoted_json(not_nil_attributes)}"
+          value_update = "jsonb_merge(jsonb_delete(attribute_store, #{fields_to_postgres_array(nil_attributes.keys)}), #{to_quoted_jsonb(not_nil_attributes)})"
         elsif not_nil_attributes.any?
-          value_update = "json_merge(attribute_store, #{to_quoted_json(not_nil_attributes)})"
+          value_update = "jsonb_merge(attribute_store, #{to_quoted_jsonb(not_nil_attributes)})"
         elsif nil_attributes.any?
-          value_update = "json_delete(attribute_store, #{fields_to_postgres_array(nil_attributes.keys)})"
+          value_update = "jsonb_delete(attribute_store, #{fields_to_postgres_array(nil_attributes.keys)})"
         end
 
         statement = "UPDATE #{table} SET attribute_store = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
@@ -155,11 +155,11 @@ module Superstore
       end
 
       def create_table(table_name, options = {})
-        define_json_functions!
+        define_jsonb_functions!
 
         ActiveRecord::Migration.create_table table_name, id: false do |t|
           t.string :id, null: false
-          t.bjson :attribute_store, null: false
+          t.jsonb :attribute_store, null: false
         end
         connection.execute "ALTER TABLE \"#{table_name}\" ADD CONSTRAINT #{table_name}_pkey PRIMARY KEY (id)"
       end
@@ -189,15 +189,15 @@ module Superstore
       end
 
       OJ_OPTIONS = {mode: :compat}
-      def to_quoted_json(data)
-        "'#{Oj.dump(data, OJ_OPTIONS)}'"
+      def to_quoted_jsonb(data)
+        "'#{Oj.dump(data, OJ_OPTIONS)}'::JSONB"
       end
 
-      def define_json_functions!
+      def define_jsonb_functions!
         JSON_FUNCTIONS.each do |signature, body|
-          connection.execute %W{
+          connection.execute %{
             CREATE OR REPLACE FUNCTION public.#{signature}
-            RETURNS json
+            RETURNS jsonb
             IMMUTABLE
             LANGUAGE sql
             AS $$

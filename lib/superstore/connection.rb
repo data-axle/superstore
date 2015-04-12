@@ -10,7 +10,7 @@ module Superstore
       def adapter_class
         case config[:adapter]
         when 'hstore'
-          Superstore::Adapters::HstoreAdapter
+          Superstore::Adapters::JsonbAdapter
         when nil, 'cassandra'
           Superstore::Adapters::CassandraAdapter
         else
