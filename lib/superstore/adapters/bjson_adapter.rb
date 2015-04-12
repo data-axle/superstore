@@ -127,7 +127,7 @@ module Superstore
         nil_attributes = attributes.select { |key, value| value.nil? }
 
         if not_nil_attributes.any? && nil_attributes.any?
-          value_update = "json_merge(json_delete(attribute_store - #{fields_to_postgres_array(nil_attributes.keys)}), #{to_quoted_json(not_nil_attributes)}"
+          value_update = "json_merge(json_delete(attribute_store, #{fields_to_postgres_array(nil_attributes.keys)}), #{to_quoted_json(not_nil_attributes)}"
         elsif not_nil_attributes.any?
           value_update = "json_merge(attribute_store, #{to_quoted_json(not_nil_attributes)})"
         elsif nil_attributes.any?
