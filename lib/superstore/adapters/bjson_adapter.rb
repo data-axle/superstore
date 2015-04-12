@@ -5,14 +5,16 @@ module Superstore
   module Adapters
     class BjsonAdapter < AbstractAdapter
       JSON_FUNCTIONS = {
-        'json_delete(data json, keys text[])' => %w{
+        # SELECT json_slice('{"b": 2, "c": 3, "a": 4}', '{b, c}');
+        'json_slice(data json, keys text[])' => %w{
           SELECT json_object_agg(key, value)
           FROM (
             SELECT * FROM json_each(data)
-            WHERE key <>ALL(keys)
-          ) t;
+          ) t
+          WHERE key =ANY(keys);
         },
 
+        # SELECT json_merge('{"a": 1}', '{"b": 2, "c": 3, "a": 4}');
         'json_merge(data json, merge_data json)' => %w{
           SELECT json_object_agg(key, value)
           FROM (
@@ -27,13 +29,14 @@ module Superstore
           ) t;
         },
 
-        'json_slice(data json, keys text[])' => %w{
+        # SELECT json_delete('{"b": 2, "c": 3, "a": 4}', '{b, c}');
+        'json_delete(data json, keys text[])' => %w{
           SELECT json_object_agg(key, value)
           FROM (
             SELECT * FROM json_each(data)
-          ) t
-          WHERE key =ANY(keys);
-        }
+            WHERE key <>ALL(keys)
+          ) t;
+        },
       }
 
       class QueryBuilder
