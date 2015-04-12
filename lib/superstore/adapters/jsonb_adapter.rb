@@ -5,7 +5,7 @@ module Superstore
   module Adapters
     class JsonbAdapter < AbstractAdapter
       JSON_FUNCTIONS = {
-        # SELECT json_slice('{"b": 2, "c": 3, "a": 4}', '{b, c}');
+        # SELECT jsonb_slice('{"b": 2, "c": 3, "a": 4}', '{b, c}');
         'jsonb_slice(data jsonb, keys text[])' => %{
           SELECT json_object_agg(key, value)::jsonb
           FROM (
@@ -14,7 +14,7 @@ module Superstore
           WHERE key =ANY(keys);
         },
 
-        # SELECT json_merge('{"a": 1}', '{"b": 2, "c": 3, "a": 4}');
+        # SELECT jsonb_merge('{"a": 1}', '{"b": 2, "c": 3, "a": 4}');
         'jsonb_merge(data jsonb, merge_data jsonb)' => %{
           SELECT json_object_agg(key, value)::jsonb
           FROM (
@@ -29,7 +29,7 @@ module Superstore
           ) t;
         },
 
-        # SELECT json_delete('{"b": 2, "c": 3, "a": 4}', '{b, c}');
+        # SELECT jsonb_delete('{"b": 2, "c": 3, "a": 4}', '{b, c}');
         'jsonb_delete(data jsonb, keys text[])' => %{
           SELECT json_object_agg(key, value)::jsonb
           FROM (
