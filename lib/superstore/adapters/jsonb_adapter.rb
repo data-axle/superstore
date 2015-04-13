@@ -4,41 +4,6 @@ require 'pg'
 module Superstore
   module Adapters
     class JsonbAdapter < AbstractAdapter
-      JSON_FUNCTIONS = {
-        # SELECT jsonb_slice('{"b": 2, "c": 3, "a": 4}', '{b, c}');
-        'jsonb_slice(data jsonb, keys text[])' => %{
-          SELECT json_object_agg(key, value)::jsonb
-          FROM (
-            SELECT * FROM jsonb_each(data)
-          ) t
-          WHERE key =ANY(keys);
-        },
-
-        # SELECT jsonb_merge('{"a": 1}', '{"b": 2, "c": 3, "a": 4}');
-        'jsonb_merge(data jsonb, merge_data jsonb)' => %{
-          SELECT json_object_agg(key, value)::jsonb
-          FROM (
-            WITH to_merge AS (
-              SELECT * FROM jsonb_each(merge_data)
-            )
-            SELECT *
-            FROM jsonb_each(data)
-            WHERE key NOT IN (SELECT key FROM to_merge)
-            UNION ALL
-            SELECT * FROM to_merge
-          ) t;
-        },
-
-        # SELECT jsonb_delete('{"b": 2, "c": 3, "a": 4}', '{b, c}');
-        'jsonb_delete(data jsonb, keys text[])' => %{
-          SELECT json_object_agg(key, value)::jsonb
-          FROM (
-            SELECT * FROM jsonb_each(data)
-            WHERE key <>ALL(keys)
-          ) t;
-        },
-      }
-
       class QueryBuilder
         def initialize(adapter, scope)
           @adapter  = adapter
@@ -193,6 +158,40 @@ module Superstore
         "#{quote(Oj.dump(data, OJ_OPTIONS))}::JSONB"
       end
 
+      JSON_FUNCTIONS = {
+        # SELECT jsonb_slice('{"b": 2, "c": 3, "a": 4}', '{b, c}');
+        'jsonb_slice(data jsonb, keys text[])' => %{
+          SELECT json_object_agg(key, value)::jsonb
+          FROM (
+            SELECT * FROM jsonb_each(data)
+          ) t
+          WHERE key =ANY(keys);
+        },
+
+        # SELECT jsonb_merge('{"a": 1}', '{"b": 2, "c": 3, "a": 4}');
+        'jsonb_merge(data jsonb, merge_data jsonb)' => %{
+          SELECT json_object_agg(key, value)::jsonb
+          FROM (
+            WITH to_merge AS (
+              SELECT * FROM jsonb_each(merge_data)
+            )
+            SELECT *
+            FROM jsonb_each(data)
+            WHERE key NOT IN (SELECT key FROM to_merge)
+            UNION ALL
+            SELECT * FROM to_merge
+          ) t;
+        },
+
+        # SELECT jsonb_delete('{"b": 2, "c": 3, "a": 4}', '{b, c}');
+        'jsonb_delete(data jsonb, keys text[])' => %{
+          SELECT json_object_agg(key, value)::jsonb
+          FROM (
+            SELECT * FROM jsonb_each(data)
+            WHERE key <>ALL(keys)
+          ) t;
+        },
+      }
       def define_jsonb_functions!
         JSON_FUNCTIONS.each do |signature, body|
           connection.execute %{
