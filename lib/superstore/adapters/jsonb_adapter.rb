@@ -184,7 +184,7 @@ module Superstore
       end
 
       def fields_to_postgres_array(fields)
-        quoted_fields = fields.map { |field| "'#{field}'" }.join(',')
+        quoted_fields = fields.map { |field| quote(field) }.join(',')
         "ARRAY[#{quoted_fields}]"
       end
 
