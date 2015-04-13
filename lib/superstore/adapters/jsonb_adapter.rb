@@ -191,7 +191,6 @@ module Superstore
       OJ_OPTIONS = {mode: :compat}
       def to_quoted_jsonb(data)
         "#{quote(Oj.dump(data, OJ_OPTIONS))}::JSONB"
-        # "'#{Oj.dump(data, OJ_OPTIONS)}'::JSONB"
       end
 
       def define_jsonb_functions!
