@@ -12,13 +12,3 @@ class HstoreInitializer
 end
 
 HstoreInitializer.initialize!
-
-module ActiveSupport
-  class TestCase
-    teardown do
-      HstoreInitializer.table_names.each do |table_name|
-        ActiveRecord::Base.connection.execute "TRUNCATE #{table_name}"
-      end
-    end
-  end
-end

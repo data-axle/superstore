@@ -35,13 +35,3 @@ end
 
 PGInitializer.initialize!
 ActiveRecord::Migration.verbose = false
-
-module ActiveSupport
-  class TestCase
-    teardown do
-      PGInitializer.table_names.each do |table_name|
-        ActiveRecord::Base.connection.execute "TRUNCATE #{table_name}"
-      end
-    end
-  end
-end
