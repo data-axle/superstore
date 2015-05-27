@@ -3,11 +3,13 @@ Bundler.require(:default, :test)
 
 I18n.config.enforce_available_locales = false
 
+require 'active_record'
 require 'rails/test_help'
 require 'mocha/setup'
 
 require 'support/pg'
- require 'support/hstore'
+# require 'support/jsonb'
+require 'support/hstore'
 # require 'support/cassandra'
 require 'support/issue'
 require 'support/user'

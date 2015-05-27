@@ -110,18 +110,14 @@ module Superstore
       end
 
       def execute_batch(statements)
-        stmt = [
-          "BEGIN",
-          statements * ";\n",
-          'COMMIT'
-        ] * ";\n"
-
-        execute stmt
+        connection.transaction do
+          execute(statements * ";\n")
+        end
       end
 
       def create_table(table_name, options = {})
         connection.execute 'CREATE EXTENSION IF NOT EXISTS hstore'
-        ActiveRecord::Migration.create_table table_name, id: false do |t|
+        connection.create_table table_name, id: false do |t|
           t.string :id, null: false
           t.hstore :attribute_store, null: false
         end
@@ -129,7 +125,7 @@ module Superstore
       end
 
       def drop_table(table_name)
-        ActiveRecord::Migration.drop_table table_name
+        connection.drop_table table_name
       end
 
       def create_ids_where_clause(ids)
