@@ -3,11 +3,19 @@ module Superstore
     class JsonType < BaseType
       OJ_OPTIONS = {mode: :compat}
       def encode(data)
-        Oj.dump(data, OJ_OPTIONS)
+        if Superstore::Base.adapter.is_a?(Superstore::Adapters::JsonbAdapter)
+          data
+        else
+          Oj.dump(data, OJ_OPTIONS)
+        end
       end
 
       def decode(str)
-        Oj.compat_load(str)
+        if Superstore::Base.adapter.is_a?(Superstore::Adapters::JsonbAdapter)
+          str
+        else
+          Oj.compat_load(str)
+        end
       end
 
       def typecast(data)
