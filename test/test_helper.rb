@@ -10,8 +10,7 @@ require 'mocha/setup'
 ActiveSupport::TestCase.test_order = :random
 
 require 'support/pg'
-# require 'support/jsonb'
-require 'support/hstore'
+require 'support/jsonb'
 # require 'support/cassandra'
 require 'support/issue'
 require 'support/user'

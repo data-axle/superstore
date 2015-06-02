@@ -11,8 +11,6 @@ module Superstore
         case config[:adapter]
         when 'jsonb'
           Superstore::Adapters::JsonbAdapter
-        when 'hstore'
-          Superstore::Adapters::HstoreAdapter
         when nil, 'cassandra'
           Superstore::Adapters::CassandraAdapter
         else

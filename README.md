@@ -69,7 +69,7 @@ And a config/superstore.yml:
 
 ```yaml
 development:
-  adapter: hstore
+  adapter: jsonb
 ```
 
 ## Creating and updating records
