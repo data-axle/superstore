@@ -110,18 +110,12 @@ module Superstore
       end
 
       def execute_batch(statements)
-        stmt = [
-          "BEGIN",
-          statements * ";\n",
-          'COMMIT'
-        ] * ";\n"
-
-        execute stmt
+        connection.transaction do
+          execute(statements * ";\n")
+        end
       end
 
       def create_table(table_name, options = {})
-        define_jsonb_functions!
-
         ActiveRecord::Migration.create_table table_name, id: false do |t|
           t.string :id, null: false
           t.jsonb :document, null: false
