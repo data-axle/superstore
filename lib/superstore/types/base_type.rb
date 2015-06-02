@@ -11,7 +11,7 @@ module Superstore
       end
 
       def encode(value)
-        value.to_s
+        value
       end
 
       def decode(str)

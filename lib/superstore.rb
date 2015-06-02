@@ -42,8 +42,8 @@ module Superstore
     extend ActiveSupport::Autoload
 
     autoload :AbstractAdapter
+    autoload :JsonbAdapter
     autoload :CassandraAdapter
-    autoload :HstoreAdapter
   end
 
   module BelongsTo

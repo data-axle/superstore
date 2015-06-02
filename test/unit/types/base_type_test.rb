@@ -8,9 +8,7 @@ class Superstore::Types::BaseTypeTest < Superstore::Types::TestCase
   end
 
   test 'encode' do
-    assert_equal '1', coder.encode(1)
-    assert_equal '', coder.encode(nil)
-    assert_equal '1', coder.encode('1')
+    assert_equal 'x', coder.encode('x')
   end
 
   test 'decode' do

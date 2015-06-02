@@ -1,15 +1,23 @@
 module Superstore
   module Types
     class ArrayType < BaseType
+      OJ_OPTIONS = {mode: :compat}
       def encode(array)
-        raise ArgumentError.new("#{array.inspect} is not an Array") unless array.kind_of?(Array)
-        array.to_a.to_json
+        if Superstore::Base.adapter.is_a?(Superstore::Adapters::JsonbAdapter)
+          array
+        else
+          Oj.dump(data, OJ_OPTIONS)
+        end
       end
 
       def decode(str)
         return nil if str.blank?
 
-        ActiveSupport::JSON.decode(str)
+        if Superstore::Base.adapter.is_a?(Superstore::Adapters::JsonbAdapter)
+          str
+        else
+          Oj.compat_load(str)
+        end
       end
 
       def typecast(value)
