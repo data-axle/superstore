@@ -21,7 +21,7 @@ module Superstore
 
         def select_string
           if @scope.select_values.any?
-            "id, jsonb_slice(attribute_store, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as attribute_store"
+            "id, jsonb_slice(document, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as document"
           else
             '*'
           end
@@ -75,13 +75,13 @@ module Superstore
         statement = QueryBuilder.new(self, scope).to_query
 
         connection.execute(statement).each do |attributes|
-          yield attributes[primary_key_column], Oj.compat_load(attributes['attribute_store'])
+          yield attributes[primary_key_column], Oj.compat_load(attributes['document'])
         end
       end
 
       def insert(table, id, attributes)
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
-        statement = "INSERT INTO #{table} (#{primary_key_column}, attribute_store) VALUES (#{quote(id)}, #{to_quoted_jsonb(not_nil_attributes)})"
+        statement = "INSERT INTO #{table} (#{primary_key_column}, document) VALUES (#{quote(id)}, #{to_quoted_jsonb(not_nil_attributes)})"
         execute_batchable statement
       end
 
@@ -92,14 +92,14 @@ module Superstore
         nil_attributes = attributes.select { |key, value| value.nil? }
 
         if not_nil_attributes.any? && nil_attributes.any?
-          value_update = "jsonb_merge(jsonb_delete(attribute_store, #{fields_to_postgres_array(nil_attributes.keys)}), #{to_quoted_jsonb(not_nil_attributes)})"
+          value_update = "jsonb_merge(jsonb_delete(document, #{fields_to_postgres_array(nil_attributes.keys)}), #{to_quoted_jsonb(not_nil_attributes)})"
         elsif not_nil_attributes.any?
-          value_update = "jsonb_merge(attribute_store, #{to_quoted_jsonb(not_nil_attributes)})"
+          value_update = "jsonb_merge(document, #{to_quoted_jsonb(not_nil_attributes)})"
         elsif nil_attributes.any?
-          value_update = "jsonb_delete(attribute_store, #{fields_to_postgres_array(nil_attributes.keys)})"
+          value_update = "jsonb_delete(document, #{fields_to_postgres_array(nil_attributes.keys)})"
         end
 
-        statement = "UPDATE #{table} SET attribute_store = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
+        statement = "UPDATE #{table} SET document = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
         execute_batchable statement
       end
 
@@ -124,7 +124,7 @@ module Superstore
 
         ActiveRecord::Migration.create_table table_name, id: false do |t|
           t.string :id, null: false
-          t.jsonb :attribute_store, null: false
+          t.jsonb :document, null: false
         end
         connection.execute "ALTER TABLE \"#{table_name}\" ADD CONSTRAINT #{table_name}_pkey PRIMARY KEY (id)"
       end

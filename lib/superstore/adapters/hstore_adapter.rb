@@ -21,7 +21,7 @@ module Superstore
 
         def select_string
           if @scope.select_values.any?
-            "id, slice(attribute_store, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as attribute_store"
+            "id, slice(document, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as document"
           else
             '*'
           end
@@ -75,13 +75,13 @@ module Superstore
         statement = QueryBuilder.new(self, scope).to_query
 
         connection.execute(statement).each do |attributes|
-          yield attributes[primary_key_column], hstore_to_attributes(attributes['attribute_store'])
+          yield attributes[primary_key_column], hstore_to_attributes(attributes['document'])
         end
       end
 
       def insert(table, id, attributes)
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
-        statement = "INSERT INTO #{table} (#{primary_key_column}, attribute_store) VALUES (#{quote(id)}, #{attributes_to_hstore(not_nil_attributes)})"
+        statement = "INSERT INTO #{table} (#{primary_key_column}, document) VALUES (#{quote(id)}, #{attributes_to_hstore(not_nil_attributes)})"
         execute_batchable statement
       end
 
@@ -92,14 +92,14 @@ module Superstore
         nil_attributes = attributes.select { |key, value| value.nil? }
 
         if not_nil_attributes.any? && nil_attributes.any?
-          value_update = "(attribute_store - #{fields_to_postgres_array(nil_attributes.keys)}) || #{attributes_to_hstore(not_nil_attributes)}"
+          value_update = "(document - #{fields_to_postgres_array(nil_attributes.keys)}) || #{attributes_to_hstore(not_nil_attributes)}"
         elsif not_nil_attributes.any?
-          value_update = "attribute_store || #{attributes_to_hstore(not_nil_attributes)}"
+          value_update = "document || #{attributes_to_hstore(not_nil_attributes)}"
         elsif nil_attributes.any?
-          value_update = "attribute_store - #{fields_to_postgres_array(nil_attributes.keys)}"
+          value_update = "document - #{fields_to_postgres_array(nil_attributes.keys)}"
         end
 
-        statement = "UPDATE #{table} SET attribute_store = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
+        statement = "UPDATE #{table} SET document = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
         execute_batchable statement
       end
 
@@ -119,7 +119,7 @@ module Superstore
         connection.execute 'CREATE EXTENSION IF NOT EXISTS hstore'
         connection.create_table table_name, id: false do |t|
           t.string :id, null: false
-          t.hstore :attribute_store, null: false
+          t.hstore :document, null: false
         end
         connection.execute "ALTER TABLE \"#{table_name}\" ADD CONSTRAINT #{table_name}_pkey PRIMARY KEY (id)"
       end
