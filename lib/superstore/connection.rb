@@ -4,7 +4,7 @@ module Superstore
 
     module ClassMethods
       def adapter
-        @@adapter ||= adapter_class.new(config)
+        @adapter ||= adapter_class.new(config)
       end
 
       def adapter_class
