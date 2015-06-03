@@ -12,6 +12,8 @@ module Superstore
     include ActiveModel::Serializers::JSON
     include GlobalID::Identification
 
+    include Model
+    include Core
     include Connection
     include Identity
     include Inspect
@@ -25,9 +27,7 @@ module Superstore
     include Callbacks
     include Timestamps
     include Scoping
-    include Core
     include Caching
-    extend  Model
 
   end
 end

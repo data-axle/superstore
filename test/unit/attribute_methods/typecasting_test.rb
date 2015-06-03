@@ -1,16 +1,9 @@
 require 'test_helper'
 
 class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
-  class CustomType
-  end
-
-  class CustomCoder < Superstore::Types::BaseType
-  end
-
   class TestIssue < Superstore::Base
     self.table_name = 'Issues'
 
-    attribute :custom_column, type: CustomType, coder: CustomCoder
     boolean :enabled
     float   :rating
     integer :price
@@ -26,13 +19,6 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
     assert_nothing_raised { Issue.new.description }
     assert_raise(NoMethodError) { TestIssue.new.description }
     assert_nothing_raised { TestChildIssue.new.description }
-  end
-
-  test 'custom attribute definer' do
-    model_attribute = TestIssue.attribute_definitions['custom_column']
-
-    assert_kind_of CustomCoder, model_attribute.coder
-    assert_equal 'custom_column', model_attribute.name
   end
 
   test 'typecast_attribute' do

@@ -38,9 +38,9 @@ module Superstore
 
   module Types
     class TestCase < Superstore::TestCase
-      attr_accessor :coder
+      attr_accessor :type
       setup do
-        @coder = self.class.name.sub(/Test$/, '').constantize.new
+        @type = self.class.name.sub(/Test$/, '').constantize.new(Issue)
       end
     end
   end

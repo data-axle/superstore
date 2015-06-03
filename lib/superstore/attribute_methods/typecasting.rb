@@ -27,19 +27,13 @@ module Superstore
 
         #
         # attribute :name, type: :string
-        # attribute :ammo, type: Ammo, coder: AmmoCodec
+        # attribute :ammo, type: :integer
         #
         def attribute(name, options)
-          type  = options[:type]
-          coder = options[:coder]
+          type_name  = options[:type]
+          type_class = Superstore::Type.get_type_class(type_name) || (raise "Unknown type #{type_name}")
 
-          if type.is_a?(Symbol)
-            coder = Superstore::Type.get_coder(type) || (raise "Unknown type #{type}")
-          elsif coder.nil?
-            raise "Must supply a :coder for #{name}"
-          end
-
-          attribute_definitions[name.to_s] = AttributeMethods::Definition.new(name, coder, options)
+          attribute_definitions[name.to_s] = AttributeMethods::Definition.new(self, name, type_class, options)
         end
 
         def typecast_attribute(name, value)
@@ -50,8 +44,8 @@ module Superstore
           end
         end
 
-        def coder_for(attribute)
-          attribute_definitions[attribute.to_s].coder
+        def type_for(attribute)
+          attribute_definitions[attribute.to_s].type
         end
       end
     end

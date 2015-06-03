@@ -5,9 +5,9 @@ class Superstore::AttributeMethods::DefinitionTest < Superstore::TestCase
   end
 
   test 'typecast' do
-    definition = Superstore::AttributeMethods::Definition.new(:foo, TestType, {a: :b})
+    definition = Superstore::AttributeMethods::Definition.new(Issue, :foo, TestType, default: 'foo')
 
     assert_equal 'foo', definition.name
-    assert_kind_of TestType, definition.coder
+    assert_kind_of TestType, definition.type
   end
 end

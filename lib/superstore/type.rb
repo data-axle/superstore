@@ -4,11 +4,11 @@ module Superstore
     self.attribute_types = {}.with_indifferent_access
 
     class << self
-      def register(name, coder)
-        attribute_types[name] = coder
+      def register(name, type)
+        attribute_types[name] = type
       end
 
-      def get_coder(name)
+      def get_type_class(name)
         attribute_types[name]
       end
     end

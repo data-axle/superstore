@@ -1,8 +1,9 @@
 module Superstore
   module Types
     class BaseType
-      attr_accessor :options
-      def initialize(options = {})
+      attr_accessor :model, :options
+      def initialize(model, options = {})
+        @model   = model
         @options = options
       end
 

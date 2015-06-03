@@ -52,7 +52,7 @@ module Superstore
           if value.nil?
             encoded[column_name] = nil
           else
-            encoded[column_name] = attribute_definitions[column_name].coder.encode(value)
+            encoded[column_name] = attribute_definitions[column_name].type.encode(value)
           end
         end
         encoded

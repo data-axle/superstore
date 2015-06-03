@@ -3,20 +3,20 @@ module Superstore
     class ArrayType < BaseType
       OJ_OPTIONS = {mode: :compat}
       def encode(array)
-        if Superstore::Base.adapter.is_a?(Superstore::Adapters::JsonbAdapter)
-          array
+        if model.adapter.is_a?(Superstore::Adapters::CassandraAdapter)
+          Oj.dump(array, OJ_OPTIONS)
         else
-          Oj.dump(data, OJ_OPTIONS)
+          array
         end
       end
 
-      def decode(str)
-        return nil if str.blank?
+      def decode(val)
+        return nil if val.blank?
 
-        if Superstore::Base.adapter.is_a?(Superstore::Adapters::JsonbAdapter)
-          str
+        if model.adapter.is_a?(Superstore::Adapters::CassandraAdapter)
+          Oj.compat_load(val)
         else
-          Oj.compat_load(str)
+          val
         end
       end
 

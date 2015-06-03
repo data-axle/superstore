@@ -1,21 +1,21 @@
 module Superstore
   module AttributeMethods
     class Definition
-      attr_reader :name, :coder
-      def initialize(name, coder, options)
-        @name   = name.to_s
-        @coder  = coder.new(options)
+      attr_reader :name, :type
+      def initialize(model, name, type_class, options)
+        @name = name.to_s
+        @type = type_class.new(model, options)
       end
 
       def default
-        coder.default
+        type.default
       end
 
       def instantiate(value)
-        value = value.nil? ? coder.default : value
+        value = value.nil? ? type.default : value
         return if value.nil?
 
-        value.kind_of?(String) ? coder.decode(value) : coder.typecast(value)
+        value.kind_of?(String) ? type.decode(value) : type.typecast(value)
       end
     end
   end
