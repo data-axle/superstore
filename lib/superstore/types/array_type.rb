@@ -3,7 +3,7 @@ module Superstore
     class ArrayType < BaseType
       OJ_OPTIONS = {mode: :compat}
       def encode(array)
-        if model.adapter.is_a?(Superstore::Adapters::CassandraAdapter)
+        if model.adapter.class.name == 'Superstore::Adapters::CassandraAdapter'
           Oj.dump(array, OJ_OPTIONS)
         else
           array
@@ -13,7 +13,7 @@ module Superstore
       def decode(val)
         return nil if val.blank?
 
-        if model.adapter.is_a?(Superstore::Adapters::CassandraAdapter)
+        if model.adapter.class.name == 'Superstore::Adapters::CassandraAdapter'
           Oj.compat_load(val)
         else
           val

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Superstore::Types::ArrayTypeTest < Superstore::Types::TestCase
-  if Superstore::Base.adapter.is_a?(Superstore::Adapters::CassandraAdapter)
+  if Superstore::Base.adapter.class.name == 'Superstore::Adapters::CassandraAdapter'
     test 'encode' do
       assert_equal ['1', '2'].to_json, type.encode(['1', '2'])
 
