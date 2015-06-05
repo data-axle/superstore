@@ -3,7 +3,7 @@ module Superstore
     class JsonType < BaseType
       OJ_OPTIONS = {mode: :compat}
       def encode(data)
-        if model.adapter.is_a?(Superstore::Adapters::CassandraAdapter)
+        if model.adapter.class.name == 'Superstore::Adapters::CassandraAdapter'
           Oj.dump(data, OJ_OPTIONS)
         else
           data
@@ -11,7 +11,7 @@ module Superstore
       end
 
       def decode(str)
-        if model.adapter.is_a?(Superstore::Adapters::CassandraAdapter)
+        if model.adapter.class.name == 'Superstore::Adapters::CassandraAdapter'
           Oj.compat_load(str)
         else
           str
