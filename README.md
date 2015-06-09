@@ -1,16 +1,14 @@
 # Superstore
-[![Build Status](https://secure.travis-ci.org/data-axle/superstore.png?rvm=2.0.0)](http://travis-ci.org/data-axle/superstore) [![Code Climate](https://codeclimate.com/github/data-axle/superstore.png)](https://codeclimate.com/github/data-axle/superstore)
+[![Build Status](https://secure.travis-ci.org/data-axle/superstore.png?rvm=2.0.0)](http://travis-ci.org/data-axle/superstore) [![Code Climate](https://codeclimate.com/github/data-axle/superstore/badges/gpa.svg)](https://codeclimate.com/github/data-axle/superstore)
 
-Cassandra Object uses ActiveModel to mimic much of the behavior in ActiveRecord.
+Superstore uses ActiveModel to mimic much of the behavior in ActiveRecord.
 
 ## Installation
 
-Add the following to your Gemfile:
+Add the following to the `Gemfile`:
 ```ruby
 gem 'superstore'
 ```
-
-Change the version of Cassandra accordingly. Recent versions have not been backward compatible.
 
 ## Defining Models
 
@@ -30,22 +28,24 @@ end
 ```
 
 The table name defaults to the case-sensitive, pluralized name of the model class. To specify a
-custom name, set the ```table_name``` attribute on the class:
+custom name, set the `table_name` attribute on the class:
 
 ```ruby
 class MyWidget < Superstore::Base
   table_name = 'my_widgets'
 end
 ```
-## Using with Cassandra
+## Using the Cassandra adapter
 
-Add the cassandra-cql gem to Gemfile:
+**Note**: _Change the version of Cassandra accordingly. Recent versions have not been backwards compatible._
+
+Add the `cassandra-cql` gem to the `Gemfile`:
 
 ```ruby
 gem 'cassandra-cql'
 ```
 
-Add a config/superstore.yml:
+Add a `config/superstore.yml` file:
 
 ```yaml
 development:
@@ -57,24 +57,26 @@ development:
     retries: 2
 ```
 
-## Using with Postgres HStore
+## Using the PostgreSQL JSONB adapter
 
-Add the pg gem to your Gemfile:
+Add the `pg` gem to the `Gemfile`:
 
 ```ruby
 gem 'pg'
 ```
 
-And a config/superstore.yml:
+Add a `config/superstore.yml`:
 
 ```yaml
 development:
   adapter: jsonb
 ```
 
+Superstore will share the existing ActiveRecord database connection.
+
 ## Creating and updating records
 
-Cassandra Object has equivalent methods as ActiveRecord:
+Superstore has equivalent methods to ActiveRecord:
 
 ```ruby
 widget = Widget.new
@@ -102,8 +104,9 @@ end
 ## Scoping
 
 Some lightweight scoping features are available:
+
 ```ruby
-  Widget.where('color' => 'red')
-  Widget.select(['name', 'color'])
-  Widget.limit(10)
+Widget.where('color' => 'red')
+Widget.select(['name', 'color'])
+Widget.limit(10)
 ```
