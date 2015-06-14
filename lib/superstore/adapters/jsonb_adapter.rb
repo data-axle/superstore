@@ -60,11 +60,7 @@ module Superstore
       end
 
       def connection
-        connection_handler.retrieve_connection(active_record_klass)
-      end
-
-      def connection_handler
-        active_record_klass.connection_handler
+        active_record_klass.connection
       end
 
       def active_record_klass=(klass)
