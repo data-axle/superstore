@@ -60,9 +60,19 @@ module Superstore
       end
 
       def connection
-        # conf = {:adapter=>"postgresql", :encoding=>"unicode", :database=>"axle_place_test", :pool=>5, :username=>"postgres"}
-        # @connection ||= ActiveRecord::Base.postgresql_connection(conf)
-        ActiveRecord::Base.connection
+        connection_handler.retrieve_connection(active_record_klass)
+      end
+
+      def connection_handler
+        active_record_klass.connection_handler
+      end
+
+      def active_record_klass=(klass)
+        @active_record_klass = klass
+      end
+
+      def active_record_klass
+        @active_record_klass ||= ActiveRecord::Base
       end
 
       def execute(statement)
