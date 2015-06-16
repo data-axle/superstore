@@ -1,18 +1,20 @@
 require 'test_helper'
 
 class Superstore::Types::BooleanTypeTest < Superstore::Types::TestCase
-  test 'encode' do
-    assert_equal '1', type.encode(true)
-    assert_equal '1', type.encode('true')
-    assert_equal '1', type.encode('1')
+  if Superstore::Base.adapter.class.name == 'Superstore::Adapters::CassandraAdapter'
+    test 'encode' do
+      assert_equal '1', type.encode(true)
+      assert_equal '1', type.encode('true')
+      assert_equal '1', type.encode('1')
 
-    assert_equal '0', type.encode(false)
-    assert_equal '0', type.encode('false')
-    assert_equal '0', type.encode('0')
-    assert_equal '0', type.encode('')
+      assert_equal '0', type.encode(false)
+      assert_equal '0', type.encode('false')
+      assert_equal '0', type.encode('0')
+      assert_equal '0', type.encode('')
 
-    assert_raise ArgumentError do
-      type.encode('wtf')
+      assert_raise ArgumentError do
+        type.encode('wtf')
+      end
     end
   end
 

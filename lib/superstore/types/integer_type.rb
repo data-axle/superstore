@@ -4,7 +4,12 @@ module Superstore
       REGEX = /\A[-+]?\d+\Z/
       def encode(int)
         raise ArgumentError.new("#{int.inspect} is not an Integer.") unless int.kind_of?(Integer)
-        int.to_s
+
+        if model.config[:adapter] == 'jsonb'
+          int
+        else
+          int.to_s
+        end
       end
 
       def decode(str)

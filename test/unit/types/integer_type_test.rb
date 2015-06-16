@@ -1,12 +1,14 @@
 require 'test_helper'
 
 class Superstore::Types::IntegerTypeTest < Superstore::Types::TestCase
-  test 'encode' do
-    assert_equal '3', type.encode(3)
-    assert_equal '-3', type.encode(-3)
+  if Superstore::Base.adapter.class.name == 'Superstore::Adapters::CassandraAdapter'
+    test 'encode' do
+      assert_equal '3', type.encode(3)
+      assert_equal '-3', type.encode(-3)
 
-    assert_raise ArgumentError do
-      type.encode('xx')
+      assert_raise ArgumentError do
+        type.encode('xx')
+      end
     end
   end
 

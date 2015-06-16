@@ -4,7 +4,12 @@ module Superstore
       REGEX = /\A[-+]?\d+(\.\d+)?\Z/
       def encode(float)
         raise ArgumentError.new("#{float.inspect} is not a Float") unless float.kind_of?(Float)
-        float.to_s
+
+        if model.config[:adapter] == 'jsonb'
+          float
+        else
+          float.to_s
+        end
       end
 
       def decode(str)

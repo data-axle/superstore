@@ -1,11 +1,13 @@
 require 'test_helper'
 
 class Superstore::Types::FloatTypeTest < Superstore::Types::TestCase
-  test 'encode' do
-    assert_equal '5.01', type.encode(5.01)
+  if Superstore::Base.adapter.class.name == 'Superstore::Adapters::CassandraAdapter'
+    test 'encode' do
+      assert_equal '5.01', type.encode(5.01)
 
-    assert_raise ArgumentError do
-      type.encode('x')
+      assert_raise ArgumentError do
+        type.encode('x')
+      end
     end
   end
 
