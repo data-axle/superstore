@@ -3,12 +3,10 @@ module Superstore
     class FloatType < BaseType
       REGEX = /\A[-+]?\d+(\.\d+)?\Z/
       def encode(float)
-        raise ArgumentError.new("#{float.inspect} is not a Float") unless float.kind_of?(Float)
-
         if model.config[:adapter] == 'jsonb'
-          float
+          Float(float)
         else
-          float.to_s
+          Float(float).to_s
         end
       end
 
