@@ -12,7 +12,7 @@ module Superstore
       end
 
       def table_name
-        @table_name ||= base_class.name.pluralize
+        @table_name ||= base_class.model_name.plural
       end
 
       def column_family
