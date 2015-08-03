@@ -100,7 +100,7 @@ module Superstore
     end
 
     def destroy
-      self.class.remove(id)
+      self.class.delete(id)
       @destroyed = true
     end
 

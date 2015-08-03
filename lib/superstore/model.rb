@@ -15,16 +15,6 @@ module Superstore
         @table_name ||= base_class.model_name.plural
       end
 
-      def column_family
-        ActiveSupport::Deprecation.warn '`column_family` is deprecated & will be removed in superstore 2.0. Use `table_name` instead.'
-        table_name
-      end
-
-      def column_family=(table_name)
-        ActiveSupport::Deprecation.warn '`column_family=` is deprecated & will be removed in superstore 2.0. Use `table_name=` instead.'
-        self.table_name = table_name
-      end
-
       def base_class
         class_of_active_record_descendant(self)
       end
