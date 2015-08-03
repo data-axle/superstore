@@ -80,8 +80,24 @@ module Superstore
       def select(scope)
         statement = QueryBuilder.new(self, scope).to_query
 
-        connection.execute(statement).each do |attributes|
-          yield attributes[primary_key_column], Oj.compat_load(attributes['document'])
+        connection.execute(statement).each do |result|
+          yield result[primary_key_column], Oj.compat_load(result['document'])
+        end
+      end
+
+      def scroll(scope, batch_size)
+        statement   = QueryBuilder.new(self, scope).to_query
+        cursor_name = "cursor_#{SecureRandom.hex(6)}"
+        fetch_sql   = "FETCH FORWARD #{batch_size} FROM #{cursor_name}"
+
+        connection.transaction do
+          connection.execute "DECLARE #{cursor_name} NO SCROLL CURSOR FOR (#{statement})"
+
+          while (batch = connection.execute(fetch_sql)).any?
+            batch.each do |result|
+              yield result[primary_key_column], Oj.compat_load(result['document'])
+            end
+          end
         end
       end
 
