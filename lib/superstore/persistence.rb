@@ -7,7 +7,7 @@ module Superstore
     end
 
     module ClassMethods
-      def remove(ids)
+      def delete(ids)
         adapter.delete table_name, ids
       end
 

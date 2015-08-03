@@ -176,7 +176,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
     assert_equal %w{'a' 'b'}, klass.__send__(:quote_columns, %w{a b})
   end
 
-  test 'remove' do
+  test 'delete' do
     klass = temp_object do
       string :name
     end
@@ -187,14 +187,14 @@ class Superstore::PersistenceTest < Superstore::TestCase
     id = record.id
     assert_equal id, klass.find(id).id
 
-    klass.remove(id)
+    klass.delete(id)
 
     assert_raise Superstore::RecordNotFound do
       klass.find(id)
     end
   end
 
-  test 'remove multiple' do
+  test 'delete multiple' do
     klass = temp_object do
       string :name
     end
@@ -205,7 +205,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
       ids << record.id
     end
 
-    klass.remove(ids)
+    klass.delete(ids)
 
     assert_equal [], klass.find(ids)
   end
