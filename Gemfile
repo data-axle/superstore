@@ -9,8 +9,3 @@ group :test do
   gem 'activerecord', '~> 4.2.0'
   gem 'mocha', require: false
 end
-
-group :cassandra do
-  gem 'cassandra-cql', "1.1.4"
-  gem 'thin'
-end

@@ -35,27 +35,6 @@ class MyWidget < Superstore::Base
   table_name = 'my_widgets'
 end
 ```
-## Using the Cassandra adapter
-
-**Note**: _Change the version of Cassandra accordingly. Recent versions have not been backwards compatible._
-
-Add the `cassandra-cql` gem to the `Gemfile`:
-
-```ruby
-gem 'cassandra-cql'
-```
-
-Add a `config/superstore.yml` file:
-
-```yaml
-development:
-  adapter: cassandra
-  keyspace: my_app_development
-  servers: 127.0.0.1:9160
-  thrift:
-    timeout: 20
-    retries: 2
-```
 
 ## Using the PostgreSQL JSONB adapter
 
