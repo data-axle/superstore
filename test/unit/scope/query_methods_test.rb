@@ -10,6 +10,16 @@ class Superstore::Scope::QueryMethodsTest < Superstore::TestCase
     assert_nil found_issue.description
   end
 
+  test "where" do
+    foo_issue = Issue.create title: 'foo'
+    bar_issue = Issue.create title: 'bar'
+    nil_issue = Issue.create title: nil
+
+    assert_equal [foo_issue], Issue.where(title: 'foo').to_a
+    assert_equal [foo_issue, bar_issue], Issue.where(title: ['foo', 'bar']).to_a
+    assert_equal [nil_issue], Issue.where(title: nil).to_a
+  end
+
   test "select with block" do
     foo_issue = Issue.create title: 'foo'
     bar_issue = Issue.create title: 'bar'

@@ -28,7 +28,8 @@ module Superstore
         end
 
         def where_string
-          wheres = @scope.where_values.dup
+          wheres = where_values_as_strings
+
           if @scope.id_values.any?
             wheres << @adapter.create_ids_where_clause(@scope.id_values)
           end
@@ -51,6 +52,26 @@ module Superstore
         def limit_string
           if @scope.limit_value
             "LIMIT #{@scope.limit_value}"
+          end
+        end
+
+        def where_values_as_strings
+          @scope.where_values.map do |where_value|
+            if where_value.is_a?(Hash)
+              key = where_value.keys.first
+              value = where_value.values.first
+
+              if value.nil?
+                "(document->>'#{key}') IS NULL"
+              elsif value.is_a?(Array)
+                typecasted_values = value.map { |v| "'#{v}'" }.join(',')
+                "document->>'#{key}' IN (#{typecasted_values})"
+              else
+                "document->>'#{key}' = '#{value}'"
+              end
+            else
+              where_value
+            end
           end
         end
       end
