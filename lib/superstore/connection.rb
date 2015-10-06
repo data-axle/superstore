@@ -9,10 +9,8 @@ module Superstore
 
       def adapter_class
         case config[:adapter]
-        when 'jsonb'
+        when nil, 'jsonb'
           Superstore::Adapters::JsonbAdapter
-        when nil, 'cassandra'
-          Superstore::Adapters::CassandraAdapter
         else
           raise "Unknown adapter #{config[:adapter]}"
         end

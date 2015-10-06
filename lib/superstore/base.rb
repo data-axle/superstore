@@ -1,6 +1,5 @@
 require 'set'
 
-require 'superstore/log_subscriber'
 require 'superstore/types'
 
 module Superstore
