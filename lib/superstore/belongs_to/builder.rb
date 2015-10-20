@@ -25,14 +25,14 @@ module Superstore
       def define_writer
         name = self.name
         mixin.redefine_method("#{name}=") do |records|
-          belongs_to_association(name).writer(records)
+          association(name).writer(records)
         end
       end
 
       def define_reader
         name = self.name
         mixin.redefine_method(name) do
-          belongs_to_association(name).reader
+          association(name).reader
         end
       end
     end

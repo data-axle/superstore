@@ -24,7 +24,7 @@ module Superstore
 
       def generated_association_methods
         @generated_association_methods ||= begin
-          mod = const_set(:GeneratedBelongsToMethods, Module.new)
+          mod = const_set(:GeneratedAssociationMethods, Module.new)
           include mod
           mod
         end
@@ -32,15 +32,15 @@ module Superstore
     end
 
     # Returns the belongs_to instance for the given name, instantiating it if it doesn't already exist
-    def belongs_to_association(name)
-      association = association_instance_get(name)
+    def association(name)
+      instance = association_instance_get(name)
 
-      if association.nil?
-        association = Superstore::BelongsTo::Association.new(self, association_reflections[name])
-        belongs_to_instance_set(name, association)
+      if instance.nil?
+        instance = Superstore::BelongsTo::Association.new(self, association_reflections[name])
+        association_instance_set(name, instance)
       end
 
-      association
+      instance
     end
 
     private
@@ -56,7 +56,7 @@ module Superstore
         associations_cache[name.to_sym]
       end
 
-      def belongs_to_instance_set(name, association)
+      def association_instance_set(name, association)
         associations_cache[name.to_sym] = association
       end
   end
