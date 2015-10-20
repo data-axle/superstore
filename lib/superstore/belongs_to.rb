@@ -22,6 +22,10 @@ module Superstore
         Superstore::BelongsTo::Builder.build(self, name, options)
       end
 
+      def has_many(name, options = {})
+        
+      end
+
       def generated_association_methods
         @generated_association_methods ||= begin
           mod = const_set(:GeneratedAssociationMethods, Module.new)
@@ -36,7 +40,8 @@ module Superstore
       instance = association_instance_get(name)
 
       if instance.nil?
-        instance = Superstore::BelongsTo::Association.new(self, association_reflections[name])
+        reflection = association_reflections[name]
+        instance = reflection.association_class.new(self, reflection)
         association_instance_set(name, instance)
       end
 

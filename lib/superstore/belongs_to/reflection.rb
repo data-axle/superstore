@@ -6,6 +6,10 @@ module Superstore
         @model, @name, @options = model, name, options
       end
 
+      def association_class
+        Superstore::BelongsTo::Association
+      end
+
       def instance_variable_name
         "@#{name}"
       end
