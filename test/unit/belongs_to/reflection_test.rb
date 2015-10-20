@@ -7,6 +7,6 @@ class Superstore::BelongsTo::ReflectionTest < Superstore::TestCase
   end
 
   test 'class_name' do
-    assert_equal 'Status', Job.new.belongs_to_reflections[:status].class_name
+    assert_equal 'Status', Job.new.association_reflections[:status].class_name
   end
 end

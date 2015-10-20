@@ -3,8 +3,8 @@ module Superstore
     extend ActiveSupport::Concern
 
     included do
-      class_attribute :belongs_to_reflections
-      self.belongs_to_reflections = {}
+      class_attribute :association_reflections
+      self.association_reflections = {}
     end
 
     module ClassMethods
@@ -22,8 +22,8 @@ module Superstore
         Superstore::BelongsTo::Builder.build(self, name, options)
       end
 
-      def generated_belongs_to_methods
-        @generated_belongs_to_methods ||= begin
+      def generated_association_methods
+        @generated_association_methods ||= begin
           mod = const_set(:GeneratedBelongsToMethods, Module.new)
           include mod
           mod
@@ -33,10 +33,10 @@ module Superstore
 
     # Returns the belongs_to instance for the given name, instantiating it if it doesn't already exist
     def belongs_to_association(name)
-      association = belongs_to_instance_get(name)
+      association = association_instance_get(name)
 
       if association.nil?
-        association = Superstore::BelongsTo::Association.new(self, belongs_to_reflections[name])
+        association = Superstore::BelongsTo::Association.new(self, association_reflections[name])
         belongs_to_instance_set(name, association)
       end
 
@@ -44,20 +44,20 @@ module Superstore
     end
 
     private
-      def clear_belongs_to_cache
-        belongs_to_cache.clear if persisted?
+      def clear_associations_cache
+        associations_cache.clear if persisted?
       end
 
-      def belongs_to_cache
-        @belongs_to_cache ||= {}
+      def associations_cache
+        @associations_cache ||= {}
       end
 
-      def belongs_to_instance_get(name)
-        belongs_to_cache[name.to_sym]
+      def association_instance_get(name)
+        associations_cache[name.to_sym]
       end
 
       def belongs_to_instance_set(name, association)
-        belongs_to_cache[name.to_sym] = association
+        associations_cache[name.to_sym] = association
       end
   end
 end

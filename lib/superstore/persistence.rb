@@ -133,7 +133,7 @@ module Superstore
     end
 
     def reload
-      clear_belongs_to_cache
+      clear_associations_cache
       @attributes = self.class.find(id).instance_variable_get('@attributes')
       self
     end

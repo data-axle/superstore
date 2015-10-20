@@ -15,11 +15,11 @@ module Superstore
         define_reader
 
         reflection = Superstore::BelongsTo::Reflection.new(model, name, options)
-        model.belongs_to_reflections = model.belongs_to_reflections.merge(name => reflection)
+        model.association_reflections = model.association_reflections.merge(name => reflection)
       end
 
       def mixin
-        model.generated_belongs_to_methods
+        model.generated_association_methods
       end
 
       def define_writer
