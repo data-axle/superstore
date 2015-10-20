@@ -1,5 +1,5 @@
 module Superstore
-  module BelongsTo
+  module Associations
     class Reflection
       attr_reader :model, :name, :options
       def initialize(model, name, options)
@@ -7,7 +7,7 @@ module Superstore
       end
 
       def association_class
-        Superstore::BelongsTo::Association
+        Superstore::Associations::Association
       end
 
       def instance_variable_name

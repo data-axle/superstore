@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Superstore::BelongsToTest < Superstore::TestCase
+class Superstore::AssociationsTest < Superstore::TestCase
   class TestObject < Issue
     string :issue_id
     belongs_to :issue

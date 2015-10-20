@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Superstore::BelongsTo::ReflectionTest < Superstore::TestCase
+class Superstore::Associations::ReflectionTest < Superstore::TestCase
   class ::Status < Superstore::Base; end
   class ::Job < Superstore::Base
     belongs_to :status

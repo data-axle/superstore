@@ -1,5 +1,5 @@
 module Superstore
-  module BelongsTo
+  module Associations
     class Builder
       def self.build(model, name, options)
         new(model, name, options).build
@@ -14,7 +14,7 @@ module Superstore
         define_writer
         define_reader
 
-        reflection = Superstore::BelongsTo::Reflection.new(model, name, options)
+        reflection = Superstore::Associations::Reflection.new(model, name, options)
         model.association_reflections = model.association_reflections.merge(name => reflection)
       end
 

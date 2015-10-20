@@ -1,5 +1,5 @@
 module Superstore
-  module BelongsTo
+  module Associations
     class Association
       attr_reader :owner, :reflection
       attr_accessor :record_variable

@@ -22,7 +22,7 @@ module Superstore
     include AttributeMethods::Dirty
     include AttributeMethods::PrimaryKey
     include AttributeMethods::Typecasting
-    include BelongsTo
+    include Associations
     include Callbacks
     include Timestamps
     include Scoping
