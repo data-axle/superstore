@@ -50,8 +50,15 @@ module Superstore
     extend ActiveSupport::Autoload
 
     autoload :Association
-    autoload :Builder
     autoload :Reflection
+
+    module Builder
+      extend ActiveSupport::Autoload
+
+      autoload :Association
+      autoload :BelongsTo
+      autoload :HasMany
+    end
   end
 
   module Types

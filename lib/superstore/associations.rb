@@ -19,11 +19,11 @@ module Superstore
       #   class Truck < Superstore::Base
       #   end
       def belongs_to(name, options = {})
-        Superstore::Associations::Builder.build(self, name, options)
+        Superstore::Associations::Builder::BelongsTo.build(self, name, options)
       end
 
       def has_many(name, options = {})
-        
+        Superstore::Associations::Builder::HasMany.build(self, name, options)
       end
 
       def generated_association_methods
