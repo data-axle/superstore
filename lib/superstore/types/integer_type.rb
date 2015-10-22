@@ -5,11 +5,7 @@ module Superstore
       def encode(int)
         raise ArgumentError.new("#{int.inspect} is not an Integer.") unless int.kind_of?(Integer)
 
-        if model.config[:adapter] == 'jsonb'
-          int
-        else
-          int.to_s
-        end
+        int
       end
 
       def decode(str)
