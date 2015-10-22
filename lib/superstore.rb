@@ -51,6 +51,8 @@ module Superstore
 
     autoload :Association
     autoload :Reflection
+    autoload :BelongsTo
+    autoload :HasMany
 
     module Builder
       extend ActiveSupport::Autoload

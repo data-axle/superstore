@@ -1,13 +1,19 @@
 module Superstore
   module Associations
     class Reflection
-      attr_reader :model, :name, :options
-      def initialize(model, name, options)
-        @model, @name, @options = model, name, options
+      attr_reader :macro, :name, :options
+      def initialize(macro, name, options)
+        @macro, @name, @options = macro, name, options
       end
 
       def association_class
-        Superstore::Associations::Association
+        case macro
+        when :has_many
+          Superstore::Associations::BelongsTo
+        when :belongs_to
+          Superstore::Associations::BelongsTo
+        end
+        
       end
 
       def instance_variable_name
