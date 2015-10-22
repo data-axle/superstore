@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Superstore::AssociationsTest < Superstore::TestCase
+class Superstore::Associations::BelongsTest < Superstore::TestCase
   class TestObject < Issue
     string :issue_id
     belongs_to :issue
@@ -68,15 +68,6 @@ class Superstore::AssociationsTest < Superstore::TestCase
 
     record = TestObject.find(record.id)
     assert_equal user, record.user
-  end
-
-  test 'belongs_to with primary_key raises an error for non-ActiveRecord' do
-    issue = Issue.create title: 'title'
-
-    record = TestObject.new
-    record.title_issue_id = issue.title
-    assert_raises(ArgumentError) { record.title_issue }
-    assert_raises(ArgumentError) { record.title_issue = issue }
   end
 
   test 'belongs_to with polymorphic' do

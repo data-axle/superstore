@@ -1,15 +1,18 @@
 module Superstore
   module Associations
     class Reflection
-      attr_reader :macro, :name, :options
-      def initialize(macro, name, options)
-        @macro, @name, @options = macro, name, options
+      attr_reader :macro, :name, :model, :options
+      def initialize(macro, name, model, options)
+        @macro  = macro
+        @name   = name
+        @model  = model
+        @options = options
       end
 
       def association_class
         case macro
         when :has_many
-          Superstore::Associations::BelongsTo
+          Superstore::Associations::HasMany
         when :belongs_to
           Superstore::Associations::BelongsTo
         end
@@ -21,7 +24,7 @@ module Superstore
       end
 
       def foreign_key
-        options[:foreign_key] || "#{name}_id"
+        @foreign_key ||= options[:foreign_key] || derive_foreign_key
       end
 
       def primary_key
@@ -41,8 +44,20 @@ module Superstore
       end
 
       def class_name
-        options[:class_name] || name.to_s.camelize
+        @class_name ||= (options[:class_name] || name.to_s.classify)
       end
+
+      private
+      
+      def derive_foreign_key
+        case macro
+        when :has_many
+          model.name.foreign_key
+        when :belongs_to
+          "#{name}_id"
+        end
+      end
+
     end
   end
 end

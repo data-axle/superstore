@@ -18,7 +18,15 @@ class PGInitializer
     ActiveRecord::Tasks::DatabaseTasks.create config
     ActiveRecord::Base.establish_connection config
 
+    create_labels_table
     create_users_table
+  end
+
+  def self.create_labels_table
+    ActiveRecord::Migration.create_table :labels do |t|
+      t.string :issue_id, null: false
+      t.string :name, null: false
+    end
   end
 
   def self.create_users_table
@@ -29,7 +37,7 @@ class PGInitializer
   end
 
   def self.table_names
-    %w(users)
+    %w(labels users)
   end
 end
 

@@ -12,6 +12,7 @@ ActiveSupport::TestCase.test_order = :random
 require 'support/pg'
 require 'support/jsonb'
 require 'support/issue'
+require 'support/label'
 require 'support/user'
 
 def MiniTest.filter_backtrace(bt)
