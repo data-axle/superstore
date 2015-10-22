@@ -4,6 +4,7 @@ module Superstore
 
     included do
       class_attribute :symbolized_config
+      self.symbolized_config = {}
     end
 
     module ClassMethods

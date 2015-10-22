@@ -2,11 +2,7 @@ module Superstore
   module Types
     class FloatType < BaseType
       def encode(float)
-        if model.config[:adapter] == 'jsonb'
-          float
-        else
-          float.to_s
-        end
+        float
       end
 
       def decode(str)

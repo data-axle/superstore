@@ -10,11 +10,7 @@ module Superstore
           raise ArgumentError.new("#{bool.inspect} is not a Boolean")
         end
 
-        if model.config[:adapter] == 'jsonb'
-          TRUE_VALS.include?(bool)
-        else
-          TRUE_VALS.include?(bool) ? '1' : '0'
-        end
+        TRUE_VALS.include?(bool)
       end
 
       def decode(str)
