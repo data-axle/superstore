@@ -9,7 +9,7 @@ module Superstore
 
   autoload :AttributeMethods
   autoload :Base
-  autoload :BelongsTo
+  autoload :Associations
   autoload :Caching
   autoload :Callbacks
   autoload :Connection
@@ -46,12 +46,21 @@ module Superstore
     autoload :CassandraAdapter
   end
 
-  module BelongsTo
+  module Associations
     extend ActiveSupport::Autoload
 
     autoload :Association
-    autoload :Builder
     autoload :Reflection
+    autoload :BelongsTo
+    autoload :HasMany
+
+    module Builder
+      extend ActiveSupport::Autoload
+
+      autoload :Association
+      autoload :BelongsTo
+      autoload :HasMany
+    end
   end
 
   module Types
