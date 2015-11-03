@@ -48,9 +48,5 @@ module Superstore
     def order(*values)
       clone.order! values
     end
-
-    def to_a
-      select_records
-    end
   end
 end

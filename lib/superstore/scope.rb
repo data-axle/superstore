@@ -17,6 +17,8 @@ module Superstore
       @where_values   = []
       @order_values   = []
       @id_values      = []
+
+      @loaded = false
     end
 
     private
@@ -36,6 +38,14 @@ module Superstore
         else
           super
         end
+      end
+
+      def to_a
+        unless @loaded
+          @records = select_records
+          @loaded  = true
+        end
+        @records
       end
 
       def select_records
