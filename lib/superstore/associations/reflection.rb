@@ -11,10 +11,12 @@ module Superstore
 
       def association_class
         case macro
-        when :has_many
-          Superstore::Associations::HasMany
         when :belongs_to
           Superstore::Associations::BelongsTo
+        when :has_many
+          Superstore::Associations::HasMany
+        when :has_one
+          Superstore::Associations::HasOne
         end
         
       end
@@ -51,7 +53,7 @@ module Superstore
       
       def derive_foreign_key
         case macro
-        when :has_many
+        when :has_many, :has_one
           model.name.foreign_key
         when :belongs_to
           "#{name}_id"

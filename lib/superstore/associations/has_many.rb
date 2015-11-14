@@ -4,7 +4,6 @@ module Superstore
       def reader
         unless loaded?
           self.target = load_collection
-          loaded!
         end
 
         target

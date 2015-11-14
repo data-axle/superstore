@@ -26,6 +26,10 @@ module Superstore
         Superstore::Associations::Builder::HasMany.build(self, name, options)
       end
 
+      def has_one(name, options = {})
+        Superstore::Associations::Builder::HasOne.build(self, name, options)
+      end
+
       def generated_association_methods
         @generated_association_methods ||= begin
           mod = const_set(:GeneratedAssociationMethods, Module.new)

@@ -2,7 +2,6 @@ module Superstore
   module Associations
     class Association
       attr_reader :owner, :reflection
-      attr_accessor :target
       delegate :options, to: :reflection
 
       def initialize(owner, reflection)
@@ -16,6 +15,15 @@ module Superstore
 
       def association_class_name
         reflection.polymorphic? ? owner.send(reflection.polymorphic_column) : reflection.class_name
+      end
+
+      def target=(target)
+        @target = target
+        loaded!
+      end
+
+      def target
+        @target
       end
 
       def loaded?
