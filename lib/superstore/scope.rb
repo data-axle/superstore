@@ -18,6 +18,20 @@ module Superstore
       @order_values   = []
       @id_values      = []
 
+      reset
+    end
+
+    def initialize_copy(other)
+      @limit_value    = @limit_value.dup if @limit_value
+      @select_values  = @select_values.dup
+      @where_values   = @where_values.dup
+      @order_values   = @order_values.dup
+      @id_values      = @id_values.dup
+      reset
+    end
+
+    def reset
+      @records = nil
       @loaded = false
     end
 

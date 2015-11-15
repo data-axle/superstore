@@ -15,7 +15,7 @@ module Superstore
     end
 
     def all
-      to_a
+      clone
     end
 
     def first
