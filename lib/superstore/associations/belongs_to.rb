@@ -4,7 +4,6 @@ module Superstore
       def reader
         unless loaded?
           self.target = get_record
-          loaded!
         end
 
         target
@@ -12,7 +11,6 @@ module Superstore
 
       def writer(record)
         self.target = record
-        loaded!
         owner.send("#{reflection.foreign_key}=", record.try(reflection.primary_key))
         if reflection.polymorphic?
           owner.send("#{reflection.polymorphic_column}=", record.class.name)

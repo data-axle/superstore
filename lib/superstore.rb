@@ -53,6 +53,7 @@ module Superstore
     autoload :Reflection
     autoload :BelongsTo
     autoload :HasMany
+    autoload :HasOne
 
     module Builder
       extend ActiveSupport::Autoload
@@ -60,6 +61,7 @@ module Superstore
       autoload :Association
       autoload :BelongsTo
       autoload :HasMany
+      autoload :HasOne
     end
   end
 

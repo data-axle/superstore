@@ -1,3 +1,9 @@
+class User < ActiveRecord::Base
+end
+
+class Label < ActiveRecord::Base
+end
+
 class Issue < Superstore::Base
   string :description
   string :title
@@ -10,3 +16,4 @@ class Issue < Superstore::Base
     where_ids(key)
   end
 end
+
