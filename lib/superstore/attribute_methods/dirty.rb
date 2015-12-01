@@ -24,6 +24,11 @@ module Superstore
       def unapplied_changes
         result = {}
         changed_attributes.each_key { |attr| result[attr] = read_attribute(attr) }
+        attribute_definitions.each_value do |definition|
+          if definition.default && !result.key?(definition.name)
+            result[definition.name] = definition.default
+          end
+        end
         result
       end
 
