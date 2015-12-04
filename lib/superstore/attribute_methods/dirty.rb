@@ -25,7 +25,7 @@ module Superstore
         result = {}
         changed_attributes.each_key { |attr| result[attr] = read_attribute(attr) }
         attribute_definitions.each_value do |definition|
-          if definition.default && !result.key?(definition.name)
+          if !result.key?(definition.name) && definition.default && definition.default == read_attribute(definition.name)
             result[definition.name] = definition.default
           end
         end

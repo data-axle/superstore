@@ -70,7 +70,8 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
       float :price
       string :color
       string :status, default: 'open'
-    end.create(price: 5.01, color: 'green')
+      integer :weight, default: 0
+    end.create(price: 5.01, color: 'green', weight: 1)
 
     record.color = 'blue'
 
