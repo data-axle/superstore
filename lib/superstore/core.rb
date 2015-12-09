@@ -9,7 +9,7 @@ module Superstore
       self.attributes = attributes || {}
       attribute_definitions.each_value do |definition|
         unless definition.default.nil? || attribute_exists?(definition.name)
-          @attributes[definition.name] = definition.default
+          write_attribute(definition.name, definition.default)
         end
       end
 
