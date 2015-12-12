@@ -6,8 +6,7 @@ module Superstore
       end
 
       def decode(str)
-        return nil if str.empty?
-        str.to_f
+        str.to_f unless str.empty?
       end
 
       def typecast(value)

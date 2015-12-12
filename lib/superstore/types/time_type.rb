@@ -8,7 +8,7 @@ module Superstore
       end
 
       def decode(str)
-        Time.parse(str).in_time_zone if str
+        Time.iso8601(str).in_time_zone if str
       rescue
 
       end

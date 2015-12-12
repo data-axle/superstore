@@ -9,8 +9,7 @@ module Superstore
       end
 
       def decode(str)
-        return nil if str.empty?
-        str.to_i
+        str.to_i unless str.empty?
       end
 
       def typecast(value)
