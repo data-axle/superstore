@@ -13,15 +13,6 @@ class Superstore::CoreTest < Superstore::TestCase
     assert_equal 'bar', issue.description
   end
 
-  test 'initialize with default' do
-    klass = temp_object do
-      string :color, default: 'blue'
-    end
-
-    obj = klass.new
-    assert_equal({ 'color' => [nil, 'blue'] }, obj.changes)
-  end
-
   test 'dup' do
     issue = Issue.create description: 'foo'
 
