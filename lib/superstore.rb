@@ -22,7 +22,6 @@ module Superstore
   autoload :CassandraSchema
   autoload :Scope
   autoload :Scoping
-  autoload :Serialization
   autoload :Timestamps
   autoload :Type
   autoload :Validations

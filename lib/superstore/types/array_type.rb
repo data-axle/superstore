@@ -1,15 +1,8 @@
 module Superstore
   module Types
     class ArrayType < BaseType
-      OJ_OPTIONS = {mode: :compat}
-      def encode(array)
-        array
-      end
-
       def decode(val)
-        return nil if val.blank?
-
-        val
+        val unless val.blank?
       end
 
       def typecast(value)
