@@ -27,13 +27,23 @@ module Superstore
         result
       end
 
+      def old_attribute_value(attr)
+        if attribute_changed?(attr)
+          changed_attributes[attr]
+        else
+          read_attribute attr
+        end
+      end
+
       def write_attribute(name, value)
         name = name.to_s
-        old = read_attribute(name)
+        old = old_attribute_value(name)
 
         super
 
-        unless attribute_changed?(name) || old == read_attribute(name)
+        if old == read_attribute(name)
+          changed_attributes.delete(name)
+        else
           changed_attributes[name] = old
         end
       end

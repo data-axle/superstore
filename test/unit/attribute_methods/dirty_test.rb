@@ -80,4 +80,21 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
       assert_equal expected, record.changes
     end
   end
+
+  test 'dirty and restore to original value' do
+    object = temp_object do
+      string :name
+    end
+
+    record = object.create(name: 'foo')
+
+    assert_equal({}, record.changes)
+
+    record.name = 'bar'
+    expected = {'name'=>[nil, 'foo']}
+    assert_equal({'name' => ['foo', 'bar']}, record.changes)
+
+    record.name = 'foo'
+    assert_equal({}, record.changes)
+  end
 end
