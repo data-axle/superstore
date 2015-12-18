@@ -7,11 +7,6 @@ module Superstore
       @destroyed = false
       @attributes = {}
       self.attributes = attributes || {}
-      attribute_definitions.each_value do |definition|
-        unless definition.default.nil? || attribute_exists?(definition.name)
-          write_attribute(definition.name, definition.default)
-        end
-      end
 
       yield self if block_given?
     end

@@ -7,10 +7,6 @@ module Superstore
         @options = options
       end
 
-      def default
-        options[:default].duplicable? ? options[:default].dup : options[:default]
-      end
-
       def encode(value)
         value
       end

@@ -73,12 +73,6 @@ module Superstore
             end
           end
 
-          attribute_definitions.each_value do |definition|
-            unless definition.default.nil? || result.has_key?(definition.name)
-              result[definition.name] = definition.default
-            end
-          end
-
           result
         end
     end
