@@ -1,6 +1,6 @@
 # 2.0.0
 
-Released YYYY-MM-DD.
+Released 2015-12-18.
 
 ## New Features
 
