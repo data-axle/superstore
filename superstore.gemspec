@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.name = 'superstore'
   s.version = '2.0.0'
   s.description = 'ActiveModel for many attributes'
-  s.summary = 'Cassandra ActiveModel'
-  s.authors = ["Michael Koziarski", "gotime"]
+  s.summary = 'JSONB ActiveModel'
+  s.authors = ["Michael Koziarski", "Infogroup"]
   s.email = 'developer@matthewhiggins.com'
   s.homepage = 'http://github.com/data-axle/superstore'
 
