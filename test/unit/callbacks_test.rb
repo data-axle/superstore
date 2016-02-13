@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Superstore::CallbacksTest < Superstore::TestCase
   class TestIssue < Superstore::Base
-    self.table_name = 'Issues'
+    self.table_name = 'issues'
     string :description
 
     %w(before_validation after_validation after_save after_create after_update after_destroy).each do |method|

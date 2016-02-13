@@ -16,7 +16,7 @@ module Superstore
         relation.instance_variable_set :@records, records
         relation.instance_variable_set :@loaded, true
 
-        self.target = load_collection
+        self.target = relation
       end
 
       private
@@ -24,6 +24,8 @@ module Superstore
         def load_collection
           association_class.where(reflection.foreign_key => owner.try(reflection.primary_key))
         end
+
+        ActiveRecord::AssociationRelation.create(association_class, association_class.arel_table, association_class.predicate_builder, self)
 
     end
   end

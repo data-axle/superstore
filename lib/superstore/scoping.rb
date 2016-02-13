@@ -15,13 +15,13 @@ module Superstore
         self.current_scope ||= Scope.new(self)
       end
 
-      def current_scope
-        Thread.current["#{self}_current_scope"]
-      end
-
-      def current_scope=(new_scope)
-        Thread.current["#{self}_current_scope"] = new_scope
-      end
+      # def current_scope
+      #   Thread.current["#{self}_current_scope"]
+      # end
+      #
+      # def current_scope=(new_scope)
+      #   Thread.current["#{self}_current_scope"] = new_scope
+      # end
     end
   end
 end

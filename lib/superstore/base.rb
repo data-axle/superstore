@@ -11,6 +11,17 @@ module Superstore
     include ActiveModel::Serializers::JSON
     include GlobalID::Identification
 
+    extend ActiveRecord::Delegation::DelegateCache
+    extend ActiveRecord::ConnectionHandling
+    # include ActiveRecord::Core
+    include ActiveRecord::ModelSchema
+    include ActiveRecord::Inheritance
+    include ActiveRecord::Scoping
+    include ActiveRecord::Attributes
+    include ActiveRecord::Associations
+    include ActiveRecord::AutosaveAssociation
+    include ActiveRecord::Reflection
+
     include Model
     include Core
     include Connection
@@ -22,7 +33,7 @@ module Superstore
     include AttributeMethods::Dirty
     include AttributeMethods::PrimaryKey
     include AttributeMethods::Typecasting
-    include Associations
+    # include Associations
     include Callbacks
     include Timestamps
     include Scoping

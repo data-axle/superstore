@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
   class TestIssue < Superstore::Base
-    self.table_name = 'Issues'
+    self.table_name = 'issues'
 
     boolean :enabled
     float   :rating
@@ -78,7 +78,7 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
 
   test 'multiple attributes definition' do
     class MultipleAttributesIssue < Superstore::Base
-      self.table_name = 'Issues'
+      self.table_name = 'issues'
     end
 
     assert_nothing_raised {
@@ -91,7 +91,7 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
 
   test 'multiple attributes with options' do
     class MultipleAttributesIssue < Superstore::Base
-      self.table_name = 'Issues'
+      self.table_name = 'issues'
     end
 
     MultipleAttributesIssue.expects(:attribute).with(:hello, { :unique => :true, :type => :string })

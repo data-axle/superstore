@@ -53,7 +53,7 @@ module Superstore
     end
 
     private
-      def clear_associations_cache
+      def clear_association_cache
         associations_cache.clear if persisted?
       end
 

@@ -33,6 +33,10 @@ module Superstore
       def attribute_methods_generated?
         @attribute_methods_generated ||= false
       end
+
+      def dangerous_attribute_method?(name)
+        false
+      end
     end
 
     def write_attribute(name, value)
@@ -40,8 +44,15 @@ module Superstore
     end
 
     def read_attribute(name)
-      @attributes[name.to_s]
+      name = name.to_s unless name.is_a?(String)
+
+      if name == self.class.primary_key
+        send(name)
+      else
+        @attributes[name]
+      end
     end
+    alias_method :_read_attribute, :read_attribute
 
     def attribute_exists?(name)
       @attributes.key?(name.to_s)

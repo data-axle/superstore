@@ -14,7 +14,7 @@ class Superstore::BaseTest < Superstore::TestCase
   end
 
   test 'table_name' do
-    assert_equal 'superstore_base_test_sons', Son.table_name
-    assert_equal 'superstore_base_test_sons', Grandson.table_name
+    assert_equal 'sons', Son.table_name
+    assert_equal 'sons', Grandson.table_name
   end
 end

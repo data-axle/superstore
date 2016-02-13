@@ -2,10 +2,49 @@ module Superstore
   module Core
     extend ActiveSupport::Concern
 
+    module ClassMethods
+      def inspect
+        if self == Base
+          super
+        else
+          attr_list = attribute_definitions.keys * ', '
+          "#{super}(#{attr_list.truncate(140 * 1.7337)})"
+        end
+      end
+
+      def initialize_generated_modules # :nodoc:
+        generated_association_methods
+      end
+
+      def generated_association_methods
+        @generated_association_methods ||= begin
+          mod = const_set(:GeneratedAssociationMethods, Module.new)
+          include mod
+          mod
+        end
+      end
+
+      def arel_table # :nodoc:
+        @arel_table ||= Arel::Table.new(table_name, self)
+      end
+      #
+      # # Returns the Arel engine.
+      # def arel_engine # :nodoc:
+      #   @arel_engine ||=
+      #     if Base == self || connection_handler.retrieve_connection_pool(self)
+      #       self
+      #     else
+      #       superclass.arel_engine
+      #     end
+      # end
+    end
+
     def initialize(attributes=nil)
-      @new_record = true
-      @destroyed = false
-      @attributes = {}
+      @new_record         = true
+      @destroyed          = false
+      @association_cache  = {}
+
+      @attributes         = {}
       self.attributes = attributes || {}
 
       yield self if block_given?
@@ -19,6 +58,7 @@ module Superstore
       @id = nil
       @new_record = true
       @destroyed = false
+      @association_cache = {}
       super
     end
 
@@ -28,17 +68,6 @@ module Superstore
 
     def hash
       id.hash
-    end
-
-    module ClassMethods
-      def inspect
-        if self == Base
-          super
-        else
-          attr_list = attribute_definitions.keys * ', '
-          "#{super}(#{attr_list.truncate(140 * 1.7337)})"
-        end
-      end
     end
 
     def ==(comparison_object)

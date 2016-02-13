@@ -5,16 +5,19 @@ module Superstore
     included do
       class_attribute :symbolized_config
       self.symbolized_config = {}
+
+      # class_attribute :pluralize_table_names, instance_writer: false
+      # self.pluralize_table_names = true
     end
 
     module ClassMethods
-      def table_name=(table_name)
-        @table_name = table_name
-      end
-
-      def table_name
-        @table_name ||= base_class.model_name.plural
-      end
+      # def table_name=(table_name)
+      #   @table_name = table_name
+      # end
+      #
+      # def table_name
+      #   @table_name ||= base_class.model_name.plural
+      # end
 
       def base_class
         class_of_active_record_descendant(self)
