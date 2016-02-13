@@ -27,16 +27,10 @@ module Superstore
       def arel_table # :nodoc:
         @arel_table ||= Arel::Table.new(table_name, self)
       end
-      #
-      # # Returns the Arel engine.
-      # def arel_engine # :nodoc:
-      #   @arel_engine ||=
-      #     if Base == self || connection_handler.retrieve_connection_pool(self)
-      #       self
-      #     else
-      #       superclass.arel_engine
-      #     end
-      # end
+
+      def subclass_from_attributes?(attrs)
+        false
+      end
     end
 
     def initialize(attributes=nil)

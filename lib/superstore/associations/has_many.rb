@@ -25,8 +25,6 @@ module Superstore
           association_class.where(reflection.foreign_key => owner.try(reflection.primary_key))
         end
 
-        ActiveRecord::AssociationRelation.create(association_class, association_class.arel_table, association_class.predicate_builder, self)
-
     end
   end
 end

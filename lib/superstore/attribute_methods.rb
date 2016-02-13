@@ -54,6 +54,11 @@ module Superstore
     end
     alias_method :_read_attribute, :read_attribute
 
+    def attribute_present?(attribute)
+      value = _read_attribute(attribute)
+      !value.nil? && !(value.respond_to?(:empty?) && value.empty?)
+    end
+
     def attribute_exists?(name)
       @attributes.key?(name.to_s)
     end

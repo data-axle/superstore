@@ -14,7 +14,7 @@ module Superstore::Associations::Builder
       define_reader
 
       reflection = Superstore::Associations::Reflection.new(macro, name, model, options)
-      model.association_reflections = model.association_reflections.merge(name => reflection)
+      ActiveRecord::Reflection.add_reflection model, name, reflection
     end
 
     def mixin
