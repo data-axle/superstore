@@ -8,14 +8,6 @@ module Superstore
     end
 
     module ClassMethods
-      def table_name=(table_name)
-        @table_name = table_name
-      end
-
-      def table_name
-        @table_name ||= base_class.model_name.plural
-      end
-
       def base_class
         class_of_active_record_descendant(self)
       end

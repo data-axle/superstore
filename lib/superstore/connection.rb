@@ -15,6 +15,10 @@ module Superstore
           raise "Unknown adapter #{config[:adapter]}"
         end
       end
+
+      def connection
+        adapter.connection
+      end
     end
   end
 end

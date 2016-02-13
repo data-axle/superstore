@@ -11,6 +11,15 @@ module Superstore
     include ActiveModel::Serializers::JSON
     include GlobalID::Identification
 
+    extend ActiveRecord::Delegation::DelegateCache
+    extend ActiveRecord::ConnectionHandling
+    include ActiveRecord::ModelSchema
+    include ActiveRecord::Inheritance
+    include ActiveRecord::Attributes
+    include ActiveRecord::Associations
+    include ActiveRecord::AutosaveAssociation
+    include ActiveRecord::Reflection
+
     include Model
     include Core
     include Connection

@@ -43,6 +43,7 @@ module Superstore
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
           object.instance_variable_set("@attributes", typecast_persisted_attributes(attributes))
+          object.instance_variable_set("@association_cache", {})
         end
       end
 
@@ -127,7 +128,7 @@ module Superstore
     end
 
     def reload
-      clear_associations_cache
+      clear_association_cache
       @attributes = self.class.find(id).instance_variable_get('@attributes')
       self
     end

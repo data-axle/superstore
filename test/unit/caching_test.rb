@@ -2,6 +2,7 @@ require 'test_helper'
 
 class Superstore::CachingTest < Superstore::TestCase
   class ::OtherClass < Superstore::Base
+    self.table_name = 'issues'
   end
 
   test 'for a new record' do

@@ -8,6 +8,9 @@ module Superstore
         delegate :find_each, :find_in_batches, to: :scope
         delegate :select, :where, :where_ids, to: :scope
       end
+
+      class_attribute :default_scopes, instance_writer: false, instance_predicate: false
+      self.default_scopes = []
     end
 
     module ClassMethods

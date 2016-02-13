@@ -4,8 +4,9 @@ module Superstore
       extend ActiveSupport::Concern
 
       module ClassMethods
+        PRIMARY_KEY = 'id'
         def primary_key
-          'id'
+          PRIMARY_KEY
         end
       end
 

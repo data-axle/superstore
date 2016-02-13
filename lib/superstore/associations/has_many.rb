@@ -16,7 +16,7 @@ module Superstore
         relation.instance_variable_set :@records, records
         relation.instance_variable_set :@loaded, true
 
-        self.target = load_collection
+        self.target = relation
       end
 
       private

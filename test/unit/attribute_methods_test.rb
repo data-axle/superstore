@@ -12,6 +12,10 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
     assert_equal 'foo', issue.read_attribute(:description)
   end
 
+  test 'read primary_key' do
+    refute_nil Issue.new[:id]
+  end
+
   test 'hash accessor aliases' do
     issue = Issue.new
 
@@ -43,6 +47,7 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
   end
 
   class ReservedWord < Superstore::Base
+    self.table_name = 'issues'
     string :system
   end
 
