@@ -49,9 +49,9 @@ class Superstore::FinderMethodsTest < Superstore::TestCase
     assert [first_issue, second_issue].include?(Issue.first)
   end
 
-  test 'pluck' do
+  test 'to_ids' do
     first_issue = Issue.create title: 'Sup!'
 
-    assert_equal ['Sup!'], Issue.pluck(:title)
+    assert_equal [first_issue.id], Issue.to_ids
   end
 end

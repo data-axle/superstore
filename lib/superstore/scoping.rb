@@ -4,7 +4,7 @@ module Superstore
 
     included do
       singleton_class.class_eval do
-        delegate :find, :find_by_id, :first, :all, :pluck, to: :scope
+        delegate :find, :find_by_id, :first, :all, :to_ids, to: :scope
         delegate :find_each, :find_in_batches, to: :scope
         delegate :select, :where, :where_ids, to: :scope
       end

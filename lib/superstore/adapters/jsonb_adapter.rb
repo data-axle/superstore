@@ -12,18 +12,25 @@ module Superstore
 
         def to_query
           [
-            "SELECT #{select_string} FROM #{@scope.klass.table_name}",
+            "SELECT #{select_string}",
+            from_string,
             where_string,
             order_string,
             limit_string
           ].delete_if(&:blank?) * ' '
         end
 
+        def from_string
+          "FROM #{@scope.klass.table_name}"
+        end
+
         def select_string
-          if @scope.select_values.any?
-            "id, jsonb_slice(document, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as document"
-          else
+          if @scope.select_values.empty?
             '*'
+          elsif @scope.select_values == [@adapter.primary_key_column]
+            @adapter.primary_key_column
+          else
+            "#{@adapter.primary_key_column}, jsonb_slice(document, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as document"
           end
         end
 
@@ -76,8 +83,9 @@ module Superstore
         end
       end
 
+      PRIMARY_KEY_COLUMN = 'id'.freeze
       def primary_key_column
-        'id'
+        PRIMARY_KEY_COLUMN
       end
 
       def connection
@@ -94,6 +102,11 @@ module Superstore
 
       def execute(statement)
         connection.execute statement
+      end
+
+      def to_ids(scope)
+        statement = QueryBuilder.new(self, scope.select('id')).to_query
+        connection.select_values(statement)
       end
 
       def select(scope)
