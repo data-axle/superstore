@@ -105,7 +105,7 @@ module Superstore
       end
 
       def to_ids(scope)
-        statement = QueryBuilder.new(self, scope.select('id')).to_query
+        statement = QueryBuilder.new(self, scope.select(primary_key_column)).to_query
         connection.select_values(statement)
       end
 
