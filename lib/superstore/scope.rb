@@ -67,7 +67,6 @@ module Superstore
         klass.adapter.select(self) do |key, attributes|
           results << klass.instantiate(key, attributes)
         end
-        results.compact!
         results
       end
   end

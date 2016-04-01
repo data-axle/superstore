@@ -48,4 +48,10 @@ class Superstore::FinderMethodsTest < Superstore::TestCase
 
     assert [first_issue, second_issue].include?(Issue.first)
   end
+
+  test 'pluck' do
+    first_issue = Issue.create title: 'Sup!'
+
+    assert_equal ['Sup!'], Issue.pluck(:title)
+  end
 end

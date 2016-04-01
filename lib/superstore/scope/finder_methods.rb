@@ -22,6 +22,16 @@ module Superstore
       limit(1).to_a.first
     end
 
+    def pluck(column)
+      column = column.to_s
+      scope = select column
+      results = []
+      klass.adapter.select(scope) do |key, attributes|
+        results << attributes[column]
+      end
+      results
+    end
+
     private
 
       def find_one(id)
