@@ -1,3 +1,27 @@
+# 2.1.1
+
+Released 2016-04-01.
+
+## New Features
+
+* Added a `to_ids` scoped method.
+
+# 2.1.0
+
+Released 2016-02-12.
+
+## Changed
+
+* Associations are now ActiveRecord-based (#17)
+
+# 2.0.1
+
+Released 2016-02-12.
+
+## Fixed
+
+* `has_many` was not working correctly.
+
 # 2.0.0
 
 Released 2015-12-18.
