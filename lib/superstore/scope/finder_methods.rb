@@ -40,9 +40,10 @@ module Superstore
 
       def find_some(ids)
         ids = ids.flatten
+        ids.compact!
         return [] if ids.empty?
 
-        ids = ids.compact.map(&:to_s).uniq
+        ids = ids.map(&:to_s).uniq
 
         where_ids(ids).to_a
       end

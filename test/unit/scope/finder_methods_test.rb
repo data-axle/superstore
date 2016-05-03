@@ -27,6 +27,11 @@ class Superstore::FinderMethodsTest < Superstore::TestCase
     assert_equal [first_issue, second_issue], Issue.find([first_issue.id, second_issue.id])
   end
 
+  test 'find with nil ids' do
+    Issue.create
+    assert_equal [], Issue.find([nil])
+  end
+
   test 'find_by_id' do
     Issue.create.tap do |issue|
       assert_equal issue, Issue.find_by_id(issue.id)
