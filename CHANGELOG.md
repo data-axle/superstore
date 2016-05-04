@@ -1,3 +1,11 @@
+# 2.1.2
+
+Released 2016-05-04.
+
+## Fixed
+
+`Model.find([nil])` no longer returns all records
+
 # 2.1.1
 
 Released 2016-04-01.
