@@ -47,7 +47,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
     assert_nothing_raised(Superstore::RecordNotFound) { Issue.find(second_issue.id) }
   end
 
-  test 'persistance inquiries' do
+  test 'persistence inquiries' do
     issue = Issue.new
     assert issue.new_record?
     assert !issue.persisted?
