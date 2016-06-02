@@ -1,3 +1,11 @@
+# 2.2.0
+
+Released 2016-06-02.
+
+## New Features
+
+* Add `geo_point` type.
+
 # 2.1.2
 
 Released 2016-05-04.
