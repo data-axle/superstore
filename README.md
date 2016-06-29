@@ -3,14 +3,30 @@
 [![Code Climate](https://codeclimate.com/github/data-axle/superstore/badges/gpa.svg)](https://codeclimate.com/github/data-axle/superstore)
 [![Gem](https://img.shields.io/gem/v/superstore.svg?maxAge=2592000)](https://rubygems.org/gems/superstore)
 
-Superstore uses ActiveModel to mimic much of the behavior in ActiveRecord.
+Superstore is a PostgreSQL JSONB document store which uses ActiveModel to mimic much of the behavior
+in ActiveRecord.
+
+## Requirements
+
+Superstore requires PostgreSQL 9.5 or above.
 
 ## Installation
 
 Add the following to the `Gemfile`:
+
 ```ruby
+gem 'pg'
 gem 'superstore'
 ```
+
+Add a `config/superstore.yml`:
+
+```yaml
+development:
+  adapter: jsonb
+```
+
+Superstore will share the existing ActiveRecord database connection.
 
 ## Defining Models
 
@@ -37,23 +53,6 @@ class MyWidget < Superstore::Base
   table_name = 'my_widgets'
 end
 ```
-
-## Using the PostgreSQL JSONB adapter
-
-Add the `pg` gem to the `Gemfile`:
-
-```ruby
-gem 'pg'
-```
-
-Add a `config/superstore.yml`:
-
-```yaml
-development:
-  adapter: jsonb
-```
-
-Superstore will share the existing ActiveRecord database connection.
 
 ## Creating and updating records
 
