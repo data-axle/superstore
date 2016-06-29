@@ -1,3 +1,11 @@
+# 2.3.0
+
+Released 2016-06-29.
+
+## Changed
+
+* Superstore requires PostgreSQL 9.5, since it uses the JSONB operators introduced in that version.
+
 # 2.2.0
 
 Released 2016-06-02.
