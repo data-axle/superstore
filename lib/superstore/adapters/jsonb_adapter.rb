@@ -146,9 +146,9 @@ module Superstore
         nil_attributes = attributes.select { |key, value| value.nil? }
 
         if not_nil_attributes.any? && nil_attributes.any?
-          value_update = "jsonb_merge(jsonb_delete(document, #{fields_to_postgres_array(nil_attributes.keys)}), #{to_quoted_jsonb(not_nil_attributes)})"
+          value_update = "jsonb_delete(document, #{fields_to_postgres_array(nil_attributes.keys)}) || #{to_quoted_jsonb(not_nil_attributes)}"
         elsif not_nil_attributes.any?
-          value_update = "jsonb_merge(document, #{to_quoted_jsonb(not_nil_attributes)})"
+          value_update = "document || #{to_quoted_jsonb(not_nil_attributes)}"
         elsif nil_attributes.any?
           value_update = "jsonb_delete(document, #{fields_to_postgres_array(nil_attributes.keys)})"
         end
@@ -216,21 +216,6 @@ module Superstore
           WHERE key =ANY(keys);
         },
 
-        # SELECT jsonb_merge('{"a": 1}', '{"b": 2, "c": 3, "a": 4}');
-        'jsonb_merge(data jsonb, merge_data jsonb)' => %{
-          SELECT json_object_agg(key, value)::jsonb
-          FROM (
-            WITH to_merge AS (
-              SELECT * FROM jsonb_each(merge_data)
-            )
-            SELECT *
-            FROM jsonb_each(data)
-            WHERE key NOT IN (SELECT key FROM to_merge)
-            UNION ALL
-            SELECT * FROM to_merge
-          ) t;
-        },
-
         # SELECT jsonb_delete('{"b": 2, "c": 3, "a": 4}', '{b, c}');
         'jsonb_delete(data jsonb, keys text[])' => %{
           SELECT json_object_agg(key, value)::jsonb
@@ -238,7 +223,7 @@ module Superstore
             SELECT * FROM jsonb_each(data)
             WHERE key <>ALL(keys)
           ) t;
-        },
+        }
       }
       def define_jsonb_functions!
         JSON_FUNCTIONS.each do |signature, body|
