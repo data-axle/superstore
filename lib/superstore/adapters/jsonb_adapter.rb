@@ -30,7 +30,8 @@ module Superstore
           elsif @scope.select_values == [@adapter.primary_key_column]
             @adapter.primary_key_column
           else
-            "#{@adapter.primary_key_column}, jsonb_slice(document, #{@adapter.fields_to_postgres_array(@scope.select_values)}) as document"
+            selects = @scope.select_values.map { |key| "#{@adapter.quote(key)},document->>#{@adapter.quote(key)}" }
+            "#{@adapter.primary_key_column}, json_build_object(#{selects * ','}) as document"
           end
         end
 
@@ -143,8 +144,8 @@ module Superstore
         return if attributes.empty?
 
         value_update = "jsonb_strip_nulls(document || #{to_quoted_jsonb(attributes)})"
-
         statement = "UPDATE #{table} SET document = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
+
         execute_batchable statement
       end
 
@@ -195,30 +196,6 @@ module Superstore
       OJ_OPTIONS = {mode: :compat}
       def to_quoted_jsonb(data)
         "#{quote(Oj.dump(data, OJ_OPTIONS))}::JSONB"
-      end
-
-      JSON_FUNCTIONS = {
-        # SELECT jsonb_slice('{"b": 2, "c": 3, "a": 4}', '{b, c}');
-        'jsonb_slice(data jsonb, keys text[])' => %{
-          SELECT json_object_agg(key, value)::jsonb
-          FROM (
-            SELECT * FROM jsonb_each(data)
-          ) t
-          WHERE key =ANY(keys);
-        }
-      }
-      def define_jsonb_functions!
-        JSON_FUNCTIONS.each do |signature, body|
-          connection.execute %{
-            CREATE OR REPLACE FUNCTION public.#{signature}
-            RETURNS jsonb
-            IMMUTABLE
-            LANGUAGE sql
-            AS $$
-              #{body}
-            $$;
-          }
-        end
       end
     end
   end
