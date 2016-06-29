@@ -142,16 +142,7 @@ module Superstore
       def update(table, id, attributes)
         return if attributes.empty?
 
-        not_nil_attributes = attributes.reject { |key, value| value.nil? }
-        nil_attributes = attributes.select { |key, value| value.nil? }
-
-        if not_nil_attributes.any? && nil_attributes.any?
-          value_update = "jsonb_delete(document, #{fields_to_postgres_array(nil_attributes.keys)}) || #{to_quoted_jsonb(not_nil_attributes)}"
-        elsif not_nil_attributes.any?
-          value_update = "document || #{to_quoted_jsonb(not_nil_attributes)}"
-        elsif nil_attributes.any?
-          value_update = "jsonb_delete(document, #{fields_to_postgres_array(nil_attributes.keys)})"
-        end
+        value_update = "jsonb_strip_nulls(document || #{to_quoted_jsonb(attributes)})"
 
         statement = "UPDATE #{table} SET document = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
         execute_batchable statement
@@ -214,15 +205,6 @@ module Superstore
             SELECT * FROM jsonb_each(data)
           ) t
           WHERE key =ANY(keys);
-        },
-
-        # SELECT jsonb_delete('{"b": 2, "c": 3, "a": 4}', '{b, c}');
-        'jsonb_delete(data jsonb, keys text[])' => %{
-          SELECT json_object_agg(key, value)::jsonb
-          FROM (
-            SELECT * FROM jsonb_each(data)
-            WHERE key <>ALL(keys)
-          ) t;
         }
       }
       def define_jsonb_functions!
