@@ -37,6 +37,10 @@ module Superstore
       def dangerous_attribute_method?(name)
         false
       end
+
+      def has_attribute?(attr_name)
+        attribute_definitions.key?(attr_name.to_s)
+      end
     end
 
     def write_attribute(name, value)
@@ -59,9 +63,10 @@ module Superstore
       !value.nil? && !(value.respond_to?(:empty?) && value.empty?)
     end
 
-    def attribute_exists?(name)
+    def has_attribute?(name)
       @attributes.key?(name.to_s)
     end
+    alias_method :attribute_exists?, :has_attribute?
 
     def attributes
       results = {}
@@ -80,7 +85,7 @@ module Superstore
     def method_missing(method_id, *args, &block)
       self.class.define_attribute_methods unless self.class.attribute_methods_generated?
 
-      match = match_attribute_method?(method_id.to_s)
+      match = matched_attribute_method(method_id.to_s)
       match ? attribute_missing(match, *args, &block) : super
     end
 
