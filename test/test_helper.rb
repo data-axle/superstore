@@ -1,21 +1,17 @@
-require 'bundler/setup'
-Bundler.require(:default, :test)
+require 'rails'
 
 I18n.config.enforce_available_locales = false
+ActiveSupport::TestCase.test_order = :random
 
 require 'active_record'
 require 'rails/test_help'
 require 'mocha/setup'
 
-ActiveSupport::TestCase.test_order = :random
+require 'superstore'
 
 require 'support/pg'
 require 'support/jsonb'
 require 'support/models'
-
-def MiniTest.filter_backtrace(bt)
-  bt
-end
 
 module Superstore
   class TestCase < ActiveSupport::TestCase

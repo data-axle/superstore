@@ -9,7 +9,7 @@ module Superstore
       if block_given?
         to_a.select(&block)
       else
-        clone.select! *values
+        clone.select!(*values)
       end
     end
 

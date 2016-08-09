@@ -4,6 +4,7 @@ module Superstore
       attr_reader :config
       def initialize(config)
         @config = config
+        @batch_statements = nil
       end
 
       # Read records from a instance of Superstore::Scope

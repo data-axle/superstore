@@ -91,7 +91,6 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
     assert_equal({}, record.changes)
 
     record.name = 'bar'
-    expected = {'name'=>[nil, 'foo']}
     assert_equal({'name' => ['foo', 'bar']}, record.changes)
 
     record.name = 'foo'

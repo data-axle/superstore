@@ -21,7 +21,7 @@ class Superstore::FinderMethodsTest < Superstore::TestCase
   test 'find with ids' do
     first_issue = Issue.create
     second_issue = Issue.create
-    third_issue = Issue.create
+    Issue.create
 
     assert_equal [], Issue.find([])
     assert_equal [first_issue, second_issue], Issue.find([first_issue.id, second_issue.id])

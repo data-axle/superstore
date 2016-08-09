@@ -43,8 +43,8 @@ class Superstore::PersistenceTest < Superstore::TestCase
     end
 
     assert !Issue.batching?
-    assert_nothing_raised(Superstore::RecordNotFound) { Issue.find(first_issue.id) }
-    assert_nothing_raised(Superstore::RecordNotFound) { Issue.find(second_issue.id) }
+    assert_nothing_raised { Issue.find(first_issue.id) }
+    assert_nothing_raised { Issue.find(second_issue.id) }
   end
 
   test 'persistence inquiries' do

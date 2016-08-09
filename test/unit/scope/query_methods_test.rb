@@ -22,7 +22,7 @@ class Superstore::Scope::QueryMethodsTest < Superstore::TestCase
 
   test "select with block" do
     foo_issue = Issue.create title: 'foo'
-    bar_issue = Issue.create title: 'bar'
+    Issue.create title: 'bar'
 
     assert_equal [foo_issue], Issue.select { |issue| issue.title == 'foo' }
   end
