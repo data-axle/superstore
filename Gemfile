@@ -6,6 +6,6 @@ gem 'rake'
 group :test do
   gem 'rails'
   gem 'pg'
-  gem 'activerecord'
+  gem 'activerecord', '~> 4.2.0'
   gem 'mocha', require: false
 end
