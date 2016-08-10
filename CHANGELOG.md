@@ -1,3 +1,11 @@
+# 2.4.0
+
+Released 2016-08-10.
+
+## New Features
+
+* Rails 5 compatibility (#19)
+
 # 2.3.0
 
 Released 2016-06-29.
@@ -12,7 +20,7 @@ Released 2016-06-02.
 
 ## New Features
 
-* Add `geo_point` type.
+* Add `geo_point` type (#18)
 
 # 2.1.2
 
