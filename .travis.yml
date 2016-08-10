@@ -1,11 +1,12 @@
 language: ruby
 rvm:
-- 2.1.10
-- 2.2.5
 - 2.3.1
 sudo: required
 dist: trusty
 cache: bundler
+gemfile:
+- Gemfile
+- Gemfile-rails4.2
 addons:
   postgresql: 9.5
 services:

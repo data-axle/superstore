@@ -36,6 +36,10 @@ module Superstore
           super
         end
       end
+
+      def belongs_to_required_by_default
+        false
+      end
     end
 
   end

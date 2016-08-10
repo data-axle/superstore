@@ -56,10 +56,10 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
     assert_equal 'hello', r.system
   end
 
-  # test 'attribute_exists' do
-  #   assert !Issue.new.attribute_exists?(:description)
-  #   assert Issue.new(description: nil).attribute_exists?(:description)
-  #   assert Issue.new(description: false).attribute_exists?(:description)
-  #   assert Issue.new(description: 'hey').attribute_exists?(:description)
-  # end
+  test 'has_attribute?' do
+    refute Issue.new.attribute_exists?(:description)
+    assert Issue.new(description: nil).has_attribute?(:description)
+    assert Issue.new(description: false).has_attribute?(:description)
+    assert Issue.new(description: 'hey').has_attribute?(:description)
+  end
 end
