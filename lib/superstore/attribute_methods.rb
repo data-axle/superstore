@@ -85,7 +85,13 @@ module Superstore
     def method_missing(method_id, *args, &block)
       self.class.define_attribute_methods unless self.class.attribute_methods_generated?
 
-      match = matched_attribute_method(method_id.to_s)
+      match = if ActiveRecord.version >= Gem::Version.new('5.0')
+        # Active Record 5.0
+        matched_attribute_method(method_id.to_s)
+      else
+        # Active Record 4.2
+        match_attribute_method?(method_id.to_s)
+      end
       match ? attribute_missing(match, *args, &block) : super
     end
 
