@@ -5,7 +5,15 @@ class Superstore::CallbacksTest < Superstore::TestCase
     self.table_name = 'issues'
     string :description
 
-    %w(before_validation after_validation after_save after_create after_update after_destroy).each do |method|
+    %w(
+      before_validation
+      after_validation
+      before_save
+      after_save
+      after_create
+      after_update
+      after_destroy
+    ).each do |method|
       send(method) do
         callback_history << method
       end
@@ -23,7 +31,14 @@ class Superstore::CallbacksTest < Superstore::TestCase
   test 'create' do
     issue = TestIssue.create
 
-    assert_equal ['before_validation', 'after_validation', 'after_save', 'after_create'], issue.callback_history
+    expected = %w(
+      before_validation
+      after_validation
+      before_save
+      after_save
+      after_create
+    )
+    assert_equal expected, issue.callback_history
   end
 
   test 'update' do
@@ -32,7 +47,7 @@ class Superstore::CallbacksTest < Superstore::TestCase
 
     issue.update_attribute :description, 'foo'
 
-    assert_equal ['after_save', 'after_update'], issue.callback_history
+    assert_equal %w(before_save after_save after_update), issue.callback_history
   end
 
   test 'destroy' do
