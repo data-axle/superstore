@@ -136,7 +136,6 @@ module Superstore
     private
 
       def create_self
-        @new_record = false
         write :insert_record
       end
 
@@ -145,6 +144,7 @@ module Superstore
       end
 
       def write(method)
+        @new_record = false
         self.class.send(method, id, unapplied_changes)
       end
   end
