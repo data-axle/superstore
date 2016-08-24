@@ -1,3 +1,11 @@
+# 2.4.1
+
+Released 2016-08-22.
+
+# Fixed
+
+* Ensure that new_record is not set until before_save callbacks complete (#20)
+
 # 2.4.0
 
 Released 2016-08-10.
