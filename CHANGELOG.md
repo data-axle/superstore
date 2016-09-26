@@ -1,5 +1,9 @@
 # Unreleased
 
+# 2.4.2
+
+Released 2016-09-26.
+
 ## Fixed
 
 * Ensure `changed_attributes` is copied when `.becomes` is invoked (#21)
