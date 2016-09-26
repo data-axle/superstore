@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.authors = ['Michael Koziarski', 'Infogroup']
   s.email = 'developer@matthewhiggins.com'
   s.homepage = 'http://github.com/data-axle/superstore'
+  s.licenses = %w(ISC MIT)
 
   s.required_ruby_version     = '>= 2.0.0'
   s.required_rubygems_version = '>= 1.3.5'
