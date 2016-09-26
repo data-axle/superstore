@@ -144,10 +144,21 @@ class Superstore::PersistenceTest < Superstore::TestCase
   end
 
   test 'becomes' do
-    klass = temp_object do
-    end
+    klass = temp_object
 
     assert_kind_of klass, Issue.new.becomes(klass)
+  end
+
+  test 'becomes includes changed_attributes' do
+    klass = temp_object do
+      string :title
+    end
+
+    issue = Issue.new(title: 'Something is wrong')
+    other = issue.becomes(klass)
+
+    assert_equal 'Something is wrong', other.title
+    assert_equal %w(title), other.changed
   end
 
   test 'reload' do
