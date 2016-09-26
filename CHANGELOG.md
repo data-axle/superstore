@@ -1,8 +1,14 @@
+# Unreleased
+
+## Fixed
+
+* Ensure `changed_attributes` is copied when `.becomes` is invoked (#21)
+
 # 2.4.1
 
 Released 2016-08-22.
 
-# Fixed
+## Fixed
 
 * Ensure that new_record is not set until before_save callbacks complete (#20)
 
