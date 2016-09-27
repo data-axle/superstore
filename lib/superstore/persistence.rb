@@ -15,12 +15,6 @@ module Superstore
         adapter.execute "TRUNCATE #{table_name}"
       end
 
-      def create(attributes = {}, &block)
-        new(attributes, &block).tap do |object|
-          object.save
-        end
-      end
-
       def insert_record(id, attributes)
         adapter.insert table_name, id, encode_attributes(attributes)
       end
@@ -91,7 +85,7 @@ module Superstore
     end
 
     def save(*)
-      new_record? ? create_self : update_self
+      create_or_update
     end
 
     def destroy
@@ -119,15 +113,6 @@ module Superstore
 
     alias update_attributes! update!
 
-    def becomes(klass)
-      became = klass.new
-      became.instance_variable_set("@attributes", @attributes)
-      became.instance_variable_set("@changed_attributes", changed_attributes || {})
-      became.instance_variable_set("@new_record", new_record?)
-      became.instance_variable_set("@destroyed", destroyed?)
-      became
-    end
-
     def reload
       clear_association_cache
       @attributes = self.class.find(id).instance_variable_get('@attributes')
@@ -135,6 +120,10 @@ module Superstore
     end
 
     private
+
+      def create_or_update
+        new_record? ? create_self : update_self
+      end
 
       def create_self
         write :insert_record
