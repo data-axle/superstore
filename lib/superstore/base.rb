@@ -13,6 +13,7 @@ module Superstore
 
     extend ActiveRecord::Delegation::DelegateCache
     extend ActiveRecord::ConnectionHandling
+    include ActiveRecord::Persistence
     include ActiveRecord::ModelSchema
     include ActiveRecord::Inheritance
     include ActiveRecord::Attributes
