@@ -143,7 +143,18 @@ module Superstore
       def update(table, id, attributes)
         return if attributes.empty?
 
-        value_update = "jsonb_strip_nulls(document || #{to_quoted_jsonb(attributes)})"
+        nil_properties = attributes.each_key.select { |k| attributes[k].nil? }
+        not_nil_attributes = attributes.reject { |key, value| value.nil? }
+
+        value_update = "document"
+        nil_properties.each do |property|
+          value_update = "(#{value_update} - '#{property}')"
+        end
+
+        if not_nil_attributes.any?
+          value_update = "(#{value_update} || #{to_quoted_jsonb(not_nil_attributes)})"
+        end
+
         statement = "UPDATE #{table} SET document = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
 
         execute_batchable statement
