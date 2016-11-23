@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'superstore'
-  s.version = '2.4.2'
+  s.version = '2.4.3'
   s.description = 'ActiveModel-based JSONB document store'
   s.summary = 'ActiveModel for JSONB documents'
   s.authors = ['Michael Koziarski', 'Infogroup']
