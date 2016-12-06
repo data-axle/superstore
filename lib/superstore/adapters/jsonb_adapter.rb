@@ -30,7 +30,7 @@ module Superstore
           elsif @scope.select_values == [@adapter.primary_key_column]
             @adapter.primary_key_column
           else
-            selects = @scope.select_values.map { |key| "#{@adapter.quote(key)},document->>#{@adapter.quote(key)}" }
+            selects = @scope.select_values.map { |key| "#{@adapter.quote(key)},document->#{@adapter.quote(key)}" }
             "#{@adapter.primary_key_column}, json_build_object(#{selects * ','}) as document"
           end
         end
