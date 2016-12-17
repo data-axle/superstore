@@ -49,6 +49,7 @@ module Superstore
     extend ActiveSupport::Autoload
 
     autoload :Association
+    autoload :AssociationScope
     autoload :Reflection
     autoload :BelongsTo
     autoload :HasMany

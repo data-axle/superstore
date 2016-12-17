@@ -49,6 +49,10 @@ module Superstore
         @class_name ||= (options[:class_name] || name.to_s.classify)
       end
 
+      def inverse_name
+        options[:inverse_of]
+      end
+
       private
       
       def derive_foreign_key

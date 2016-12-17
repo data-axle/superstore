@@ -35,6 +35,14 @@ module Superstore
       @loaded = false
     end
 
+    def ==(other)
+      to_a == other
+    end
+
+    def to_ary
+      to_a.to_ary
+    end
+
     private
 
       def scoping
