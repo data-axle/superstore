@@ -204,7 +204,7 @@ module Superstore
         "ARRAY[#{quoted_fields}]"
       end
 
-      OJ_OPTIONS = {mode: :compat}
+      OJ_OPTIONS = {mode: :compat, time_format: :xmlschema}
       def to_quoted_jsonb(data)
         "#{quote(Oj.dump(data, OJ_OPTIONS))}::JSONB"
       end
