@@ -14,7 +14,7 @@ class Superstore::CoreTest < Superstore::TestCase
   end
 
   test 'dup' do
-    issue = Issue.create description: 'foo'
+    issue = Issue.create description: 'foo', comments: {"foo" => "bar"}
 
     dup_issue = issue.dup
 
@@ -23,6 +23,7 @@ class Superstore::CoreTest < Superstore::TestCase
     assert_nil dup_issue.created_at
     assert_nil dup_issue.updated_at
     assert_equal 'foo', issue.description
+    refute_equal issue.comments['foo'].object_id, dup_issue.comments['foo'].object_id
   end
 
   test 'equality of new records' do
