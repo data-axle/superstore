@@ -2,6 +2,7 @@ module Superstore
   module AttributeMethods
     extend ActiveSupport::Concern
     include ActiveModel::AttributeMethods
+    include ActiveModel::AttributeAssignment
 
     included do
       attribute_method_suffix("=")
@@ -76,11 +77,20 @@ module Superstore
       results
     end
 
-    def attributes=(attributes)
-      attributes.each do |(name, value)|
-        send("#{name}=", value)
+    if ActiveRecord.version >= Gem::Version.new('5.0')
+      include ActiveModel::AttributeAssignment
+
+      def attributes=(attributes)
+        assign_attributes(attributes)
+      end
+    else
+      def attributes=(attributes)
+        attributes.each do |name, value|
+          send("#{name}=", value)
+        end
       end
     end
+    
 
     def method_missing(method_id, *args, &block)
       self.class.define_attribute_methods unless self.class.attribute_methods_generated?
