@@ -2,7 +2,6 @@ module Superstore
   module AttributeMethods
     extend ActiveSupport::Concern
     include ActiveModel::AttributeMethods
-    include ActiveModel::AttributeAssignment
 
     included do
       attribute_method_suffix("=")
