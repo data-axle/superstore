@@ -1,5 +1,6 @@
 require 'active_support/all'
 require 'active_model'
+require 'active_record'
 require 'global_id/identification'
 require 'oj'
 require 'superstore/errors'

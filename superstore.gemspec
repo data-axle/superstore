@@ -18,7 +18,8 @@ Gem::Specification.new do |s|
   s.test_files  = `git ls-files -- {test}/*`.split("\n")
   s.require_paths = ['lib']
 
-  s.add_runtime_dependency('activemodel', '>= 3.0')
+  s.add_runtime_dependency('activemodel', '>= 4.2')
+  s.add_runtime_dependency('activerecord', '>= 4.2')
   s.add_runtime_dependency('globalid')
   s.add_runtime_dependency('oj')
 
