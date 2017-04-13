@@ -72,6 +72,7 @@ module Superstore
     autoload :BooleanType
     autoload :DateType
     autoload :FloatType
+    autoload :GeoPointType
     autoload :IntegerType
     autoload :JsonType
     autoload :StringType
