@@ -4,16 +4,20 @@ module Superstore
       def typecast(value)
         case value
         when Array
-          {lat: value[0]&.to_f, lon: value[1]&.to_f }
+          to_float_or_nil(lat: value[0], lon: value[1])
         when Hash
-          if value.keys.sort == %i(lat lon)
-            {lat: value[:lat].to_f, lon: value[:lon].to_f}
-          elsif value.keys.sort == %w(lat lon)
-            {lat: value['lat'].to_f, lon: value['lon'].to_f}
-          end
+          value = value.symbolize_keys!
+          to_float_or_nil(lat: value[:lat], lon: value[:lon])
         when String
-          intermediate = value.split(/[,\s]+/)
-          standardize(intermediate)
+          typecast value.split(/[,\s]+/)
+        end
+      end
+
+      private
+
+      def to_float_or_nil(coords)
+        if coords[:lat] && coords[:lon]
+          coords.transform_values!(&:to_f)
         end
       end
     end
