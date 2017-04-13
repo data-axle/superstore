@@ -1,6 +1,10 @@
 module Superstore
   module Types
     class GeoPointType < BaseType
+      def decode(str)
+        typecast str.split(/[,\s]+/)
+      end
+
       def typecast(value)
         case value
         when Array
@@ -8,8 +12,6 @@ module Superstore
         when Hash
           value = value.symbolize_keys!
           to_float_or_nil(lat: value[:lat], lon: value[:lon])
-        when String
-          typecast value.split(/[,\s]+/)
         end
       end
 
