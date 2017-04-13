@@ -10,8 +10,7 @@ module Superstore
         when Array
           to_float_or_nil(lat: value[0], lon: value[1])
         when Hash
-          value = value.symbolize_keys!
-          to_float_or_nil(lat: value[:lat], lon: value[:lon])
+          to_float_or_nil(lat: value[:lat] || value['lat'], lon: value[:lon] || value['lon'])
         end
       end
 
