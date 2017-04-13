@@ -20,7 +20,6 @@ module Superstore
   autoload :Model
   autoload :Persistence
   autoload :Schema
-  autoload :CassandraSchema
   autoload :Scope
   autoload :Scoping
   autoload :Timestamps
@@ -43,7 +42,6 @@ module Superstore
 
     autoload :AbstractAdapter
     autoload :JsonbAdapter
-    autoload :CassandraAdapter
   end
 
   module Associations
