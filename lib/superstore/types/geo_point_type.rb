@@ -1,28 +1,19 @@
 module Superstore
   module Types
     class GeoPointType < BaseType
-      # def encode(int)
-      #   raise ArgumentError.new("#{int.inspect} is not an Integer.") unless int.kind_of?(Integer)
-      #
-      #   int
-      # end
-
-      # def decode(str)
-      #   str.to_i unless str.empty?
-      # end
-
       def typecast(value)
         case value
         when Array
           {lat: value[0]&.to_f, lon: value[1]&.to_f }
         when Hash
-          value.transform_values(&:to_f).symbolize_keys
-          #  {lat: value['lat'], lon: value['lon']}
+          if value.keys.sort == %i(lat lon)
+            {lat: value[:lat].to_f, lon: value[:lon].to_f}
+          elsif value.keys.sort == %w(lat lon)
+            {lat: value['lat'].to_f, lon: value['lon'].to_f}
+          end
         when String
           intermediate = value.split(/[,\s]+/)
-          standardize(definition, intermediate)
-        else
-          value
+          standardize(intermediate)
         end
       end
     end
