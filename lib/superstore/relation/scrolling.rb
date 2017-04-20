@@ -4,7 +4,7 @@ module Superstore
       def scroll_each(options = {})
         batch_size = options[:batch_size] || 1000
 
-        klass.adapter.scroll(self, batch_size) do |attributes|
+        scroll_results(batch_size) do |attributes|
           yield klass.instantiate(attributes)
         end
       end
@@ -24,6 +24,25 @@ module Superstore
 
         yield(batch) if batch.any?
       end
+
+      private
+      
+      def scroll_results(batch_size)
+        statement   = to_sql
+        cursor_name = "cursor_#{SecureRandom.hex(6)}"
+        fetch_sql   = "FETCH FORWARD #{batch_size} FROM #{cursor_name}"
+
+        connection.transaction do
+          connection.execute "DECLARE #{cursor_name} NO SCROLL CURSOR FOR (#{statement})"
+
+          while (batch = connection.execute(fetch_sql)).any?
+            batch.each do |result|
+              yield(klass.primary_key => result[klass.primary_key], 'document' => result['document'])
+            end
+          end
+        end
+      end
+
     end
   end
 end

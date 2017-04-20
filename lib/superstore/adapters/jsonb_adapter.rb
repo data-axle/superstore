@@ -25,22 +25,6 @@ module Superstore
         connection.execute statement
       end
 
-      def scroll(relation, batch_size)
-        statement   = relation.to_sql
-        cursor_name = "cursor_#{SecureRandom.hex(6)}"
-        fetch_sql   = "FETCH FORWARD #{batch_size} FROM #{cursor_name}"
-
-        connection.transaction do
-          connection.execute "DECLARE #{cursor_name} NO SCROLL CURSOR FOR (#{statement})"
-
-          while (batch = connection.execute(fetch_sql)).any?
-            batch.each do |result|
-              yield(primary_key_column => result[primary_key_column], 'document' => result['document'])
-            end
-          end
-        end
-      end
-
       def insert(table, id, attributes)
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
         statement = "INSERT INTO #{table} (#{primary_key_column}, document) VALUES (#{quote(id)}, #{to_quoted_jsonb(not_nil_attributes)})"
