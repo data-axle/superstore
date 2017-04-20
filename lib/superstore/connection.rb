@@ -4,16 +4,7 @@ module Superstore
 
     module ClassMethods
       def adapter
-        @adapter ||= adapter_class.new(config)
-      end
-
-      def adapter_class
-        case config[:adapter]
-        when nil, 'jsonb'
-          Superstore::Adapters::JsonbAdapter
-        else
-          raise "Unknown adapter #{config[:adapter]}"
-        end
+        @adapter ||= Superstore::Adapters::JsonbAdapter.new
       end
 
       def connection

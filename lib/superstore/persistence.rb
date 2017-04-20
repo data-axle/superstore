@@ -40,7 +40,8 @@ module Superstore
           object.instance_variable_set("@id", attributes['id']) if attributes['id']
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
-          object.instance_variable_set("@attributes", typecast_persisted_attributes(Oj.compat_load(attributes['document'])))
+          document = attributes['document'].is_a?(String) ? Oj.compat_load(attributes['document']) : attributes['document']
+          object.instance_variable_set("@attributes", typecast_persisted_attributes(document))
           object.instance_variable_set("@association_cache", {})
         end
       end
