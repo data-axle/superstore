@@ -19,6 +19,7 @@ module Superstore
     include ActiveRecord::Persistence
     include ActiveRecord::ModelSchema
     include ActiveRecord::Inheritance
+    include Persistence
     include ActiveRecord::Scoping
     include ActiveRecord::Sanitization
     include ActiveRecord::Integration
@@ -35,7 +36,6 @@ module Superstore
     include Connection
     include Identity
     include Inspect
-    include Persistence
     include AttributeMethods
     # include Validations
     include AttributeMethods::Dirty
