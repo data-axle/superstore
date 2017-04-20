@@ -33,7 +33,8 @@ module Superstore
       @new_record = true
       @destroyed = false
       @association_cache = {}
-      super
+
+      initialize_copy(other)
     end
   end
 end
