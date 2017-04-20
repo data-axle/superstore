@@ -5,6 +5,12 @@ module Superstore
         self.configurations = Rails.application.config.database_configuration
         establish_connection
       end
+
+      ActiveSupport.on_load :active_record do
+        Relation.class_eval do
+          include Superstore::Relation::Scrolling
+        end
+      end
     end
   end
 end

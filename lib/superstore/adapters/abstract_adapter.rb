@@ -2,7 +2,6 @@ module Superstore
   module Adapters
     class AbstractAdapter
       def initialize
-        @batch_statements = nil
       end
 
       # Read records from a instance of Superstore::Scope
@@ -19,29 +18,6 @@ module Superstore
 
       # Delete rows by an array of ids
       def delete(table, ids) # abstract
-      end
-
-      def execute_batch(statements) # abstract
-      end
-
-      def batching?
-        !@batch_statements.nil?
-      end
-
-      def batch
-        @batch_statements = []
-        yield
-        execute_batch(@batch_statements) if @batch_statements.any?
-      ensure
-        @batch_statements = nil
-      end
-
-      def execute_batchable(statement)
-        if @batch_statements
-          @batch_statements << statement
-        else
-          execute statement
-        end
       end
     end
   end

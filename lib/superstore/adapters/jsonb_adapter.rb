@@ -25,8 +25,8 @@ module Superstore
         connection.execute statement
       end
 
-      def scroll(scope, batch_size)
-        statement   = QueryBuilder.new(self, scope).to_query
+      def scroll(relation, batch_size)
+        statement   = relation.to_sql
         cursor_name = "cursor_#{SecureRandom.hex(6)}"
         fetch_sql   = "FETCH FORWARD #{batch_size} FROM #{cursor_name}"
 
@@ -35,7 +35,7 @@ module Superstore
 
           while (batch = connection.execute(fetch_sql)).any?
             batch.each do |result|
-              yield result[primary_key_column], Oj.compat_load(result['document'])
+              yield(primary_key_column => result[primary_key_column], 'document' => result['document'])
             end
           end
         end
@@ -44,7 +44,7 @@ module Superstore
       def insert(table, id, attributes)
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
         statement = "INSERT INTO #{table} (#{primary_key_column}, document) VALUES (#{quote(id)}, #{to_quoted_jsonb(not_nil_attributes)})"
-        execute_batchable statement
+        execute statement
       end
 
       def update(table, id, attributes)
@@ -64,19 +64,13 @@ module Superstore
 
         statement = "UPDATE #{table} SET document = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
 
-        execute_batchable statement
+        execute statement
       end
 
       def delete(table, ids)
         statement = "DELETE FROM #{table} WHERE #{create_ids_where_clause(ids)}"
 
-        execute_batchable statement
-      end
-
-      def execute_batch(statements)
-        connection.transaction do
-          execute(statements * ";\n")
-        end
+        execute statement
       end
 
       def create_table(table_name, options = {})

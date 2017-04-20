@@ -61,6 +61,12 @@ module Superstore
     end
   end
 
+  module Relation
+    extend ActiveSupport::Autoload
+
+    autoload :Scrolling
+  end
+
   module Types
     extend ActiveSupport::Autoload
 

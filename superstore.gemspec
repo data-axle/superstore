@@ -24,4 +24,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('oj')
 
   s.add_development_dependency('bundler')
+  s.add_development_dependency('rails')
 end

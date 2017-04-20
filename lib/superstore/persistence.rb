@@ -2,10 +2,6 @@ module Superstore
   module Persistence
     extend ActiveSupport::Concern
 
-    included do
-      class_attribute :batch_statements
-    end
-
     module ClassMethods
       def find_by_id(id)
         find_by(id: id)
@@ -25,14 +21,6 @@ module Superstore
 
       def update_record(id, attributes)
         adapter.update table_name, id, encode_attributes(attributes)
-      end
-
-      def batching?
-        adapter.batching?
-      end
-
-      def batch(&block)
-        adapter.batch(&block)
       end
 
       def instantiate(attributes, column_types = {}, &block)

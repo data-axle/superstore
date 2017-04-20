@@ -1,25 +1,29 @@
 require 'test_helper'
 
-class Superstore::BatchesTest < Superstore::TestCase
-  test 'find_each' do
+class Superstore::ScrollingTest < Superstore::TestCase
+  ActiveRecord::Relation.class_eval do
+    include Superstore::Relation::Scrolling
+  end
+  
+  test 'scroll_each' do
     Issue.create
     Issue.create
 
     issues = []
-    Issue.find_each do |issue|
+    Issue.all.scroll_each do |issue|
       issues << issue
     end
 
     assert_equal Issue.all.to_set, issues.to_set
   end
 
-  test 'find_in_batches' do
+  test 'scroll_in_batches' do
     Issue.create
     Issue.create
     Issue.create
 
     issue_batches = []
-    Issue.find_in_batches(batch_size: 2) do |issues|
+    Issue.all.scroll_in_batches(batch_size: 2) do |issues|
       issue_batches << issues
     end
 
