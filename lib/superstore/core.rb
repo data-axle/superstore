@@ -35,9 +35,5 @@ module Superstore
       @association_cache = {}
       super
     end
-
-    def to_param
-      id
-    end
   end
 end
