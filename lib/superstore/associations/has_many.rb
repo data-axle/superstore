@@ -35,7 +35,7 @@ module Superstore
         end
 
         def load_collection
-          AssociationScope.new(association_class, self).where(reflection.foreign_key => owner.try(reflection.primary_key))
+          AssociationScope.new(association_class, self).where("document ->> '#{reflection.foreign_key}' = '#{owner.try(reflection.primary_key)}'")
         end
 
     end
