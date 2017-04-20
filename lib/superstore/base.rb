@@ -22,7 +22,9 @@ module Superstore
     include ActiveRecord::Scoping
     include ActiveRecord::Sanitization
     include ActiveRecord::Integration
+    # include ActiveRecord::Validations
     include ActiveRecord::Attributes
+    # include ActiveRecord::Callbacks
     include ActiveRecord::Associations
     include ActiveRecord::AutosaveAssociation
     include ActiveRecord::Reflection

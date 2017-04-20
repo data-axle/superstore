@@ -121,15 +121,11 @@ module Superstore
 
     private
 
-      def create_or_update
-        new_record? ? create_self : update_self
-      end
-
-      def create_self
+      def _create_record
         write :insert_record
       end
 
-      def update_self
+      def _update_record(*args)
         write :update_record
       end
 
