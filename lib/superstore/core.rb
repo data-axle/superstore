@@ -12,25 +12,25 @@ module Superstore
         end
       end
 
-      def initialize_generated_modules # :nodoc:
-        generated_association_methods
-      end
-
-      def generated_association_methods
-        @generated_association_methods ||= begin
-          mod = const_set(:GeneratedAssociationMethods, Module.new)
-          include mod
-          mod
-        end
-      end
-
-      def arel_table # :nodoc:
-        @arel_table ||= Arel::Table.new(table_name, self)
-      end
-
-      def subclass_from_attributes?(attrs)
-        false
-      end
+      # def initialize_generated_modules # :nodoc:
+      #   generated_association_methods
+      # end
+      #
+      # def generated_association_methods
+      #   @generated_association_methods ||= begin
+      #     mod = const_set(:GeneratedAssociationMethods, Module.new)
+      #     include mod
+      #     mod
+      #   end
+      # end
+      #
+      # def arel_table # :nodoc:
+      #   @arel_table ||= Arel::Table.new(table_name)
+      # end
+      #
+      # def subclass_from_attributes?(attrs)
+      #   false
+      # end
     end
 
     def initialize(attributes=nil)
@@ -60,18 +60,18 @@ module Superstore
       id
     end
 
-    def hash
-      id.hash
-    end
-
-    def ==(comparison_object)
-      comparison_object.equal?(self) ||
-        (comparison_object.instance_of?(self.class) &&
-          comparison_object.id == id)
-    end
-
-    def eql?(comparison_object)
-      self == (comparison_object)
-    end
+    # def hash
+    #   id.hash
+    # end
+    #
+    # def ==(comparison_object)
+    #   comparison_object.equal?(self) ||
+    #     (comparison_object.instance_of?(self.class) &&
+    #       comparison_object.id == id)
+    # end
+    #
+    # def eql?(comparison_object)
+    #   self == (comparison_object)
+    # end
   end
 end

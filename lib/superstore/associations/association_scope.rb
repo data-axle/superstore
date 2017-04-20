@@ -1,6 +1,6 @@
 module Superstore
   module Associations
-    class AssociationScope < Scope
+    class AssociationScope < ActiveRecord::Relation
       def initialize(klass, association)
         super(klass)
         @association = association

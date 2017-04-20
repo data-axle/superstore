@@ -7,6 +7,10 @@ module Superstore
     end
 
     module ClassMethods
+      def find_by_id(id)
+        find_by(id: id)
+      end
+
       def delete(ids)
         adapter.delete table_name, ids
       end
@@ -31,12 +35,12 @@ module Superstore
         adapter.batch(&block)
       end
 
-      def instantiate(id, attributes)
+      def instantiate(attributes, column_types = {}, &block)
         allocate.tap do |object|
-          object.instance_variable_set("@id", id) if id
+          object.instance_variable_set("@id", attributes['id']) if attributes['id']
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
-          object.instance_variable_set("@attributes", typecast_persisted_attributes(attributes))
+          object.instance_variable_set("@attributes", typecast_persisted_attributes(Oj.compat_load(attributes['document'])))
           object.instance_variable_set("@association_cache", {})
         end
       end
@@ -54,10 +58,6 @@ module Superstore
       end
 
       private
-
-        def quote_columns(column_names)
-          column_names.map { |name| "'#{name}'" }
-        end
 
         def typecast_persisted_attributes(attributes)
           result = {}

@@ -5,7 +5,7 @@ require 'test_helper'
 
 class Superstore::PersistenceTest < Superstore::TestCase
   test 'instantiate removes unknowns' do
-    assert_nil Issue.instantiate('theid', 'z' => 'nooo').attributes['z']
+    assert_nil Issue.instantiate('id' => 'theid', 'document' => {'z' => 'nooo'}.to_json).attributes['z']
   end
 
   test 'encode_attributes' do
@@ -38,8 +38,8 @@ class Superstore::PersistenceTest < Superstore::TestCase
       first_issue = Issue.create
       second_issue = Issue.create
 
-      assert_raise(Superstore::RecordNotFound) { Issue.find(first_issue.id) }
-      assert_raise(Superstore::RecordNotFound) { Issue.find(second_issue.id) }
+      assert_raise(ActiveRecord::RecordNotFound) { Issue.find(first_issue.id) }
+      assert_raise(ActiveRecord::RecordNotFound) { Issue.find(second_issue.id) }
     end
 
     assert !Issue.batching?
@@ -171,11 +171,6 @@ class Superstore::PersistenceTest < Superstore::TestCase
     assert_equal persisted_issue, reloaded_issue
   end
 
-  test 'quote_columns' do
-    klass = Class.new { include Superstore::Persistence }
-    assert_equal %w{'a' 'b'}, klass.__send__(:quote_columns, %w{a b})
-  end
-
   test 'delete' do
     klass = temp_object do
       string :name
@@ -189,7 +184,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
 
     klass.delete(id)
 
-    assert_raise Superstore::RecordNotFound do
+    assert_raise ActiveRecord::RecordNotFound do
       klass.find(id)
     end
   end
@@ -210,4 +205,11 @@ class Superstore::PersistenceTest < Superstore::TestCase
     assert_equal [], klass.find(ids)
   end
 
+  test 'find_by_id' do
+    Issue.create.tap do |issue|
+      assert_equal issue, Issue.find_by_id(issue.id)
+    end
+
+    assert_nil Issue.find_by_id('what')
+  end
 end

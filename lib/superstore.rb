@@ -20,8 +20,6 @@ module Superstore
   autoload :Model
   autoload :Persistence
   autoload :Schema
-  autoload :Scope
-  autoload :Scoping
   autoload :Timestamps
   autoload :Type
   autoload :Validations
