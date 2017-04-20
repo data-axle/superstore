@@ -37,12 +37,10 @@ module Superstore
     include Identity
     include Inspect
     include AttributeMethods
-    # include Validations
     include AttributeMethods::Dirty
     include AttributeMethods::PrimaryKey
     include AttributeMethods::Typecasting
     include Associations
-    # include Callbacks
     include Timestamps
     include Caching
 
