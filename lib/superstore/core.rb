@@ -11,6 +11,15 @@ module Superstore
           "#{super}(#{attr_list.truncate(140 * 1.7337)})"
         end
       end
+
+      def arel_engine # :nodoc:
+        @arel_engine ||=
+          if Base == self || connection_handler.retrieve_connection_pool(connection_specification_name)
+            self
+          else
+            superclass.arel_engine
+          end
+      end
     end
 
     def initialize(attributes=nil)

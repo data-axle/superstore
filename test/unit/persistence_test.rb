@@ -202,7 +202,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
 
     klass.delete(ids)
 
-    assert_equal [], klass.find(ids)
+    assert_equal [], klass.where(id: ids)
   end
 
   test 'find_by_id' do
