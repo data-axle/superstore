@@ -7,8 +7,7 @@ module Superstore
       # Attempts to +save+ the record and clears changed attributes if successful.
       def save(*) #:nodoc:
         if status = super
-          @previously_changed = changes
-          @changed_attributes = {}
+          changes_applied
         end
         status
       end
@@ -16,8 +15,7 @@ module Superstore
       # <tt>reload</tt> the record and clears changed attributes.
       def reload
         super.tap do
-          @previously_changed.try :clear
-          @changed_attributes.try :clear
+          clear_changes_information
         end
       end
 

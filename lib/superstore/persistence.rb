@@ -31,6 +31,8 @@ module Superstore
           document = attributes['document'].is_a?(String) ? Oj.compat_load(attributes['document']) : attributes['document']
           object.instance_variable_set("@attributes", typecast_persisted_attributes(document))
           object.instance_variable_set("@association_cache", {})
+          object.instance_variable_set("@_start_transaction_state", {})
+          object.instance_variable_set("@transaction_state", nil)
         end
       end
 
@@ -102,11 +104,11 @@ module Superstore
 
     alias update_attributes! update!
 
-    def reload
-      clear_association_cache
-      @attributes = self.class.find(id).instance_variable_get('@attributes')
-      self
-    end
+    # def reload
+    #   clear_association_cache
+    #   @attributes = self.class.find(id).instance_variable_get('@attributes')
+    #   self
+    # end
 
     private
 
