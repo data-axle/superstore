@@ -61,24 +61,3 @@ widget.price_was
 widget.save
 widget.save!
 ```
-
-## Finding records
-
-```ruby
-widget = Widget.find(uuid)
-widget = Widget.first
-widgets = Widget.all
-Widget.find_each do |widget|
-  # Codez
-end
-```
-
-## Scoping
-
-Some lightweight scoping features are available:
-
-```ruby
-Widget.where('color' => 'red')
-Widget.select(['name', 'color'])
-Widget.limit(10)
-```
