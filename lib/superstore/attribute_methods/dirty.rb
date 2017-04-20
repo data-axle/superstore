@@ -12,6 +12,12 @@ module Superstore
         status
       end
 
+      def save!(*)
+        super.tap do
+          changes_applied
+        end
+      end
+
       # <tt>reload</tt> the record and clears changed attributes.
       def reload
         super.tap do
