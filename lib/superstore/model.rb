@@ -2,22 +2,9 @@ module Superstore
   module Model
     extend ActiveSupport::Concern
 
-    included do
-      class_attribute :symbolized_config
-      self.symbolized_config = {}
-    end
-
     module ClassMethods
       def base_class
         class_of_active_record_descendant(self)
-      end
-
-      def config=(config)
-        self.symbolized_config = config.deep_symbolize_keys
-      end
-
-      def config
-        symbolized_config
       end
 
       private

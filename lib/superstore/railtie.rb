@@ -2,17 +2,8 @@ module Superstore
   class Railtie < Rails::Railtie
     initializer "superstore.config" do |app|
       ActiveSupport.on_load :superstore do
-        pathname = Rails.root.join('config', 'superstore.yml')
-        if pathname.exist?
-          config = ERB.new(pathname.read).result
-          config = YAML.load(config)
-
-          if config = config[Rails.env]
-            self.config = config.symbolize_keys!
-          else
-            raise "Missing environment #{Rails.env} in superstore.yml"
-          end
-        end
+        self.configurations = Rails.application.config.database_configuration
+        establish_connection
       end
     end
   end

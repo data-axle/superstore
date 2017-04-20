@@ -1,9 +1,7 @@
 module Superstore
   module Adapters
     class AbstractAdapter
-      attr_reader :config
-      def initialize(config)
-        @config = config
+      def initialize
         @batch_statements = nil
       end
 

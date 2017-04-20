@@ -4,86 +4,6 @@ require 'pg'
 module Superstore
   module Adapters
     class JsonbAdapter < AbstractAdapter
-      class QueryBuilder
-        def initialize(adapter, scope)
-          @adapter  = adapter
-          @scope    = scope
-        end
-
-        def to_query
-          [
-            "SELECT #{select_string}",
-            from_string,
-            where_string,
-            order_string,
-            limit_string
-          ].delete_if(&:blank?) * ' '
-        end
-
-        def from_string
-          "FROM #{@scope.klass.table_name}"
-        end
-
-        def select_string
-          if @scope.select_values.empty?
-            '*'
-          elsif @scope.select_values == [@adapter.primary_key_column]
-            @adapter.primary_key_column
-          else
-            selects = @scope.select_values.map { |key| "#{@adapter.quote(key)},document->#{@adapter.quote(key)}" }
-            "#{@adapter.primary_key_column}, json_build_object(#{selects * ','}) as document"
-          end
-        end
-
-        def where_string
-          wheres = where_values_as_strings
-
-          if @scope.id_values.any?
-            wheres << @adapter.create_ids_where_clause(@scope.id_values)
-          end
-
-          if wheres.any?
-            "WHERE #{wheres * ' AND '}"
-          end
-        end
-
-        def order_string
-          if @scope.order_values.any?
-            orders = @scope.order_values.join(', ')
-            "ORDER BY #{orders}"
-          elsif @scope.id_values.many?
-            id_orders = @scope.id_values.map { |id| "ID=#{@adapter.quote(id)} DESC" }.join(',')
-            "ORDER BY #{id_orders}"
-          end
-        end
-
-        def limit_string
-          if @scope.limit_value
-            "LIMIT #{@scope.limit_value}"
-          end
-        end
-
-        def where_values_as_strings
-          @scope.where_values.map do |where_value|
-            if where_value.is_a?(Hash)
-              key = where_value.keys.first
-              value = where_value.values.first
-
-              if value.nil?
-                "(document->>'#{key}') IS NULL"
-              elsif value.is_a?(Array)
-                typecasted_values = value.map { |v| "'#{v}'" }.join(',')
-                "document->>'#{key}' IN (#{typecasted_values})"
-              else
-                "document->>'#{key}' = '#{value}'"
-              end
-            else
-              where_value
-            end
-          end
-        end
-      end
-
       PRIMARY_KEY_COLUMN = 'id'.freeze
       def primary_key_column
         PRIMARY_KEY_COLUMN
@@ -103,19 +23,6 @@ module Superstore
 
       def execute(statement)
         connection.execute statement
-      end
-
-      def to_ids(scope)
-        statement = QueryBuilder.new(self, scope.select(primary_key_column)).to_query
-        connection.select_values(statement)
-      end
-
-      def select(scope)
-        statement = QueryBuilder.new(self, scope).to_query
-
-        connection.execute(statement).each do |result|
-          yield result[primary_key_column], Oj.compat_load(result['document'])
-        end
       end
 
       def scroll(scope, batch_size)

@@ -8,6 +8,10 @@ module Superstore
         def primary_key
           PRIMARY_KEY
         end
+
+        def quoted_primary_key
+          @quoted_primary_key ||= connection.quote_column_name(primary_key)
+        end
       end
 
       def id

@@ -15,15 +15,7 @@ Superstore requires PostgreSQL 9.5 or above.
 Add the following to the `Gemfile`:
 
 ```ruby
-gem 'pg'
 gem 'superstore'
-```
-
-Add a `config/superstore.yml`:
-
-```yaml
-development:
-  adapter: jsonb
 ```
 
 Superstore will share the existing ActiveRecord database connection.
