@@ -37,7 +37,7 @@ module Superstore
 
           while (batch = connection.execute(fetch_sql)).any?
             batch.each do |result|
-              yield(klass.primary_key => result[klass.primary_key], 'document' => result['document'])
+              yield result
             end
           end
         end
