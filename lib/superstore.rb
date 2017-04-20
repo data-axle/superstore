@@ -3,7 +3,6 @@ require 'active_model'
 require 'active_record'
 require 'global_id/identification'
 require 'oj'
-require 'superstore/errors'
 
 module Superstore
   extend ActiveSupport::Autoload
