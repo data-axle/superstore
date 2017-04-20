@@ -9,6 +9,12 @@ module Superstore
       def exec_queries
         super.each { |r| @association.set_inverse_instance r }
       end
+
+      def <<(*records)
+        if loaded?
+          @records = @records + records
+        end
+      end
     end
   end
 end
