@@ -61,26 +61,26 @@ module Superstore
         end
     end
 
-    def new_record?
-      @new_record
-    end
+    # def new_record?
+    #   @new_record
+    # end
+    #
+    # def destroyed?
+    #   @destroyed
+    # end
+    #
+    # def persisted?
+    #   !(new_record? || destroyed?)
+    # end
 
-    def destroyed?
-      @destroyed
-    end
+    # def save(*)
+    #   create_or_update
+    # end
 
-    def persisted?
-      !(new_record? || destroyed?)
-    end
-
-    def save(*)
-      create_or_update
-    end
-
-    def destroy
-      self.class.delete(id)
-      @destroyed = true
-    end
+    # def destroy
+    #   self.class.delete(id)
+    #   @destroyed = true
+    # end
 
     def update_attribute(name, value)
       name = name.to_s

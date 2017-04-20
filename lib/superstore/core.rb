@@ -30,6 +30,9 @@ module Superstore
       @attributes         = {}
       self.attributes = attributes || {}
 
+      @_start_transaction_state = {}
+      @transaction_state        = nil
+
       yield self if block_given?
     end
 
@@ -42,6 +45,9 @@ module Superstore
       @new_record = true
       @destroyed = false
       @association_cache = {}
+
+      @_start_transaction_state = {}
+      @transaction_state        = nil
 
       initialize_copy(other)
     end
