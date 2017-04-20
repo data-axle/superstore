@@ -70,7 +70,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
     record = klass.new(description: 'bad')
     record.save!
 
-    assert_raise Superstore::RecordInvalid do
+    assert_raise ActiveRecord::RecordInvalid do
       record = klass.new
       record.save!
     end
@@ -108,7 +108,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
       issue = Issue.new(description: 'bad')
       issue.save!
 
-      assert_raise Superstore::RecordInvalid do
+      assert_raise ActiveRecord::RecordInvalid do
         issue.update! description: ''
       end
     ensure

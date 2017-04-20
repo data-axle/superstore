@@ -35,8 +35,8 @@ class Superstore::CallbacksTest < Superstore::TestCase
       before_validation
       after_validation
       before_save
-      after_save
       after_create
+      after_save
     )
     assert_equal expected, issue.callback_history
   end
@@ -47,7 +47,7 @@ class Superstore::CallbacksTest < Superstore::TestCase
 
     issue.update_attribute :description, 'foo'
 
-    assert_equal %w(before_save after_save after_update), issue.callback_history
+    assert_equal %w(before_save after_update after_save), issue.callback_history
   end
 
   test 'destroy' do

@@ -11,7 +11,6 @@ module Superstore
   autoload :Base
   autoload :Associations
   autoload :Caching
-  autoload :Callbacks
   autoload :Connection
   autoload :Core
   autoload :Identity
@@ -21,7 +20,6 @@ module Superstore
   autoload :Schema
   autoload :Timestamps
   autoload :Type
-  autoload :Validations
 
   module AttributeMethods
     extend ActiveSupport::Autoload

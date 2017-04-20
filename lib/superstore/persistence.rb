@@ -11,10 +11,6 @@ module Superstore
         adapter.delete table_name, ids
       end
 
-      def delete_all
-        adapter.execute "TRUNCATE #{table_name}"
-      end
-
       def insert_record(id, attributes)
         adapter.insert table_name, id, encode_attributes(attributes)
       end
@@ -31,6 +27,8 @@ module Superstore
           document = attributes['document'].is_a?(String) ? Oj.compat_load(attributes['document']) : attributes['document']
           object.instance_variable_set("@attributes", typecast_persisted_attributes(document))
           object.instance_variable_set("@association_cache", {})
+          object.instance_variable_set("@_start_transaction_state", {})
+          object.instance_variable_set("@transaction_state", nil)
         end
       end
 
@@ -59,53 +57,6 @@ module Superstore
 
           result
         end
-    end
-
-    def new_record?
-      @new_record
-    end
-
-    def destroyed?
-      @destroyed
-    end
-
-    def persisted?
-      !(new_record? || destroyed?)
-    end
-
-    def save(*)
-      create_or_update
-    end
-
-    def destroy
-      self.class.delete(id)
-      @destroyed = true
-    end
-
-    def update_attribute(name, value)
-      name = name.to_s
-      send("#{name}=", value)
-      save(validate: false)
-    end
-
-    def update(attributes)
-      self.attributes = attributes
-      save
-    end
-
-    alias update_attributes update
-
-    def update!(attributes)
-      self.attributes = attributes
-      save!
-    end
-
-    alias update_attributes! update!
-
-    def reload
-      clear_association_cache
-      @attributes = self.class.find(id).instance_variable_get('@attributes')
-      self
     end
 
     private

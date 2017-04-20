@@ -7,7 +7,7 @@ class Superstore::ValidationsTest < Superstore::TestCase
 
       Issue.create!(description: 'lol')
 
-      assert_raise(Superstore::RecordInvalid) { Issue.create!(description: '') }
+      assert_raise(ActiveRecord::RecordInvalid) { Issue.create!(description: '') }
     ensure
       Issue.reset_callbacks(:validate)
     end
@@ -19,7 +19,7 @@ class Superstore::ValidationsTest < Superstore::TestCase
 
       Issue.new(description: 'lol').save!
 
-      assert_raise(Superstore::RecordInvalid) { Issue.new(description: '').save! }
+      assert_raise(ActiveRecord::RecordInvalid) { Issue.new(description: '').save! }
     ensure
       Issue.reset_callbacks(:validate)
     end

@@ -17,29 +17,31 @@ module Superstore
     extend ActiveRecord::Delegation::DelegateCache
     include ActiveRecord::Core
     include ActiveRecord::Persistence
+    include Persistence
+    include ActiveRecord::ReadonlyAttributes
     include ActiveRecord::ModelSchema
     include ActiveRecord::Inheritance
     include ActiveRecord::Scoping
     include ActiveRecord::Sanitization
     include ActiveRecord::Integration
+    include ActiveRecord::Validations
     include ActiveRecord::Attributes
+    include ActiveRecord::Callbacks
     include ActiveRecord::Associations
     include ActiveRecord::AutosaveAssociation
     include ActiveRecord::Reflection
+    include ActiveRecord::Transactions
 
     include Model
     include Core
     include Connection
     include Identity
     include Inspect
-    include Persistence
     include AttributeMethods
-    include Validations
     include AttributeMethods::Dirty
     include AttributeMethods::PrimaryKey
     include AttributeMethods::Typecasting
     include Associations
-    include Callbacks
     include Timestamps
     include Caching
 
