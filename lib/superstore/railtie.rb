@@ -7,7 +7,7 @@ module Superstore
       end
 
       ActiveSupport.on_load :active_record do
-        Relation.class_eval do
+        ActiveRecord::Relation.class_eval do
           include Superstore::Relation::Scrolling
         end
       end
