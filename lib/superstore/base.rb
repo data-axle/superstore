@@ -1,5 +1,5 @@
 require 'set'
-
+require 'active_record/attributes'
 require 'superstore/types'
 
 module Superstore
