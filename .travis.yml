@@ -7,6 +7,7 @@ cache: bundler
 gemfile:
 - Gemfile
 - Gemfile-rails4.2
+- Gemfile-rails5.0
 addons:
   postgresql: 9.5
 services:

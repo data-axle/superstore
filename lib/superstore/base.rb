@@ -26,6 +26,7 @@ module Superstore
     include ActiveRecord::Integration
     include ActiveRecord::Validations
     include ActiveRecord::Attributes
+    include ActiveRecord::DefineCallbacks if ActiveRecord.version >= Gem::Version.new('5.1.0')
     include ActiveRecord::Callbacks
     include ActiveRecord::Associations
     include ActiveRecord::AutosaveAssociation
