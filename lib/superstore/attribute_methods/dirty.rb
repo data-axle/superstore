@@ -31,6 +31,10 @@ module Superstore
         result
       end
 
+      def has_changes_to_save?
+        changed_attributes.any?
+      end
+
       def old_attribute_value(attr)
         if attribute_changed?(attr)
           changed_attributes[attr]

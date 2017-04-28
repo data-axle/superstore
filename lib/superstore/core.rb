@@ -23,6 +23,7 @@ module Superstore
     end
 
     def initialize(attributes=nil)
+      @readonly           = false
       @new_record         = true
       @destroyed          = false
       @association_cache  = {}

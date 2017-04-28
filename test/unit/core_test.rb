@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Superstore::CoreTest < Superstore::TestCase
-  test 'initialiaze' do
+  test 'initialize' do
     issue = Issue.new
 
     assert issue.new_record?
@@ -46,7 +46,14 @@ class Superstore::CoreTest < Superstore::TestCase
 
   test 'hash' do
     issue = Issue.create
-    assert_equal issue.id.hash, issue.hash
+    issue2 = Issue.create
+    refute_equal issue.hash, issue2.hash
+
+    issue3 = Issue.new(id: issue.id)
+    assert_equal issue.hash, issue3.hash
+
+    user = User.new(id: issue.id)
+    refute_equal issue.hash, user.hash
   end
 
   test 'inspect' do
