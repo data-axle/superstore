@@ -14,6 +14,7 @@ module Superstore
     extend ActiveRecord::ConnectionHandling
     self.connection_specification_name = 'primary'
     extend ActiveRecord::Querying
+    extend ActiveRecord::Translation
     extend ActiveRecord::Delegation::DelegateCache
     include ActiveRecord::Core
     include ActiveRecord::Persistence

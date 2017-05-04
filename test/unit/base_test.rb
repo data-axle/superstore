@@ -17,4 +17,8 @@ class Superstore::BaseTest < Superstore::TestCase
     assert_equal 'sons', Son.table_name
     assert_equal 'sons', Grandson.table_name
   end
+
+  test 'translations' do
+    assert_equal :activerecord, Son.i18n_scope
+  end
 end
