@@ -15,7 +15,7 @@ class Superstore::Types::TimeTypeTest < Superstore::Types::TestCase
     assert_equal Time.utc(2004, 12, 24, 1, 2, 3), type.decode('2004-12-24T01:02:03.000000Z')
 
     Time.use_zone 'Central Time (US & Canada)' do
-      with_zone = type.decode('2013-07-18 13:12:46 -0700')
+      with_zone = type.decode('2013-07-18T13:12:46-07:00')
       assert_equal Time.utc(2013, 07, 18, 20, 12, 46), with_zone
       assert_equal 'CDT', with_zone.zone
     end

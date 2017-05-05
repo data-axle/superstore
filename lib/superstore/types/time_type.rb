@@ -1,3 +1,21 @@
+class Time
+  def self.rfc3339(str)
+    parts = Date._rfc3339(str)
+
+    raise ArgumentError, "invalid date" if parts.empty?
+
+    Time.new(
+      parts.fetch(:year),
+      parts.fetch(:mon),
+      parts.fetch(:mday),
+      parts.fetch(:hour),
+      parts.fetch(:min),
+      parts.fetch(:sec) + parts.fetch(:sec_fraction, 0),
+      parts.fetch(:offset)
+    )
+  end
+end
+
 module Superstore
   module Types
     class TimeType < BaseType
@@ -8,7 +26,7 @@ module Superstore
       end
 
       def decode(str)
-        Time.parse(str).in_time_zone if str
+        Time.rfc3339(str).in_time_zone if str
       rescue
 
       end
