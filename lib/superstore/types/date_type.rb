@@ -2,7 +2,6 @@ module Superstore
   module Types
     class DateType < BaseType
       FORMAT = '%Y-%m-%d'
-      REGEX = /\A\d{4}-\d{2}-\d{2}\Z/
 
       def encode(value)
         raise ArgumentError.new("#{value.inspect} is not a Date") unless value.kind_of?(Date)
@@ -11,7 +10,7 @@ module Superstore
 
       def decode(str)
         return nil if str.empty?
-        Date.parse(str)
+        Date.strptime(str, FORMAT)
       end
 
       def typecast(value)
