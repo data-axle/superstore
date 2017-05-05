@@ -27,8 +27,8 @@ module Superstore
 
       def decode(str)
         Time.rfc3339(str).in_time_zone if str
-      rescue
-
+      rescue ArgumentError
+        Time.parse(str).in_time_zone rescue nil
       end
     end
   end

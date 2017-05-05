@@ -13,6 +13,7 @@ class Superstore::Types::TimeTypeTest < Superstore::Types::TestCase
     assert_nil type.decode(nil)
     assert_nil type.decode('bad format')
     assert_equal Time.utc(2004, 12, 24, 1, 2, 3), type.decode('2004-12-24T01:02:03.000000Z')
+    assert_equal Time.utc(2004, 12, 24, 12, 13, 45), type.decode('2004-12-24 12:13:45 -0000')
 
     Time.use_zone 'Central Time (US & Canada)' do
       with_zone = type.decode('2013-07-18T13:12:46-07:00')

@@ -7,6 +7,7 @@ class Superstore::Types::DateTypeTest < Superstore::Types::TestCase
 
   test 'decode' do
     assert_equal Date.new(2004, 4, 25), type.decode('2004-04-25')
+    assert_equal Date.new(2004, 4, 25), type.decode('2004-04-25')
   end
 
   test 'decoding a blank dates' do
