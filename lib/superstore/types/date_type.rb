@@ -9,8 +9,9 @@ module Superstore
       end
 
       def decode(str)
-        return nil if str.empty?
-        Date.strptime(str, FORMAT)
+        Date.strptime(str, FORMAT) unless str.empty?
+      rescue
+        Date.parse(str)
       end
 
       def typecast(value)
