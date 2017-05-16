@@ -12,6 +12,22 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
     assert_equal 'foo', issue.read_attribute(:description)
   end
 
+   test 'copies on write like ActiveRecord does' do
+     test_string = 'foo'
+
+     # Label is an ActiveRecord::Base
+     label = Label.new
+     label.write_attribute(:name, test_string)
+     assert_equal test_string, label.read_attribute(:name)
+     refute_equal test_string.object_id, label.read_attribute(:name).object_id
+
+     # Issue is a Superstore::Base
+     issue = Issue.new
+     issue.write_attribute(:description, test_string)
+     assert_equal test_string, issue.read_attribute(:description)
+     refute_equal test_string.object_id, issue.read_attribute(:description).object_id # fails
+   end
+
   test 'read primary_key' do
     refute_nil Issue.new[:id]
   end
