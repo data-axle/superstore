@@ -89,9 +89,8 @@ module Superstore
         "ARRAY[#{quoted_fields}]"
       end
 
-      OJ_OPTIONS = {mode: :compat, use_as_json: true}
       def to_quoted_jsonb(data)
-        "#{quote(Oj.dump(data, OJ_OPTIONS))}::JSONB"
+        "#{quote(JSON.generate(data))}::JSONB"
       end
     end
   end

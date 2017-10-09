@@ -24,7 +24,7 @@ module Superstore
           object.instance_variable_set("@id", attributes['id']) if attributes['id']
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
-          document = attributes['document'].is_a?(String) ? Oj.compat_load(attributes['document']) : attributes['document']
+          document = attributes['document'].is_a?(String) ? JSON.parse(attributes['document']) : attributes['document']
           object.instance_variable_set("@attributes", typecast_persisted_attributes(document))
           object.instance_variable_set("@association_cache", {})
           object.instance_variable_set("@_start_transaction_state", {})

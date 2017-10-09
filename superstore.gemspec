@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('activemodel', '>= 5.0')
   s.add_runtime_dependency('activerecord', '>= 5.0')
   s.add_runtime_dependency('globalid')
-  s.add_runtime_dependency('oj')
 
   s.add_development_dependency('bundler')
   s.add_development_dependency('rails')
