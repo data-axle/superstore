@@ -11,7 +11,7 @@ module Superstore
       def decode(str)
         Date.strptime(str, FORMAT) unless str.empty?
       rescue
-        Date.parse(str)
+        Date.parse(str) rescue nil
       end
 
       def typecast(value)
