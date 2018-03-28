@@ -12,4 +12,9 @@ class Superstore::Types::DateTypeTest < Superstore::Types::TestCase
     assert_equal Date.new(2004, 4, 25), type.decode('2004-04-25')
     assert_equal Date.new(2017, 5, 1), type.decode('2017-05-01T21:39:06.796897Z')
   end
+
+  test 'typecast' do
+    assert_nil type.typecast(1000)
+    assert_nil type.typecast(1000.0)
+  end
 end
