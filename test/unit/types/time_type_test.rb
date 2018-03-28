@@ -21,4 +21,9 @@ class Superstore::Types::TimeTypeTest < Superstore::Types::TestCase
       assert_equal 'CDT', with_zone.zone
     end
   end
+
+  test 'typecast' do
+    assert_nil type.typecast(1000)
+    assert_nil type.typecast(1000.0)
+  end
 end
