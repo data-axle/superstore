@@ -15,7 +15,7 @@ module Superstore
       end
 
       def typecast(value)
-        value.to_date
+        value.to_date rescue nil
       end
     end
   end
