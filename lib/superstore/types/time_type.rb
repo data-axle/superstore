@@ -30,6 +30,10 @@ module Superstore
       rescue ArgumentError
         Time.parse(str).in_time_zone rescue nil
       end
+
+      def typecast(value)
+        value.to_time.in_time_zone rescue nil
+      end
     end
   end
 end

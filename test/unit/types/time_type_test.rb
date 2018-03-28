@@ -25,5 +25,8 @@ class Superstore::Types::TimeTypeTest < Superstore::Types::TestCase
   test 'typecast' do
     assert_nil type.typecast(1000)
     assert_nil type.typecast(1000.0)
+
+    my_date = Date.new
+    assert_equal my_date.to_time, type.typecast(my_date)
   end
 end
