@@ -11,10 +11,7 @@ module Superstore
 
       def writer(records)
         relation = load_collection
-
-        # TODO: Use relation.load_records with Rails 5
-        relation.instance_variable_set :@records, records
-        relation.instance_variable_set :@loaded, true
+        relation.load_records(records)
 
         self.target = relation
       end

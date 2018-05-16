@@ -7,7 +7,7 @@ module Superstore
       def initialize(owner, reflection)
         @owner = owner
         @reflection = reflection
-        @loaded = false
+        reset
       end
 
       def association_class
@@ -33,6 +33,11 @@ module Superstore
 
       def loaded!
         @loaded = true
+      end
+
+      def reset
+        @loaded = false
+        @target = nil
       end
     end
   end
