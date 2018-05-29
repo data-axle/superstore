@@ -4,7 +4,6 @@ module Superstore
       FORMAT = '%Y-%m-%d'
 
       def encode(value)
-        raise ArgumentError.new("#{value.inspect} is not a Date") unless value.kind_of?(Date)
         value.strftime(FORMAT)
       end
 
