@@ -1,5 +1,5 @@
 # Superstore
-[![Build Status](https://secure.travis-ci.org/data-axle/superstore.png?rvm=2.0.0)](http://travis-ci.org/data-axle/superstore)
+[![Build Status](https://travis-ci.org/data-axle/superstore.svg?branch=master)](http://travis-ci.org/data-axle/superstore)
 [![Code Climate](https://codeclimate.com/github/data-axle/superstore/badges/gpa.svg)](https://codeclimate.com/github/data-axle/superstore)
 [![Gem](https://img.shields.io/gem/v/superstore.svg?maxAge=2592000)](https://rubygems.org/gems/superstore)
 
