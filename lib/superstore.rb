@@ -70,6 +70,7 @@ module Superstore
     autoload :BaseType
     autoload :ArrayType
     autoload :BooleanType
+    autoload :DateType
     autoload :DateRangeType
     autoload :FloatType
     autoload :GeoPointType
