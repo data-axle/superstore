@@ -7,7 +7,7 @@ module Superstore
         class_attribute :attribute_definitions
         self.attribute_definitions = {}
 
-        %w(array boolean date float integer json string time).each do |type|
+        %w(array boolean date date_range float integer integer_range json string time).each do |type|
           instance_eval <<-EOV, __FILE__, __LINE__ + 1
             def #{type}(*args)
               options = args.extract_options!
