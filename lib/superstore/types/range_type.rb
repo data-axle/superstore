@@ -3,12 +3,12 @@ module Superstore
     class RangeType < BaseType
       class_attribute :subtype
 
-      def encode(range)
+      def encode(tuple)
         range.map { |v| subtype.encode(v) }
       end
 
-      def decode(range)
-        range.map { |v| subtype.decode(v) }
+      def decode(tuple)
+        subtype.decode(tuple[0]) .. subtype.decode(tuple[1])
       end
 
       def typecast(value)
