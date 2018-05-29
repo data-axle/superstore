@@ -3,21 +3,35 @@ module Superstore
     class RangeType < BaseType
       class_attribute :subtype
 
-      def encode(tuple)
-        range.map { |v| subtype.encode(v) }
+      def encode(range_hash)
+        [
+          convert(:encode, range_hash[:lower]),
+          convert(:encode, range_hash[:upper])
+        ]
       end
 
-      def decode(tuple)
-        subtype.decode(tuple[0]) .. subtype.decode(tuple[1])
+      def decode(range_tuple)
+        {
+          lower: convert(:decode, range_tuple[0]),
+          upper: convert(:decode, range_tuple[1])
+        }
       end
+
 
       def typecast(value)
-        to_range_tuple(value).map! { |v| subtype.typecast(v) }
+        {
+          lower: convert(:typecast, value[:lower] || value['lower']),
+          upper: convert(:typecast, value[:upper] || value['upper'])
+        }
       end
 
       private
 
-      def to_range_tuple(value)
+      def convert(method, value)
+        subtype.send(method, value) unless value.nil?
+      end
+      #
+      def to_range_hash(value)
         if value.is_a?(Range)
           [value.begin, value.end]
         elsif value.is_a?(Hash)
