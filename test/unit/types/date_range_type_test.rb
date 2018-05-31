@@ -9,11 +9,11 @@ class Superstore::Types::DateRangeTypeTest < Superstore::Types::TestCase
     assert_equal Date.new(2004, 4, 25)..Date.new(2004, 5, 15), type.decode(["2004-04-25", "2004-05-15"])
   end
   #
-  # test 'typecast' do
-  #   assert_nil type.typecast(1000)
-  #   assert_nil type.typecast(1000.0)
-  #
-  #   my_time = Time.current
-  #   assert_equal my_time.to_date, type.typecast(my_time)
-  # end
+  test 'typecast' do
+    assert_equal Date.new(2004, 4, 25)..Date.new(2004, 5, 15), type.typecast(Date.new(2004, 4, 25)..Date.new(2004, 5, 15))
+    assert_equal Date.new(2004, 4, 25)..Date.new(2004, 5, 15), type.typecast([Date.new(2004, 4, 25), Date.new(2004, 5, 15)])
+    assert_equal Date.new(2004, 4, 25)..Date.new(2004, 5, 15), type.typecast(["2004-04-25", "2004-05-15"])
+    # assert_nil typecastype.typecast(1000.0)
+    raise 'what about nil'
+  end
 end
