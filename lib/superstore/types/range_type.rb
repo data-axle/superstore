@@ -5,13 +5,13 @@ module Superstore
 
       def encode(range)
         [
-          convert(:encode, range.begin),
-          convert(:encode, range.end)
+          convert_begin(:encode, range.begin),
+          convert_begin(:encode, range.end)
         ]
       end
 
       def decode(range_tuple)
-        convert(:decode, range_tuple[0]) .. convert(:decode, range_tuple[1])
+        convert_begin(:decode, range_tuple[0]) .. convert_end(:decode, range_tuple[1])
       end
 
 
@@ -19,14 +19,18 @@ module Superstore
         if value.is_a?(Range)
           value
         elsif value.is_a?(Array) && value.size == 2
-          convert(:typecast, value[0]) .. convert(:typecast, value[1])
+          convert_begin(:typecast, value[0])..convert_end(:typecast, value[1])
         end
       end
 
       private
 
-      def convert(method, value)
-        subtype.send(method, value) unless value.nil?
+      def convert_begin(method, value)
+        subtype.send(method, value)
+      end
+
+      def convert_end(method, value)
+        subtype.send(method, value)
       end
     end
   end
