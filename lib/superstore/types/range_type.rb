@@ -19,7 +19,10 @@ module Superstore
         if value.is_a?(Range)
           value
         elsif value.is_a?(Array) && value.size == 2
-          convert_begin(:typecast, value[0])..convert_end(:typecast, value[1])
+          begin
+            convert_begin(:typecast, value[0])..convert_end(:typecast, value[1])
+          rescue ArgumentError
+          end
         end
       end
 
