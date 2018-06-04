@@ -5,6 +5,6 @@ class Superstore::Types::IntegerTypeTest < Superstore::Types::TestCase
     assert_nil type.typecast('')
     assert_nil type.typecast('abc')
     assert_equal 3, type.typecast('3')
-    assert_equal -3, type.typecast('-3')
+    assert_equal(-3, type.typecast('-3'))
   end
 end

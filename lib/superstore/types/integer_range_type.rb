@@ -7,11 +7,11 @@ module Superstore
         value.abs == Float::INFINITY ? nil : super
       end
 
-      def convert_begin(method, value)
+      def convert_min(method, value)
         value.nil? ? -Float::INFINITY : super
       end
 
-      def convert_end(method, value)
+      def convert_max(method, value)
         value.nil? ? Float::INFINITY : super
       end
     end
