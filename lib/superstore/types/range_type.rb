@@ -31,7 +31,11 @@ module Superstore
       private
 
       def ordered_range(range)
-        Range.new(*[range.begin, range.end].sort)
+        if range.begin > range.end
+          range.end..range.begin
+        else
+          range
+        end
       end
 
       def encode_for_open_ended(value)
