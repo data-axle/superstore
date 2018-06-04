@@ -3,8 +3,8 @@ require 'test_helper'
 class Superstore::Types::IntegerRangeTypeTest < Superstore::Types::TestCase
   test 'encode' do
     assert_equal [4, 5], type.encode(4..5)
-    assert_equal [4, Float::INFINITY], type.encode(4..Float::INFINITY)
-    assert_equal [-Float::INFINITY, 5], type.encode(-Float::INFINITY..5)
+    assert_equal [4, nil], type.encode(4..Float::INFINITY)
+    assert_equal [nil, 5], type.encode(-Float::INFINITY..5)
   end
 
   test 'decode' do

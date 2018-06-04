@@ -5,8 +5,8 @@ module Superstore
 
       def encode(range)
         [
-          convert_begin(:encode, range.begin),
-          convert_begin(:encode, range.end)
+          encode_for_open_ended(range.begin),
+          encode_for_open_ended(range.end)
         ]
       end
 
@@ -27,6 +27,10 @@ module Superstore
       end
 
       private
+
+      def encode_for_open_ended(value)
+        subtype.encode(value)
+      end
 
       def convert_begin(method, value)
         subtype.send(method, value)

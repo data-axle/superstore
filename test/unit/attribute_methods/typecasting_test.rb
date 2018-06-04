@@ -9,6 +9,7 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
     integer :price
     json    :orders
     string  :name
+    integer_range :age_range
   end
 
   class TestChildIssue < TestIssue
@@ -74,6 +75,14 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
 
     issue = TestIssue.create! name: 42
     assert_equal '42', issue.name
+  end
+
+  test 'integer_range' do
+    issue = TestIssue.create! age_range: ['70', nil]
+    assert_equal 70..Float::INFINITY, issue.age_range
+
+    issue = TestIssue.find issue.id
+    assert_equal 70..Float::INFINITY, issue.age_range
   end
 
   test 'multiple attributes definition' do
