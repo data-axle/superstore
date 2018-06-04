@@ -7,10 +7,16 @@ module Superstore
         @type = type_class.new(model, options)
       end
 
-      def instantiate(value)
-        return if value.nil?
+      def encode(value)
+        type.encode(value) unless value.nil?
+      end
 
-        value.kind_of?(String) ? type.decode(value) : type.typecast(value)
+      def decode(value)
+        type.decode(value) unless value.nil?
+      end
+
+      def typecast(value)
+        type.typecast(value) unless value.nil?
       end
     end
   end

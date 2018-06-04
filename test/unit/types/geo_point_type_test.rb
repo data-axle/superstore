@@ -5,9 +5,7 @@ class Superstore::Types::GeoPointTypeTest < Superstore::Types::TestCase
     lat, lon = 47.604, -122.329
     seattle = {lat: lat, lon: lon}
 
-    assert_equal seattle, type.decode("#{lat}, #{lon}")
-    assert_equal seattle, type.decode("#{lat} #{lon}")
-    assert_nil type.decode('invalid')
+    assert_equal seattle, type.decode('lat' => lat, 'lon' => lon)
   end
 
   test 'typecast' do
