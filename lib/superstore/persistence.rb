@@ -25,7 +25,7 @@ module Superstore
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
           document = attributes['document'].is_a?(String) ? JSON.parse(attributes['document']) : attributes['document']
-          object.instance_variable_set("@attributes", typecast_persisted_attributes(document))
+          object.instance_variable_set("@attributes", decode_persisted_attributes(document))
           object.instance_variable_set("@association_cache", {})
           object.instance_variable_set("@_start_transaction_state", {})
           object.instance_variable_set("@transaction_state", nil)
@@ -35,23 +35,19 @@ module Superstore
       def encode_attributes(attributes)
         encoded = {}
         attributes.each do |column_name, value|
-          if value.nil?
-            encoded[column_name] = nil
-          else
-            encoded[column_name] = attribute_definitions[column_name].type.encode(value)
-          end
+          encoded[column_name] = attribute_definitions[column_name].encode(value)
         end
         encoded
       end
 
       private
 
-        def typecast_persisted_attributes(attributes)
+        def decode_persisted_attributes(attributes)
           result = {}
 
           attributes.each do |key, value|
             if definition = attribute_definitions[key]
-              result[key] = definition.instantiate(value)
+              result[key] = definition.decode(value)
             end
           end
 

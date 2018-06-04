@@ -1,12 +1,8 @@
 module Superstore
   module Types
     class IntegerType < BaseType
-      def decode(str)
-        str.to_i unless str.empty?
-      end
-
       def typecast(value)
-        value.to_i
+        Integer(value) rescue nil
       end
     end
   end

@@ -38,7 +38,7 @@ module Superstore
 
         def typecast_attribute(name, value)
           if attribute_definition = attribute_definitions[name.to_s]
-            attribute_definition.instantiate(value)
+            attribute_definition.typecast(value)
           else
             raise NoMethodError, "Unknown attribute #{name.inspect}"
           end
