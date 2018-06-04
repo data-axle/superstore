@@ -8,9 +8,7 @@ module Superstore
       end
 
       def decode(str)
-        Date.strptime(str, FORMAT) unless str.empty?
-      rescue
-        Date.parse(str) rescue nil
+        Date.strptime(str, FORMAT)
       end
 
       def typecast(value)
