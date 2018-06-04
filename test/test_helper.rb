@@ -13,6 +13,10 @@ require 'support/pg'
 require 'support/jsonb'
 require 'support/models'
 
+def MiniTest.filter_backtrace(bt)
+  bt
+end
+
 module Superstore
   class TestCase < ActiveSupport::TestCase
     def temp_object(&block)
