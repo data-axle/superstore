@@ -1,10 +1,14 @@
 module Superstore
   module Types
     class GeoPointType < BaseType
+      def decode(value)
+        {lat: value['lat'], lon: value['lon']}
+      end
+
       def typecast(value)
         case value
-        case String
-          typecast str.split(/[,\s]+/)
+        when String
+          typecast value.split(/[,\s]+/)
         when Array
           to_float_or_nil(lat: value[0], lon: value[1])
         when Hash
