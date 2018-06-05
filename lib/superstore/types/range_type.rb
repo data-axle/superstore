@@ -4,39 +4,31 @@ module Superstore
       class_attribute :subtype
 
       def encode(range)
-        ordered = ordered_range(range)
-
         [
-          encode_for_open_ended(ordered.min),
-          encode_for_open_ended(ordered.max)
+          encode_for_open_ended(range.begin),
+          encode_for_open_ended(range.end)
         ]
       end
 
       def decode(range_tuple)
-        convert_min(:decode, range_tuple[0]) .. convert_max(:decode, range_tuple[1])
+        range = convert_min(:decode, range_tuple[0]) .. convert_max(:decode, range_tuple[1])
+        typecast(range)
       end
 
 
       def typecast(value)
-        if value.is_a?(Range)
-          ordered_range(value)
+        if value.is_a?(Range) && value.begin < value.end
+          value
         elsif value.is_a?(Array) && value.size == 2
           begin
-            convert_min(:typecast, value[0])..convert_max(:typecast, value[1])
+            array = convert_min(:typecast, value[0])..convert_max(:typecast, value[1])
+            typecast(array)
           rescue ArgumentError
           end
         end
       end
 
       private
-
-      def ordered_range(range)
-        if range.begin > range.end
-          range.end..range.begin
-        else
-          range
-        end
-      end
 
       def encode_for_open_ended(value)
         subtype.encode(value)
