@@ -9,7 +9,6 @@ class Issue < Superstore::Base
   string :description
   string :title
   string :parent_issue_id
-  integer_range :skill_level_required
   json :comments
 
   before_create { self.description ||= 'funny' }
