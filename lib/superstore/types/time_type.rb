@@ -4,7 +4,7 @@ module Superstore
       def encode(time)
         raise ArgumentError.new("#{time.inspect} does not respond to #to_time") unless time.is_a?(Time) || time.respond_to?(:to_time)
         time = time.to_time unless time.is_a?(Time)
-        time.utc.xmlschema(6)
+        time.utc.as_json
       end
 
       def decode(str)
