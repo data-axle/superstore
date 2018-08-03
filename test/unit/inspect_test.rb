@@ -17,10 +17,12 @@ class Superstore::InspectTest < Superstore::TestCase
     object = temp_object do
       string :description
       integer :price
-    end.new(description: "yeah buddy", price: nil)
+      boolean :available
+    end.new(description: "yeah buddy", price: nil, available: false)
 
     assert_match(/id/, object.inspect)
     assert_match(/description/, object.inspect)
+    assert_match(/available/, object.inspect)
     assert_no_match(/price/, object.inspect)
   end
 end
