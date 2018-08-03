@@ -4,7 +4,7 @@ module Superstore
       inspection = ["#{self.class.primary_key}: #{id.inspect}"]
 
       @attributes.each do |attribute, value|
-        if value.present?
+        if value.present? || value === false
           inspection << "#{attribute}: #{attribute_for_inspect(value)}"
         end
       end
