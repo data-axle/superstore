@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'rails'
 
 I18n.config.enforce_available_locales = false
