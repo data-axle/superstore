@@ -6,6 +6,7 @@ dist: trusty
 cache: bundler
 gemfile:
 - Gemfile
+- Gemfile-rails5.1
 addons:
   postgresql: 9.6
 services:
