@@ -49,7 +49,7 @@ module Superstore
 
         super
 
-        if old.value != read_attribute(name).value
+        if old != read_attribute(name)
           send("#{name}_will_change!")
         end
       end

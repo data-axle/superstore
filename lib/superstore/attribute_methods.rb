@@ -54,7 +54,7 @@ module Superstore
       if name == self.class.primary_key
         send(name)
       else
-        @attributes[name]
+        @attributes.to_h[name]
       end
     end
     alias_method :_read_attribute, :read_attribute
