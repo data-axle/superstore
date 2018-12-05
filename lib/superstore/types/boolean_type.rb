@@ -4,11 +4,11 @@ module Superstore
       TRUE_VALS = [true, 'true', '1']
       FALSE_VALS = [false, 'false', '0']
 
-      def typecast(value)
+      def typecast(name, value)
         if TRUE_VALS.include?(value)
-          true
+          ActiveModel::Attribute.from_user(name, true, ActiveModel::Type::Boolean.new)
         elsif FALSE_VALS.include?(value)
-          false
+          ActiveModel::Attribute.from_user(name, false, ActiveModel::Type::Boolean.new)
         end
       end
     end

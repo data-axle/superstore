@@ -43,6 +43,7 @@ module Superstore
       private
 
         def decode_persisted_attributes(attributes)
+          fail 'need to decode json'
           result = {}
 
           attributes.each do |key, value|

@@ -8,15 +8,15 @@ module Superstore
       end
 
       def encode(value)
-        type.encode(value) unless value.nil?
+        type.encode(value.value) unless value&.value&.nil?
       end
 
       def decode(value)
-        type.decode(value) unless value.nil?
+        type.decode(value.value) unless value&.value&.nil?
       end
 
-      def typecast(value)
-        type.typecast(value) unless value.nil?
+      def typecast(name, value)
+        type.typecast(name, value) unless value.nil?
       end
     end
   end

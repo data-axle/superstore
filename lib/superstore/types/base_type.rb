@@ -15,7 +15,8 @@ module Superstore
         str
       end
 
-      def typecast(value)
+      def typecast(name, value)
+        raise 'Not implemented'
         value
       end
     end

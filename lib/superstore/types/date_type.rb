@@ -11,8 +11,9 @@ module Superstore
         Date.strptime(str, FORMAT)
       end
 
-      def typecast(value)
-        value.to_date rescue nil
+      def typecast(name, value)
+        date = value.to_date rescue nil
+        ActiveModel::Attribute.from_user(name, date, ActiveModel::Type::Date.new)
       end
     end
   end

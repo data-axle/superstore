@@ -16,7 +16,8 @@ module Superstore
       end
 
 
-      def typecast(value)
+      def typecast(name, value)
+        raise 'Not implemented'
         if value.is_a?(Range) && value.begin < value.end
           value
         elsif value.is_a?(Array) && value.size == 2

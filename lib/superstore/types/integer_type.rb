@@ -1,11 +1,11 @@
 module Superstore
   module Types
     class IntegerType < BaseType
-      def typecast(value)
+      def typecast(name, value)
         if value.is_a?(String)
-          Integer(value, 10)
+          ActiveModel::Attribute.from_user(name, Integer(value, 10), ActiveModel::Type::Integer.new)
         else
-          Integer(value)
+          ActiveModel::Attribute.from_user(name, Integer(value), ActiveModel::Type::Integer.new)
         end
       rescue
       end

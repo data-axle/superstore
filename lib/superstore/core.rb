@@ -23,13 +23,11 @@ module Superstore
     end
 
     def initialize(attributes=nil)
+      super
       @readonly           = false
       @new_record         = true
       @destroyed          = false
       @association_cache  = {}
-
-      @attributes         = {}
-      self.attributes = attributes || {}
 
       @_start_transaction_state = {}
       @transaction_state        = nil

@@ -70,11 +70,7 @@ module Superstore
     alias_method :attribute_exists?, :has_attribute?
 
     def attributes
-      results = {}
-      @attributes.each_key do |key|
-        results[key] = read_attribute(key)
-      end
-      results
+      @attributes.to_h
     end
 
     def attributes=(attributes)

@@ -49,10 +49,8 @@ module Superstore
 
         super
 
-        if old == read_attribute(name)
-          changed_attributes.delete(name)
-        else
-          changed_attributes[name] = old
+        if old.value != read_attribute(name).value
+          send("#{name}_will_change!")
         end
       end
     end

@@ -5,7 +5,8 @@ module Superstore
         {lat: value['lat'], lon: value['lon']}
       end
 
-      def typecast(value)
+      def typecast(name, value)
+        raise 'Not implemented'
         case value
         when String
           typecast value.split(/[,\s]+/)
