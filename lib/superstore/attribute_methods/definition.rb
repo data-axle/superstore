@@ -15,8 +15,8 @@ module Superstore
         type.decode(value) unless value.nil?
       end
 
-      def typecast(name, value)
-        type.typecast(name, value)
+      def typecast(name, value, current_value)
+        type.typecast(name, value, current_value)
       end
     end
   end

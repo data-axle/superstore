@@ -36,9 +36,9 @@ module Superstore
           attribute_definitions[name.to_s] = AttributeMethods::Definition.new(self, name, type_class, options)
         end
 
-        def typecast_attribute(name, value)
+        def typecast_attribute(name, value, current_value)
           if attribute_definition = attribute_definitions[name.to_s]
-            attribute_definition.typecast(name, value)
+            attribute_definition.typecast(name, value, current_value)
           else
             raise NoMethodError, "Unknown attribute #{name.inspect}"
           end

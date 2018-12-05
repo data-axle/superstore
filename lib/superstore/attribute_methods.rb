@@ -45,7 +45,8 @@ module Superstore
     end
 
     def write_attribute(name, value)
-      @attributes[name.to_s] = self.class.typecast_attribute(name, value)
+      current_value = @attributes[name.to_s] if @attributes.respond_to? :[]
+      @attributes[name.to_s] = self.class.typecast_attribute(name, value, current_value)
     end
 
     def read_attribute(name)

@@ -11,8 +11,10 @@ module Superstore
         end
       end
 
-      def typecast(name, value)
-        ActiveModel::Attribute.from_user(name, value.to_s, ActiveModel::Type::String.new)
+      def typecast(name, value, current_value = nil)
+        current_value ||= ActiveModel::Attribute.from_user(name, nil, ActiveModel::Type::String.new)
+
+        ActiveModel::Attribute.from_user(name, value.to_s, ActiveModel::Type::String.new, current_value)
       end
     end
   end

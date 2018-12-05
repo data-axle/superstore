@@ -30,29 +30,6 @@ module Superstore
         changed_attributes.each_key { |attr| result[attr] = read_attribute(attr) }
         result
       end
-
-      def has_changes_to_save?
-        changed_attributes.any?
-      end
-
-      def old_attribute_value(attr)
-        if attribute_changed?(attr)
-          changed_attributes[attr]
-        else
-          read_attribute attr
-        end
-      end
-
-      def write_attribute(name, value)
-        name = name.to_s
-        old = old_attribute_value(name)
-
-        super
-
-        if old != read_attribute(name)
-          send("#{name}_will_change!")
-        end
-      end
     end
   end
 end

@@ -13,9 +13,11 @@ module Superstore
         Time.parse(str).in_time_zone rescue nil
       end
 
-      def typecast(name, value)
+      def typecast(name, value, current_value = nil)
+        current_value ||= ActiveModel::Attribute.from_user(name, nil, ActiveModel::Type::Time.new)
+
         time = value.to_time.in_time_zone rescue nil
-        ActiveModel::Attribute.from_user(name, time, ActiveModel::Type::Time.new)
+        ActiveModel::Attribute.from_user(name, time, ActiveModel::Type::Time.new, current_value)
       end
     end
   end
