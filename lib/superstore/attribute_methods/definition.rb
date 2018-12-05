@@ -16,7 +16,7 @@ module Superstore
       end
 
       def typecast(name, value)
-        type.typecast(name, value) unless value.nil?
+        type.typecast(name, value)
       end
     end
   end

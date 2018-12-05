@@ -8,6 +8,7 @@ module Superstore
           ActiveModel::Attribute.from_user(name, Integer(value), ActiveModel::Type::Integer.new)
         end
       rescue
+        ActiveModel::Attribute.from_user(name, nil, ActiveModel::Type::Integer.new)
       end
     end
   end
