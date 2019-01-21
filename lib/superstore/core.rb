@@ -23,6 +23,8 @@ module Superstore
     end
 
     def initialize(attributes=nil)
+      self.class.define_attribute_methods
+
       @readonly           = false
       @new_record         = true
       @destroyed          = false
