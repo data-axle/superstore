@@ -25,10 +25,13 @@ module Superstore
     include ActiveRecord::Inheritance
     include ActiveRecord::Scoping
     include ActiveRecord::Sanitization
+    include ActiveRecord::AttributeAssignment
     include ActiveRecord::Integration
     include ActiveRecord::Validations
     include ActiveRecord::Attributes
+    include ActiveRecord::AttributeDecorators
     include ActiveRecord::DefineCallbacks if ActiveRecord.version >= Gem::Version.new('5.1.0')
+    include AttributeMethods
     include ActiveRecord::Callbacks
     include ActiveRecord::Associations
     include ActiveRecord::AutosaveAssociation
@@ -40,7 +43,6 @@ module Superstore
     include Connection
     include Identity
     include Inspect
-    include AttributeMethods
     include AttributeMethods::Dirty
     include AttributeMethods::PrimaryKey
     include AttributeMethods::Typecasting

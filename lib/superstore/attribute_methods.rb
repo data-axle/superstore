@@ -1,11 +1,14 @@
 module Superstore
   module AttributeMethods
     extend ActiveSupport::Concern
-    include ActiveModel::AttributeAssignment
-    include ActiveModel::AttributeMethods
 
     included do
-      attribute_method_suffix("=")
+      include ActiveModel::AttributeMethods
+      extend ActiveRecord::AttributeMethods::ClassMethods
+      include ActiveRecord::AttributeMethods::Read
+      include ActiveRecord::AttributeMethods::Write
+      extend ClassOverrides
+      include InstanceOverrides
 
       # (Alias for the protected read_attribute method).
       def [](attr_name)
@@ -19,23 +22,13 @@ module Superstore
       end
     end
 
-    module ClassMethods
-      def inherited(child_class)
-        child_class.define_attribute_methods
-        super
+    module ClassOverrides
+      def dangerous_class_method?(method_name)
+        false
       end
 
-      def define_attribute_methods
-        return if attribute_methods_generated?
-        super(attribute_definitions.keys)
-        @attribute_methods_generated = true
-      end
-
-      def attribute_methods_generated?
-        @attribute_methods_generated ||= false
-      end
-
-      def dangerous_attribute_method?(name)
+      def dangerous_attribute_method?(name) # :nodoc:
+        # method_defined_within?(name, Base)
         false
       end
 
@@ -44,70 +37,65 @@ module Superstore
       end
     end
 
-    def write_attribute(name, value)
-      @attributes[name.to_s] = self.class.typecast_attribute(name, value)
-    end
-
-    def read_attribute(name)
-      name = name.to_s unless name.is_a?(String)
-
-      if name == self.class.primary_key
-        send(name)
-      else
-        @attributes[name]
-      end
-    end
-    alias_method :_read_attribute, :read_attribute
-
-    def attribute_present?(attribute)
-      value = _read_attribute(attribute)
-      !value.nil? && !(value.respond_to?(:empty?) && value.empty?)
-    end
-
-    def has_attribute?(name)
-      @attributes.key?(name.to_s)
-    end
-    alias_method :attribute_exists?, :has_attribute?
-
-    def attributes
-      results = {}
-      @attributes.each_key do |key|
-        results[key] = read_attribute(key)
-      end
-      results
-    end
-
-    def attributes=(attributes)
-      assign_attributes(attributes)
-    end
-
-    def method_missing(method_id, *args, &block)
-      self.class.define_attribute_methods unless self.class.attribute_methods_generated?
-
-      if (match = matched_attribute_method(method_id.to_s))
-        attribute_missing(match, *args, &block)
-      else
-        super
-      end
-    end
-
-    def respond_to?(*args)
-      self.class.define_attribute_methods unless self.class.attribute_methods_generated?
-      super
-    end
-
-    protected
-      def attribute_method?(name)
-        !!attribute_definitions[name.to_s]
+    module InstanceOverrides
+      def write_attribute(name, value)
+        @attributes[name.to_s] = self.class.typecast_attribute(name, value)
       end
 
-    private
-      def attribute(name)
-        read_attribute(name)
+      def read_attribute(name)
+        name = name.to_s unless name.is_a?(String)
+
+        if name == self.class.primary_key
+          send(name)
+        else
+          @attributes[name]
+        end
+      end
+      alias_method :_read_attribute, :read_attribute
+
+      def attribute_present?(attribute)
+        value = _read_attribute(attribute)
+        !value.nil? && !(value.respond_to?(:empty?) && value.empty?)
       end
 
-      def attribute=(name, value)
-        write_attribute(name, value)
+      def has_attribute?(name)
+        @attributes.key?(name.to_s)
       end
+      alias_method :attribute_exists?, :has_attribute?
+
+      def attributes
+        results = {}
+        @attributes.each_key do |key|
+          results[key] = read_attribute(key)
+        end
+        results
+      end
+
+      def attributes=(attributes)
+        assign_attributes(attributes)
+      end
+
+      def method_missing(method_id, *args, &block)
+        if (match = matched_attribute_method(method_id.to_s))
+          attribute_missing(match, *args, &block)
+        else
+          super
+        end
+      end
+
+      protected
+        def attribute_method?(name)
+          !!attribute_definitions[name.to_s]
+        end
+
+      private
+        def attribute(name)
+          read_attribute(name)
+        end
+
+        def attribute=(name, value)
+          write_attribute(name, value)
+        end
+    end
   end
 end
