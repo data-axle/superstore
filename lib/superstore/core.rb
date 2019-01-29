@@ -29,7 +29,7 @@ module Superstore
     end
 
     module InstanceOverrides
-      def initialize(attributes=nil)
+      def initialize(attributes = nil)
         self.class.define_attribute_methods
         init_internals
 
@@ -37,6 +37,7 @@ module Superstore
         self.attributes = attributes || {}
 
         yield self if block_given?
+        _run_initialize_callbacks
       end
 
       def initialize_dup(other)
