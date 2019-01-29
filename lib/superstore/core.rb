@@ -48,6 +48,8 @@ module Superstore
 
         @new_record = true
         @destroyed = false
+
+        initialize_copy(other)
       end
     end
   end
