@@ -25,8 +25,8 @@ module Superstore
           object.instance_variable_set("@new_record", false)
           object.instance_variable_set("@destroyed", false)
 
-          if attributes['document']
-            document = attributes['document'].is_a?(String) ? JSON.parse(attributes['document']) : attributes['document']
+          if attributes['document'].is_a?(String)
+            document = JSON.parse(attributes['document'])
           else
             document = attributes
           end
