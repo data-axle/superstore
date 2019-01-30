@@ -7,12 +7,13 @@ module Superstore
       extend ActiveRecord::AttributeMethods::ClassMethods
       include ActiveRecord::AttributeMethods::Read
       include ActiveRecord::AttributeMethods::Write
+      include ActiveRecord::AttributeMethods::BeforeTypeCast
 
       extend ClassOverrides
       include InstanceOverrides
 
-      include Dirty
       include PrimaryKey
+      include Dirty
       include Typecasting
 
       # (Alias for the protected read_attribute method).

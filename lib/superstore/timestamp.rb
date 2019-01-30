@@ -1,10 +1,7 @@
 module Superstore
   module Timestamp
     extend ActiveSupport::Concern
-
-    included do
-      include ActiveRecord::Timestamp
-    end
+    include ActiveRecord::Timestamp
 
     class_methods do
       def inherited(child)
