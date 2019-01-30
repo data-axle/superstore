@@ -2,7 +2,13 @@ module Superstore
   module Core
     extend ActiveSupport::Concern
 
-    module ClassMethods
+    included do
+      include ActiveRecord::Core
+      extend ClassOverrides
+      include InstanceOverrides
+    end
+
+    module ClassOverrides
       def inspect
         if self == Base
           super
@@ -22,37 +28,29 @@ module Superstore
       end
     end
 
-    def initialize(attributes=nil)
-      self.class.define_attribute_methods
+    module InstanceOverrides
+      def initialize(attributes = nil)
+        self.class.define_attribute_methods
+        init_internals
 
-      @readonly           = false
-      @new_record         = true
-      @destroyed          = false
-      @association_cache  = {}
+        @attributes     = {}
+        self.attributes = attributes || {}
 
-      @attributes         = {}
-      self.attributes = attributes || {}
+        yield self if block_given?
+        _run_initialize_callbacks
+      end
 
-      @_start_transaction_state = {}
-      @transaction_state        = nil
+      def initialize_dup(other)
+        init_internals
 
-      yield self if block_given?
-    end
+        @attributes = @attributes.deep_dup
+        @attributes['created_at'] = nil
+        @attributes['updated_at'] = nil
+        @attributes.delete(self.class.primary_key)
+        @id = nil
 
-    def initialize_dup(other)
-      @attributes = @attributes.deep_dup
-      @attributes['created_at'] = nil
-      @attributes['updated_at'] = nil
-      @attributes.delete(self.class.primary_key)
-      @id = nil
-      @new_record = true
-      @destroyed = false
-      @association_cache = {}
-
-      @_start_transaction_state = {}
-      @transaction_state        = nil
-
-      initialize_copy(other)
+        initialize_copy(other)
+      end
     end
   end
 end
