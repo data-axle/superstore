@@ -4,7 +4,11 @@ module Superstore
       extend ActiveSupport::Concern
       include ActiveModel::Dirty
 
-      # Attempts to +save+ the record and clears changed attributes if successful.
+      included do
+        class_attribute :partial_writes, instance_writer: false
+        self.partial_writes = true
+      end
+
       def save(*) #:nodoc:
         if status = super
           changes_applied
@@ -19,7 +23,7 @@ module Superstore
       end
 
       # <tt>reload</tt> the record and clears changed attributes.
-      def reload
+      def reload(*)
         super.tap do
           clear_changes_information
         end
@@ -33,6 +37,10 @@ module Superstore
 
       def has_changes_to_save?
         changed_attributes.any?
+      end
+
+      def will_save_change_to_attribute?(attr)
+        attribute_changed?(attr)
       end
 
       def old_attribute_value(attr)

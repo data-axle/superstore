@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Superstore::TimestampsTest < Superstore::TestCase
+class Superstore::TimestampTest < Superstore::TestCase
   test 'timestamps set on create' do
-    issue = Issue.create
+    issue = Issue.create#issue.created_at.to_i = #{issue.created_at.to_i}
 
     assert_in_delta Time.now.to_i, issue.created_at.to_i, 3
     assert_in_delta Time.now.to_i, issue.updated_at.to_i, 3

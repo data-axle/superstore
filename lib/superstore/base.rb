@@ -33,6 +33,7 @@ module Superstore
     include ActiveRecord::DefineCallbacks if ActiveRecord.version >= Gem::Version.new('5.1.0')
     include AttributeMethods
     include ActiveRecord::Callbacks
+    include Timestamp
     include ActiveRecord::Associations
     include ActiveRecord::AutosaveAssociation
     include ActiveRecord::Reflection
@@ -43,13 +44,8 @@ module Superstore
     include Connection
     include Identity
     include Inspect
-    include AttributeMethods::Dirty
-    include AttributeMethods::PrimaryKey
-    include AttributeMethods::Typecasting
     include Associations
-    include Timestamps
     include Caching
-
   end
 end
 
