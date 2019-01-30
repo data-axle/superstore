@@ -12,12 +12,13 @@ module Superstore
   autoload :Caching
   autoload :Connection
   autoload :Core
+  autoload :FakeAttributeSet
   autoload :Identity
   autoload :Inspect
   autoload :Model
   autoload :Persistence
   autoload :Schema
-  autoload :Timestamps
+  autoload :Timestamp
   autoload :Type
 
   module AttributeMethods

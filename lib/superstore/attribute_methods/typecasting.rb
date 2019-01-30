@@ -47,6 +47,10 @@ module Superstore
         def type_for(attribute)
           attribute_definitions[attribute.to_s].type
         end
+
+        def column_names
+          attribute_definitions.values.map(&:name)
+        end
       end
     end
   end

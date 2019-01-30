@@ -49,7 +49,7 @@ module Superstore
       private
 
         def decode_persisted_attributes(attributes)
-          result = {}
+          result = FakeAttributeSet.new
 
           attributes.each do |key, value|
             if definition = attribute_definitions[key]

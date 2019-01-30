@@ -7,8 +7,13 @@ module Superstore
       extend ActiveRecord::AttributeMethods::ClassMethods
       include ActiveRecord::AttributeMethods::Read
       include ActiveRecord::AttributeMethods::Write
+
       extend ClassOverrides
       include InstanceOverrides
+
+      include PrimaryKey
+      include Dirty
+      include Typecasting
 
       # (Alias for the protected read_attribute method).
       def [](attr_name)

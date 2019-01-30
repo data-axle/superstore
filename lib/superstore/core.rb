@@ -9,15 +9,6 @@ module Superstore
     end
 
     module ClassOverrides
-      def inspect
-        if self == Base
-          super
-        else
-          attr_list = attribute_definitions.keys * ', '
-          "#{super}(#{attr_list.truncate(140 * 1.7337)})"
-        end
-      end
-
       def arel_engine # :nodoc:
         @arel_engine ||=
           if Base == self || connection_handler.retrieve_connection_pool(connection_specification_name)
@@ -33,7 +24,7 @@ module Superstore
         self.class.define_attribute_methods
         init_internals
 
-        @attributes     = {}
+        @attributes     = FakeAttributeSet.new
         self.attributes = attributes || {}
 
         yield self if block_given?
@@ -41,15 +32,9 @@ module Superstore
       end
 
       def initialize_dup(other)
-        init_internals
-
-        @attributes = @attributes.deep_dup
-        @attributes['created_at'] = nil
-        @attributes['updated_at'] = nil
-        @attributes.delete(self.class.primary_key)
         @id = nil
 
-        initialize_copy(other)
+        super
       end
     end
   end
