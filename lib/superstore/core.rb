@@ -9,15 +9,6 @@ module Superstore
     end
 
     module ClassOverrides
-      def inspect
-        if self == Base
-          super
-        else
-          attr_list = attribute_definitions.keys * ', '
-          "#{super}(#{attr_list.truncate(140 * 1.7337)})"
-        end
-      end
-
       def arel_engine # :nodoc:
         @arel_engine ||=
           if Base == self || connection_handler.retrieve_connection_pool(connection_specification_name)
