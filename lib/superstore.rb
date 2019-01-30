@@ -12,6 +12,7 @@ module Superstore
   autoload :Caching
   autoload :Connection
   autoload :Core
+  autoload :FakeAttributeSet
   autoload :Identity
   autoload :Inspect
   autoload :Model
