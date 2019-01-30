@@ -41,14 +41,13 @@ module Superstore
       end
 
       def initialize_dup(other)
+        init_internals
+
         @attributes = @attributes.deep_dup
         @attributes['created_at'] = nil
         @attributes['updated_at'] = nil
         @attributes.delete(self.class.primary_key)
         @id = nil
-
-        @new_record = true
-        @destroyed = false
 
         initialize_copy(other)
       end
