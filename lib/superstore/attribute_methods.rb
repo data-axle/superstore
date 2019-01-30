@@ -7,7 +7,6 @@ module Superstore
       extend ActiveRecord::AttributeMethods::ClassMethods
       include ActiveRecord::AttributeMethods::Read
       include ActiveRecord::AttributeMethods::Write
-      include ActiveRecord::AttributeMethods::BeforeTypeCast
 
       extend ClassOverrides
       include InstanceOverrides
