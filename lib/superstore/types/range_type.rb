@@ -11,8 +11,12 @@ module Superstore
       end
 
       def decode(range_tuple)
-        range = convert_min(:decode, range_tuple[0]) .. convert_max(:decode, range_tuple[1])
-        typecast(range)
+        if range_tuple.is_a? Range
+          range_tuple
+        else
+          range = convert_min(:decode, range_tuple[0]) .. convert_max(:decode, range_tuple[1])
+          typecast(range)
+        end
       end
 
 
