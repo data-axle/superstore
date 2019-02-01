@@ -8,6 +8,10 @@ class Superstore::Types::DateRangeTypeTest < Superstore::Types::TestCase
   test 'decode' do
     assert_equal Date.new(2004, 4, 25)..Date.new(2004, 5, 15), type.decode(["2004-04-25", "2004-05-15"])
     assert_nil type.decode(["2004-05-15", "2004-04-25"])
+
+    # decode returns argument if already a Range
+    range = Date.new(2019, 1, 1)..Date.new(2019, 2, 1)
+    assert_equal range, type.decode(range)
   end
 
   test 'typecast' do
