@@ -5,7 +5,6 @@ module Superstore
     included do
       include ActiveRecord::Core
       extend ClassOverrides
-      include InstanceOverrides
     end
 
     module ClassOverrides
@@ -19,22 +18,14 @@ module Superstore
       end
     end
 
-    module InstanceOverrides
-      def initialize(attributes = nil)
-        self.class.define_attribute_methods
-        init_internals
+    def initialize_dup(other)
+      super
 
-        @attributes     = FakeAttributeSet.new
-        self.attributes = attributes || {}
-
-        yield self if block_given?
-        _run_initialize_callbacks
-      end
-
-      def initialize_dup(other)
-        @id = nil
-
-        super
+      @attributes.keys.each do |key|
+        attribute = @attributes[key]
+        if attribute.instance_variable_defined?(:@value)
+          attribute.instance_variable_set(:@value, attribute.instance_variable_get(:@value).deep_dup)
+        end
       end
     end
   end

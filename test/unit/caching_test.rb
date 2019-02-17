@@ -16,6 +16,6 @@ class Superstore::CachingTest < Superstore::TestCase
     updated_at = Time.now
     issue = Issue.create!(id: 1, updated_at: updated_at)
 
-    assert_equal "issues/1-#{updated_at.utc.to_s(:nsec)}", issue.cache_key
+    assert_equal "issues/1-#{updated_at.utc.to_s(:usec)}", issue.cache_key
   end
 end

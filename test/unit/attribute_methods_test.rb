@@ -12,10 +12,6 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
     assert_equal 'foo', issue.read_attribute(:description)
   end
 
-  test 'read primary_key' do
-    refute_nil Issue.new[:id]
-  end
-
   test 'hash accessor aliases' do
     issue = Issue.new
 
@@ -34,20 +30,21 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
     assert_equal 'foo', issue.description
   end
 
-  class ChildIssue < Issue
-    def title=(val)
-      self[:title] = val + ' lol'
+  class ModelWithOverride < Superstore::Base
+    string :title
+
+    def title=(v)
+      super "#{v} lol"
     end
   end
 
   test 'override' do
-    issue = ChildIssue.new(title: 'hey')
+    issue = ModelWithOverride.new(title: 'hey')
 
     assert_equal 'hey lol', issue.title
   end
 
   class ReservedWord < Superstore::Base
-    self.table_name = 'issues'
     string :system
   end
 
@@ -57,9 +54,9 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
   end
 
   test 'has_attribute?' do
-    refute Issue.new.attribute_exists?(:description)
+    refute Issue.new.has_attribute?(:unknown)
+    assert Issue.new.has_attribute?(:description)
     assert Issue.new(description: nil).has_attribute?(:description)
-    assert Issue.new(description: false).has_attribute?(:description)
     assert Issue.new(description: 'hey').has_attribute?(:description)
   end
 end

@@ -1,30 +1,30 @@
 require 'test_helper'
 
 class Superstore::Types::StringTypeTest < Superstore::Types::TestCase
-  test 'encode' do
-    assert_equal 'abc', type.encode('abc')
+  test 'serialize' do
+    assert_equal 'abc', type.serialize('abc')
 
     assert_raise ArgumentError do
-      type.encode(123)
+      type.serialize(123)
     end
   end
 
-  test 'encode as utf' do
+  test 'serialize as utf' do
     assert_equal(
       '123'.force_encoding('UTF-8').encoding,
-      type.encode('123'.force_encoding('ASCII-8BIT')).encoding
+      type.serialize('123'.force_encoding('ASCII-8BIT')).encoding
     )
   end
 
-  test 'encode frozen as utf' do
+  test 'serialize frozen as utf' do
     assert_equal(
       '123'.force_encoding('UTF-8').encoding,
-      type.encode('123'.force_encoding('ASCII-8BIT').freeze).encoding
+      type.serialize('123'.force_encoding('ASCII-8BIT').freeze).encoding
     )
   end
 
-  test 'typecast' do
-    assert_equal '123', type.typecast(123)
-    assert_equal '123', type.typecast('123')
+  test 'cast_value' do
+    assert_equal '123', type.cast_value(123)
+    assert_equal '123', type.cast_value('123')
   end
 end

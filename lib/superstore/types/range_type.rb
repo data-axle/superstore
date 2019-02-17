@@ -1,32 +1,31 @@
 module Superstore
   module Types
-    class RangeType < BaseType
+    class RangeType < ActiveModel::Type::Value
       class_attribute :subtype
 
-      def encode(range)
+      def serialize(range)
         [
-          encode_for_open_ended(range.begin),
-          encode_for_open_ended(range.end)
+          serialize_for_open_ended(range.begin),
+          serialize_for_open_ended(range.end)
         ]
       end
 
-      def decode(range_tuple)
+      def deserialize(range_tuple)
         if range_tuple.is_a? Range
           range_tuple
         else
-          range = convert_min(:decode, range_tuple[0]) .. convert_max(:decode, range_tuple[1])
-          typecast(range)
+          range = convert_min(:deserialize, range_tuple[0]) .. convert_max(:deserialize, range_tuple[1])
+          cast_value(range)
         end
       end
 
-
-      def typecast(value)
+      def cast_value(value)
         if value.is_a?(Range) && value.begin < value.end
           value
         elsif value.is_a?(Array) && value.size == 2
           begin
-            array = convert_min(:typecast, value[0])..convert_max(:typecast, value[1])
-            typecast(array)
+            array = convert_min(:cast_value, value[0])..convert_max(:cast_value, value[1])
+            cast_value(array)
           rescue ArgumentError
           end
         end
@@ -34,8 +33,8 @@ module Superstore
 
       private
 
-      def encode_for_open_ended(value)
-        subtype.encode(value)
+      def serialize_for_open_ended(value)
+        subtype.serialize(value)
       end
 
       def convert_min(method, value)

@@ -1,9 +1,9 @@
 module Superstore
   module Types
     class IntegerRangeType < RangeType
-      self.subtype = IntegerType.new(nil)
+      self.subtype = IntegerType.new
 
-      def encode_for_open_ended(value)
+      def serialize_for_open_ended(value)
         value.abs == Float::INFINITY ? nil : super
       end
 

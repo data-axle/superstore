@@ -18,34 +18,30 @@ module Superstore
     extend ActiveRecord::Translation
     extend ActiveRecord::Delegation::DelegateCache
     include ActiveRecord::Core
-    include ActiveRecord::Persistence
     include Persistence
     include ActiveRecord::ReadonlyAttributes
-    include ActiveRecord::ModelSchema
-    include ActiveRecord::Inheritance
+    include ModelSchema
+    include Inheritance
     include ActiveRecord::Scoping
     include ActiveRecord::Sanitization
-    include ActiveRecord::AttributeAssignment
+    include AttributeAssignment
     include ActiveRecord::Integration
     include ActiveRecord::Validations
-    include ActiveRecord::Attributes
+    include Attributes
     include ActiveRecord::AttributeDecorators
-    include ActiveRecord::DefineCallbacks if ActiveRecord.version >= Gem::Version.new('5.1.0')
+    include ActiveRecord::DefineCallbacks
     include AttributeMethods
     include ActiveRecord::Callbacks
     include Timestamp
-    include ActiveRecord::Associations
+    include Associations
     include ActiveRecord::AutosaveAssociation
     include ActiveRecord::Reflection
     include ActiveRecord::Transactions
 
-    include Model
     include Core
     include Connection
     include Identity
     include Inspect
-    include Associations
-    include Caching
   end
 end
 

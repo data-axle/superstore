@@ -27,7 +27,7 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
     assert !record.changed?
   end
 
-  test 'typecast float before dirty check' do
+  test 'cast_value float before dirty check' do
     record = temp_object do
       float :price
     end.create(price: 5.01)
@@ -39,7 +39,7 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
     assert record.changed?
   end
 
-  test 'typecast boolean before dirty check' do
+  test 'cast_value boolean before dirty check' do
     record = temp_object do
       boolean :awesome
     end.create(awesome: false)
@@ -49,17 +49,6 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
 
     record.awesome = true
     assert record.changed?
-  end
-
-  test 'unapplied_changes' do
-    record = temp_object do
-      float :price
-      string :color
-    end.create(price: 5.01, color: 'green')
-
-    record.color = 'blue'
-
-    assert_equal({'color' => 'blue'}, record.unapplied_changes)
   end
 
   test 'write_attribute' do

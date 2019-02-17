@@ -1,7 +1,7 @@
 module Superstore
   module Types
-    class ArrayType < BaseType
-      def typecast(value)
+    class ArrayType < ActiveModel::Type::Value
+      def cast_value(value)
         Array(value)
       end
     end

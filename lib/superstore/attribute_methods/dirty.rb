@@ -29,10 +29,12 @@ module Superstore
         end
       end
 
-      def unapplied_changes
-        result = {}
-        changed_attributes.each_key { |attr| result[attr] = read_attribute(attr) }
-        result
+      def _update_record(*)
+        super(changed_attributes.keys)
+      end
+
+      def _create_record(*)
+        super(changed_attributes.keys)
       end
 
       def has_changes_to_save?

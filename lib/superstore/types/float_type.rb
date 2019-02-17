@@ -1,7 +1,7 @@
 module Superstore
   module Types
-    class FloatType < BaseType
-      def typecast(value)
+    class FloatType < ActiveModel::Type::Value
+      def cast_value(value)
         Float(value) rescue nil
       end
     end

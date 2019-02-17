@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
+class Superstore::AttributesTest < Superstore::TestCase
   class TestIssue < Superstore::Base
     self.table_name = 'issues'
 
@@ -20,15 +20,6 @@ class Superstore::AttributeMethods::TypecastingTest < Superstore::TestCase
     assert_nothing_raised { Issue.new.description }
     assert_raise(NoMethodError) { TestIssue.new.description }
     assert_nothing_raised { TestChildIssue.new.description }
-  end
-
-  test 'typecast_attribute' do
-    assert_equal 1, TestIssue.typecast_attribute('price', 1)
-    assert_equal 1, TestIssue.typecast_attribute(:price, 1)
-
-    assert_raise NoMethodError do
-      TestIssue.typecast_attribute('wtf', 1)
-    end
   end
 
   test 'boolean attribute' do
