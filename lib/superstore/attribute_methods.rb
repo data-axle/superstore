@@ -5,15 +5,15 @@ module Superstore
     included do
       include ActiveModel::AttributeMethods
       extend ActiveRecord::AttributeMethods::ClassMethods
-      include ActiveRecord::AttributeMethods::Read
-      include ActiveRecord::AttributeMethods::Write
 
       extend ClassOverrides
       include InstanceOverrides
 
+      include ActiveRecord::AttributeMethods::Read
+      include ActiveRecord::AttributeMethods::Write
+      include ActiveRecord::AttributeMethods::BeforeTypeCast
       include PrimaryKey
       include Dirty
-      include Typecasting
 
       # (Alias for the protected read_attribute method).
       def [](attr_name)
@@ -38,26 +38,15 @@ module Superstore
       end
 
       def has_attribute?(attr_name)
-        attribute_definitions.key?(attr_name.to_s)
+        attribute_types.key?(attr_name.to_s)
+      end
+
+      def column_names
+        attribute_names
       end
     end
 
     module InstanceOverrides
-      def write_attribute(name, value)
-        @attributes[name.to_s] = self.class.typecast_attribute(name, value)
-      end
-
-      def read_attribute(name)
-        name = name.to_s unless name.is_a?(String)
-
-        if name == self.class.primary_key
-          send(name)
-        else
-          @attributes[name]
-        end
-      end
-      alias_method :_read_attribute, :read_attribute
-
       def attribute_present?(attribute)
         value = _read_attribute(attribute)
         !value.nil? && !(value.respond_to?(:empty?) && value.empty?)
@@ -66,40 +55,30 @@ module Superstore
       def has_attribute?(name)
         @attributes.key?(name.to_s)
       end
-      alias_method :attribute_exists?, :has_attribute?
+
+      def attribute_names
+        @attributes.keys
+      end
 
       def attributes
-        results = {}
-        @attributes.each_key do |key|
-          results[key] = read_attribute(key)
-        end
-        results
+        @attributes.to_hash
       end
 
-      def attributes=(attributes)
-        assign_attributes(attributes)
-      end
-
-      def method_missing(method_id, *args, &block)
-        if (match = matched_attribute_method(method_id.to_s))
-          attribute_missing(match, *args, &block)
+      def attribute_for_inspect(value)
+        if value.is_a?(String) && value.length > 50
+          "#{value[0..50]}...".inspect
+        elsif value.is_a?(Date) || value.is_a?(Time)
+          %("#{value.to_s(:db)}")
         else
-          super
+          value.inspect
         end
       end
 
       protected
-        def attribute_method?(name)
-          !!attribute_definitions[name.to_s]
-        end
 
-      private
-        def attribute(name)
-          read_attribute(name)
-        end
-
-        def attribute=(name, value)
-          write_attribute(name, value)
+        def attribute_method?(attr_name) # :nodoc:
+          # We check defined? because Syck calls respond_to? before actually calling initialize.
+          defined?(@attributes) && @attributes.key?(attr_name)
         end
     end
   end

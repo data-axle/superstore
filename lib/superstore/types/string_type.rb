@@ -1,7 +1,7 @@
 module Superstore
   module Types
-    class StringType < BaseType
-      def encode(str)
+    class StringType < ActiveModel::Type::Value
+      def serialize(str)
         raise ArgumentError.new("#{str.inspect} is not a String") unless str.kind_of?(String)
 
         unless str.encoding == Encoding::UTF_8
@@ -11,7 +11,7 @@ module Superstore
         end
       end
 
-      def typecast(value)
+      def cast_value(value)
         value.to_s
       end
     end

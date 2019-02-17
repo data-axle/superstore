@@ -3,27 +3,33 @@ module Superstore
     module PrimaryKey
       extend ActiveSupport::Concern
 
-      module ClassMethods
-        PRIMARY_KEY = 'id'
+      included do
+        include ActiveRecord::AttributeMethods::PrimaryKey
+        attribute :id, type: :string
+
+        extend ClassOverrides
+        include InstanceOverrides
+      end
+
+      module ClassOverrides
         def primary_key
-          PRIMARY_KEY
-        end
-
-        def quoted_primary_key
-          @quoted_primary_key ||= connection.quote_column_name(primary_key)
+          'id'
         end
       end
 
-      def id
-        @id ||= self.class._generate_key(self)
-      end
+      module InstanceOverrides
+        def id
+          value = super
+          if value.nil?
+            value = self.class._generate_key(self)
+            self.id = value
+          end
+          value
+        end
 
-      def id=(id)
-        @id = id
-      end
-
-      def attributes
-        super.update(self.class.primary_key => id)
+        def attributes
+          super.update(self.class.primary_key => id)
+        end
       end
     end
   end

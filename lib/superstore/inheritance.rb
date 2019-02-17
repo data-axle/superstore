@@ -1,8 +1,13 @@
 module Superstore
-  module Model
+  module Inheritance
     extend ActiveSupport::Concern
 
-    module ClassMethods
+    included do
+      include ActiveRecord::Inheritance
+      extend ClassOverrides
+    end
+
+    module ClassOverrides
       def base_class
         class_of_active_record_descendant(self)
       end

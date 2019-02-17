@@ -19,10 +19,11 @@ class Superstore::CoreTest < Superstore::TestCase
     dup_issue = issue.dup
 
     assert dup_issue.new_record?
-    assert_not_equal issue.id, dup_issue.id
+    refute_equal issue.id, dup_issue.id
     assert_nil dup_issue.created_at
     assert_nil dup_issue.updated_at
-    assert_equal 'foo', issue.description
+    assert_equal issue.description, dup_issue.description
+    refute_equal issue.description.object_id, dup_issue.description.object_id
     refute_equal issue.comments['foo'].object_id, dup_issue.comments['foo'].object_id
   end
 

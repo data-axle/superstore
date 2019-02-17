@@ -1,17 +1,17 @@
 module Superstore
   module Types
-    class DateType < BaseType
+    class DateType < ActiveModel::Type::Value
       FORMAT = '%Y-%m-%d'
 
-      def encode(value)
+      def serialize(value)
         value.strftime(FORMAT)
       end
 
-      def decode(str)
+      def deserialize(str)
         Date.strptime(str, FORMAT)
       end
 
-      def typecast(value)
+      def cast_value(value)
         value.to_date rescue nil
       end
     end

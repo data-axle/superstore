@@ -9,26 +9,24 @@ module Superstore
   autoload :AttributeMethods
   autoload :Base
   autoload :Associations
-  autoload :Caching
+  autoload :AttributeAssignment
+  autoload :Attributes
   autoload :Connection
   autoload :Core
-  autoload :FakeAttributeSet
   autoload :Identity
+  autoload :Inheritance
   autoload :Inspect
-  autoload :Model
+  autoload :ModelSchema
   autoload :Persistence
   autoload :Schema
   autoload :Timestamp
-  autoload :Type
 
   module AttributeMethods
     extend ActiveSupport::Autoload
 
     eager_autoload do
-      autoload :Definition
       autoload :Dirty
       autoload :PrimaryKey
-      autoload :Typecasting
     end
   end
 
@@ -68,7 +66,6 @@ module Superstore
   module Types
     extend ActiveSupport::Autoload
 
-    autoload :BaseType
     autoload :ArrayType
     autoload :BooleanType
     autoload :DateType

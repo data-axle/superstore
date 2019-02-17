@@ -19,7 +19,7 @@ class Superstore::AttributeMethods::PrimaryKeyTest < Superstore::TestCase
   end
 
   test 'attributes' do
-    issue = Issue.new
+    issue = Issue.new(id: 'lol')
 
     assert_not_nil issue.attributes['id']
   end

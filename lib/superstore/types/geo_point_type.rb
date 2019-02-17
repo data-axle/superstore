@@ -1,14 +1,14 @@
 module Superstore
   module Types
-    class GeoPointType < BaseType
-      def decode(value)
+    class GeoPointType < ActiveModel::Type::Value
+      def deserialize(value)
         {lat: value['lat'], lon: value['lon']}
       end
 
-      def typecast(value)
+      def cast_value(value)
         case value
         when String
-          typecast value.split(/[,\s]+/)
+          cast_value value.split(/[,\s]+/)
         when Array
           to_float_or_nil(lat: value[0], lon: value[1])
         when Hash

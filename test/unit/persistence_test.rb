@@ -4,29 +4,8 @@
 require 'test_helper'
 
 class Superstore::PersistenceTest < Superstore::TestCase
-  test 'instantiate removes unknowns' do
-    assert_nil Issue.instantiate('id' => 'theid', 'document' => {'z' => 'nooo'}.to_json).attributes['z']
-  end
-
-  test 'encode_attributes' do
-    klass = temp_object do
-      string :description
-    end
-
-    assert_equal(
-      {},
-      klass.encode_attributes({})
-    )
-
-    assert_equal(
-      {'description' => nil},
-      klass.encode_attributes({'description' => nil})
-    )
-
-    assert_equal(
-      {'description' => 'lol'},
-      klass.encode_attributes({'description' => 'lol'})
-    )
+  test 'instantiate with unknowns' do
+    assert_equal 'nooo', Issue.instantiate('id' => 'theid', 'document' => {'z' => 'nooo'}.to_json).attributes['z']
   end
 
   test 'persistence inquiries' do

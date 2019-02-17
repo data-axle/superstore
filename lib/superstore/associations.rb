@@ -2,7 +2,12 @@ module Superstore
   module Associations
     extend ActiveSupport::Concern
 
-    module ClassMethods
+    included do
+      include ActiveRecord::Associations
+      extend ClassOverrides
+    end
+
+    module ClassOverrides
       # === Options
       # [:class_name]
       #   Use if the class cannot be inferred from the association
