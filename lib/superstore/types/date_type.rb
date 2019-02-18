@@ -8,7 +8,7 @@ module Superstore
       end
 
       def deserialize(str)
-        Date.strptime(str, FORMAT)
+        Date.strptime(str, FORMAT) if str
       end
 
       def cast_value(value)
