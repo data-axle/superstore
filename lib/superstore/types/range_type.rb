@@ -15,7 +15,7 @@ module Superstore
       def deserialize(range_tuple)
         if range_tuple.is_a? Range
           range_tuple
-        else
+        elsif range_tuple.is_a?(Array)
           range = convert_min(:deserialize, range_tuple[0]) .. convert_max(:deserialize, range_tuple[1])
           cast_value(range)
         end
