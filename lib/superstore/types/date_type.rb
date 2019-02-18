@@ -4,7 +4,7 @@ module Superstore
       FORMAT = '%Y-%m-%d'
 
       def serialize(value)
-        value.strftime(FORMAT)
+        value.strftime(FORMAT) if value
       end
 
       def deserialize(str)

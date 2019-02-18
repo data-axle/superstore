@@ -4,10 +4,12 @@ module Superstore
       class_attribute :subtype
 
       def serialize(range)
-        [
-          serialize_for_open_ended(range.begin),
-          serialize_for_open_ended(range.end)
-        ]
+        if range
+          [
+            serialize_for_open_ended(range.begin),
+            serialize_for_open_ended(range.end)
+          ]
+        end
       end
 
       def deserialize(range_tuple)

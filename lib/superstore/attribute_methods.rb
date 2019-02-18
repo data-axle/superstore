@@ -13,7 +13,8 @@ module Superstore
       include ActiveRecord::AttributeMethods::Write
       include ActiveRecord::AttributeMethods::BeforeTypeCast
       include PrimaryKey
-      include Dirty
+      include ActiveRecord::AttributeMethods::Dirty
+      # include Dirty
 
       # (Alias for the protected read_attribute method).
       def [](attr_name)

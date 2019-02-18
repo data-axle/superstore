@@ -2,7 +2,7 @@ module Superstore
   module Types
     class StringType < ActiveModel::Type::Value
       def serialize(str)
-        raise ArgumentError.new("#{str.inspect} is not a String") unless str.kind_of?(String)
+        return if str.nil?
 
         unless str.encoding == Encoding::UTF_8
           (str.frozen? ? str.dup : str).force_encoding('UTF-8')
