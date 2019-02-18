@@ -15,7 +15,6 @@ module Superstore
   autoload :Core
   autoload :Identity
   autoload :Inheritance
-  autoload :Inspect
   autoload :ModelSchema
   autoload :Persistence
   autoload :Schema
@@ -25,7 +24,6 @@ module Superstore
     extend ActiveSupport::Autoload
 
     eager_autoload do
-      autoload :Dirty
       autoload :PrimaryKey
     end
   end

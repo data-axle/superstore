@@ -5,6 +5,7 @@ module Superstore
     included do
       include ActiveRecord::Core
       extend ClassOverrides
+      include InstanceOverrides
     end
 
     module ClassOverrides
@@ -26,6 +27,22 @@ module Superstore
         if attribute.instance_variable_defined?(:@value)
           attribute.instance_variable_set(:@value, attribute.instance_variable_get(:@value).deep_dup)
         end
+      end
+    end
+
+    module InstanceOverrides
+      def inspect
+        inspection = ["#{self.class.primary_key}: #{id.inspect}"]
+
+        (self.class.attribute_names - [self.class.primary_key]).each do |name|
+          value = send(name)
+
+          if value.present? || value === false
+            inspection << "#{name}: #{attribute_for_inspect(name)}"
+          end
+        end
+
+        "#<#{self.class} #{inspection * ', '}>"
       end
     end
   end

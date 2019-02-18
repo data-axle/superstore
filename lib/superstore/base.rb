@@ -41,7 +41,6 @@ module Superstore
     include Core
     include Connection
     include Identity
-    include Inspect
   end
 end
 
