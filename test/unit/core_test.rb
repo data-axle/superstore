@@ -8,25 +8,6 @@ class Superstore::CoreTest < Superstore::TestCase
     assert !issue.destroyed?
   end
 
-  test 'initialize yields self' do
-    issue = Issue.new { |i| i.description = 'bar' }
-    assert_equal 'bar', issue.description
-  end
-
-  test 'dup' do
-    issue = Issue.create description: 'foo', comments: {"foo" => "bar"}
-
-    dup_issue = issue.dup
-
-    assert dup_issue.new_record?
-    refute_equal issue.id, dup_issue.id
-    assert_nil dup_issue.created_at
-    assert_nil dup_issue.updated_at
-    assert_equal issue.description, dup_issue.description
-    refute_equal issue.description.object_id, dup_issue.description.object_id
-    refute_equal issue.comments['foo'].object_id, dup_issue.comments['foo'].object_id
-  end
-
   test 'equality of new records' do
     assert_not_equal Issue.new, Issue.new
   end

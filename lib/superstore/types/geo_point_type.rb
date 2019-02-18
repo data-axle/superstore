@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Superstore
   module Types
     class GeoPointType < ActiveModel::Type::Value
       def deserialize(value)
-        {lat: value['lat'], lon: value['lon']}
+        {lat: value[:lat] || value['lat'], lon: value[:lon] || value['lon']} if value
       end
 
       def cast_value(value)

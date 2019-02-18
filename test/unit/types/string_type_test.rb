@@ -3,10 +3,6 @@ require 'test_helper'
 class Superstore::Types::StringTypeTest < Superstore::Types::TestCase
   test 'serialize' do
     assert_equal 'abc', type.serialize('abc')
-
-    assert_raise ArgumentError do
-      type.serialize(123)
-    end
   end
 
   test 'serialize as utf' do

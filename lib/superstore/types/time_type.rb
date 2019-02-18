@@ -2,9 +2,7 @@ module Superstore
   module Types
     class TimeType < ActiveModel::Type::Value
       def serialize(time)
-        raise ArgumentError.new("#{time.inspect} does not respond to #to_time") unless time.is_a?(Time) || time.respond_to?(:to_time)
-        time = time.to_time unless time.is_a?(Time)
-        time.utc.xmlschema(6)
+        time.utc.xmlschema(6) if time
       end
 
       def deserialize(str)

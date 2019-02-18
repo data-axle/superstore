@@ -19,6 +19,10 @@ module Superstore
       def load_schema!
         @columns_hash = {}
       end
+
+      def column_names
+        attribute_names
+      end
     end
   end
 end

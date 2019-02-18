@@ -3,10 +3,7 @@ require 'test_helper'
 class Superstore::Types::TimeTypeTest < Superstore::Types::TestCase
   test 'serialize' do
     assert_equal '2004-12-24T01:02:03.000000Z', type.serialize(Time.utc(2004, 12, 24, 1, 2, 3))
-    assert_equal '2004-12-24T01:02:03.000000Z', type.serialize(DateTime.new(2004, 12, 24, 1, 2, 3))
-    assert_raise ArgumentError do
-      type.serialize 123
-    end
+    assert_nil type.serialize(nil)
   end
 
   test 'deserialize' do

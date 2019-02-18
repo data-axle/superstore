@@ -4,16 +4,18 @@ module Superstore
       class_attribute :subtype
 
       def serialize(range)
-        [
-          serialize_for_open_ended(range.begin),
-          serialize_for_open_ended(range.end)
-        ]
+        if range
+          [
+            serialize_for_open_ended(range.begin),
+            serialize_for_open_ended(range.end)
+          ]
+        end
       end
 
       def deserialize(range_tuple)
         if range_tuple.is_a? Range
           range_tuple
-        else
+        elsif range_tuple.is_a?(Array)
           range = convert_min(:deserialize, range_tuple[0]) .. convert_max(:deserialize, range_tuple[1])
           cast_value(range)
         end
