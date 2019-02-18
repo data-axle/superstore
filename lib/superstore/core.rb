@@ -19,17 +19,6 @@ module Superstore
       end
     end
 
-    def initialize_dup(other)
-      super
-
-      @attributes.keys.each do |key|
-        attribute = @attributes[key]
-        if attribute.instance_variable_defined?(:@value)
-          attribute.instance_variable_set(:@value, attribute.instance_variable_get(:@value).deep_dup)
-        end
-      end
-    end
-
     module InstanceOverrides
       def inspect
         inspection = ["#{self.class.primary_key}: #{id.inspect}"]
