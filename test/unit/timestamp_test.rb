@@ -30,13 +30,13 @@ class Superstore::TimestampTest < Superstore::TestCase
     time = 5.days.ago
     issue = Issue.create created_at: time
 
-    assert_equal time, issue.created_at
+    assert_in_delta time.to_i, issue.created_at.to_i, 3
   end
 
   test 'updated_at sets only if nil' do
-    time = 5.days.ago
+    time = 5.days.ago.utc
     issue = Issue.create updated_at: time
 
-    assert_equal time, issue.updated_at
+    assert_in_delta time.to_i, issue.updated_at.to_i, 3
   end
 end
