@@ -1,9 +1,16 @@
 module Superstore
   module Associations
     class AssociationScope < ActiveRecord::Relation
-      def initialize(klass, association)
-        super(klass, klass.arel_table, klass.predicate_builder)
-        @association = association
+      if Rails.version >= '5.2'
+        def initialize(klass, association)
+          super(klass)
+          @association = association
+        end
+      else
+        def initialize(klass, association)
+          super(klass, klass.arel_table, klass.predicate_builder)
+          @association = association
+        end
       end
 
       def exec_queries

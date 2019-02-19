@@ -9,7 +9,7 @@ module Superstore
 
     module ClassOverrides
       def attributes_builder # :nodoc:
-        @attributes_builder ||= ActiveRecord::AttributeSet::Builder.new(attribute_types, _default_attributes)
+        @attributes_builder ||= attribute_set_class::Builder.new(attribute_types, _default_attributes)
       end
 
       def table_exists?
