@@ -4,7 +4,6 @@ module Superstore
       extend ActiveSupport::Concern
 
       included do
-        # include ActiveRecord::AttributeMethods::PrimaryKey
         attribute :id, type: :string
 
         extend ClassOverrides
