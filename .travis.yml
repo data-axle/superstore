@@ -1,8 +1,6 @@
 language: ruby
-rvm:
-- 2.5.1
-sudo: false
-dist: trusty
+rvm: 2.5.3
+dist: xenial
 cache: bundler
 gemfile:
 - Gemfile
