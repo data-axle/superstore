@@ -11,8 +11,9 @@ module Superstore
       end
 
       module ClassOverrides
+        PRIMARY_KEY = 'id'
         def primary_key
-          'id'
+          PRIMARY_KEY
         end
       end
 
