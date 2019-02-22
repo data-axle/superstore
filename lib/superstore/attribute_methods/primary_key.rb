@@ -12,7 +12,7 @@ module Superstore
 
       module ClassOverrides
         def primary_key
-          'id'
+          'id'.freeze
         end
       end
 
