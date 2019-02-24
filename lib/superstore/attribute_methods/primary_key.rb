@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Superstore
   module AttributeMethods
     module PrimaryKey
@@ -12,7 +14,7 @@ module Superstore
 
       module ClassOverrides
         def primary_key
-          'id'.freeze
+          'id'
         end
       end
 
