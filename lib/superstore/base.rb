@@ -1,6 +1,5 @@
 require 'set'
-require 'active_record/attributes'
-require 'active_record/define_callbacks' if ActiveRecord.version >= Gem::Version.new('5.1.0')
+require 'active_record/define_callbacks'
 require 'superstore/types'
 
 module Superstore
