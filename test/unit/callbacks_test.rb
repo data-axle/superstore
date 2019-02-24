@@ -3,7 +3,7 @@ require 'test_helper'
 class Superstore::CallbacksTest < Superstore::TestCase
   class TestIssue < Superstore::Base
     self.table_name = 'issues'
-    string :description
+    attribute :description, type: :string
 
     %w(
       before_validation
@@ -62,7 +62,7 @@ class Superstore::CallbacksTest < Superstore::TestCase
   test 'new_record during callbacks' do
     class NewRecordTestClass < Superstore::Base
       self.table_name = 'issues'
-      string :description
+      attribute :description, type: :string
 
       before_create :expect_new_record
       before_save   :expect_new_record

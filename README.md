@@ -24,10 +24,9 @@ Superstore will share the existing ActiveRecord database connection.
 
 ```ruby
 class Widget < Superstore::Base
-  string :name
-  string :description
-  integer :price
-  array :colors, unique: true
+  attribute :name, type: :string
+  attribute :price, type: :integer
+  attribute :colors, type: :array
 
   validates :name, presence: :true
 

@@ -5,17 +5,6 @@ module Superstore
     included do
       include ActiveRecord::Attributes
       extend ClassOverrides
-
-      %w(array boolean date date_range float integer integer_range json string time).each do |type|
-        instance_eval <<-EOV, __FILE__, __LINE__ + 1
-          def #{type}(*args)
-            options = args.extract_options!
-            args.each do |name|
-              attribute(name, options.merge(:type => :#{type}))
-            end
-          end
-        EOV
-      end
     end
 
     module ClassOverrides

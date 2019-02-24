@@ -42,7 +42,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
 
   test 'save!' do
     klass = temp_object do
-      string :description
+      attribute :description, type: :string
       validates :description, presence: true
     end
 
@@ -112,7 +112,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
 
   test 'becomes includes changed_attributes' do
     klass = temp_object do
-      string :title
+      attribute :title, type: :string
     end
 
     issue = Issue.new(title: 'Something is wrong')
@@ -134,7 +134,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
 
   test 'delete' do
     klass = temp_object do
-      string :name
+      attribute :name, type: :string
     end
 
     record = klass.new(name: 'cool')
@@ -152,7 +152,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
 
   test 'delete multiple' do
     klass = temp_object do
-      string :name
+      attribute :name, type: :string
     end
 
     ids = []
