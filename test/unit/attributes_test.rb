@@ -4,16 +4,16 @@ class Superstore::AttributesTest < Superstore::TestCase
   class TestIssue < Superstore::Base
     self.table_name = 'issues'
 
-    boolean :enabled
-    float   :rating
-    integer :price
-    json    :orders
-    string  :name
-    integer_range :age_range
+    attribute :enabled, type: :boolean
+    attribute :rating, type: :float
+    attribute :price, type: :integer
+    attribute :orders, type: :json
+    attribute :name, type: :string
+    attribute :age_range, type: :integer_range
   end
 
   class TestChildIssue < TestIssue
-    string :description
+    attribute :description, type: :string
   end
 
   test 'attributes not shared' do
@@ -74,31 +74,5 @@ class Superstore::AttributesTest < Superstore::TestCase
 
     issue = TestIssue.find issue.id
     assert_equal 70..Float::INFINITY, issue.age_range
-  end
-
-  test 'multiple attributes definition' do
-    class MultipleAttributesIssue < Superstore::Base
-      self.table_name = 'issues'
-    end
-
-    assert_nothing_raised {
-      MultipleAttributesIssue.string :hello, :greetings, :bye
-    }
-    issue = MultipleAttributesIssue.new :hello => 'hey', :greetings => 'how r u', :bye => 'see ya'
-
-    assert_equal 'how r u', issue.greetings
-  end
-
-  test 'multiple attributes with options' do
-    class MultipleAttributesIssue < Superstore::Base
-      self.table_name = 'issues'
-    end
-
-    MultipleAttributesIssue.expects(:attribute).with(:hello, { :unique => :true, :type => :string })
-    MultipleAttributesIssue.expects(:attribute).with(:world, { :unique => :true, :type => :string })
-
-    class MultipleAttributesIssue < Superstore::Base
-      string :hello, :world, :unique => :true
-    end
   end
 end

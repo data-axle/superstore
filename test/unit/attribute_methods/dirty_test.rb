@@ -3,7 +3,7 @@ require 'test_helper'
 class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
   test 'save clears dirty' do
     record = temp_object do
-      string :name
+      attribute :name, type: :string
     end.new name: 'foo'
 
     assert record.changed?
@@ -16,7 +16,7 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
 
   test 'reload clears dirty' do
     record = temp_object do
-      string :name
+      attribute :name, type: :string
     end.create! name: 'foo'
 
     record.name = 'bar'
@@ -29,7 +29,7 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
 
   test 'cast_value float before dirty check' do
     record = temp_object do
-      float :price
+      attribute :price, type: :float
     end.create(price: 5.01)
 
     record.price = '5.01'
@@ -41,7 +41,7 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
 
   test 'cast_value boolean before dirty check' do
     record = temp_object do
-      boolean :awesome
+      attribute :awesome, type: :boolean
     end.create(awesome: false)
 
     record.awesome = false
@@ -53,7 +53,7 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
 
   test 'write_attribute' do
     object = temp_object do
-      string :name
+      attribute :name, type: :string
     end
 
     expected = {"name"=>[nil, "foo"]}
@@ -72,7 +72,7 @@ class Superstore::AttributeMethods::DirtyTest < Superstore::TestCase
 
   test 'dirty and restore to original value' do
     object = temp_object do
-      string :name
+      attribute :name, type: :string
     end
 
     record = object.create(name: 'foo')

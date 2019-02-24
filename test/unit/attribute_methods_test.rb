@@ -31,7 +31,7 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
   end
 
   class ModelWithOverride < Superstore::Base
-    string :title
+    attribute :title, type: :string
 
     def title=(v)
       super "#{v} lol"
@@ -45,7 +45,7 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
   end
 
   class ReservedWord < Superstore::Base
-    string :system
+    attribute :system, type: :string
   end
 
   test 'reserved words' do

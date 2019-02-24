@@ -6,10 +6,10 @@ class Label < ActiveRecord::Base
 end
 
 class Issue < Superstore::Base
-  string :description
-  string :title
-  string :parent_issue_id
-  json :comments
+  attribute :description, type: :string
+  attribute :title, type: :string
+  attribute :parent_issue_id, type: :string
+  attribute :comments, type: :json
 
   before_create { self.description ||= 'funny' }
 
