@@ -58,7 +58,7 @@ module Superstore
       end
 
       def write(method, attribute_names)
-        result = attribute_set_class.new({})
+        result = ActiveModel::AttributeSet.new({})
         attribute_names.each { |attr| result[attr] = @attributes[attr] }
 
         @new_record = false

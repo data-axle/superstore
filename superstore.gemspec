@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.test_files  = `git ls-files -- {test}/*`.split("\n")
   s.require_paths = ['lib']
 
-  s.add_runtime_dependency('activemodel', '>= 5.0')
-  s.add_runtime_dependency('activerecord', '>= 5.0')
+  s.add_runtime_dependency('activemodel', '>= 5.2')
+  s.add_runtime_dependency('activerecord', '>= 5.2')
   s.add_runtime_dependency('globalid')
 
   s.add_development_dependency('bundler')
