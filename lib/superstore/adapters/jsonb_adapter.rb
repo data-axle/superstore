@@ -57,18 +57,6 @@ module Superstore
         execute statement
       end
 
-      def create_table(table_name, options = {})
-        ActiveRecord::Migration.create_table table_name, id: false do |t|
-          t.string :id, null: false
-          t.jsonb :document, null: false
-        end
-        connection.execute "ALTER TABLE \"#{table_name}\" ADD CONSTRAINT #{table_name}_pkey PRIMARY KEY (id)"
-      end
-
-      def drop_table(table_name)
-        ActiveRecord::Migration.drop_table table_name
-      end
-
       def create_ids_where_clause(ids)
         ids = ids.first if ids.is_a?(Array) && ids.one?
 

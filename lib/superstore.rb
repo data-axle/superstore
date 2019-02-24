@@ -17,7 +17,6 @@ module Superstore
   autoload :Inheritance
   autoload :ModelSchema
   autoload :Persistence
-  autoload :Schema
   autoload :Timestamp
 
   module AttributeMethods
