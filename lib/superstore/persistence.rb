@@ -36,6 +36,13 @@ module Superstore
         end
         serialized
       end
+
+      private
+
+        def adapter
+          @adapter ||= Superstore::Adapters::JsonbAdapter.new
+        end
+
     end
 
     private

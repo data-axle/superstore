@@ -6,9 +6,6 @@ module Superstore
       extend ActiveSupport::Concern
 
       included do
-        p "****************"
-        p "WE WERE INCLUDED!!!!!!"
-        p "****************"
         attribute :id, type: :string
       end
 
