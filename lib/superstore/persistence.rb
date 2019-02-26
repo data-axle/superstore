@@ -8,15 +8,11 @@ module Superstore
         find_by(id: id)
       end
 
-      def delete(ids)
-        adapter.delete table_name, ids
-      end
-
-      def insert_record(id, attributes)
+      def _insert_record(id, attributes)
         adapter.insert table_name, id, serialize_attributes(attributes)
       end
 
-      def update_record(id, attributes)
+      def _update_record(id, attributes)
         adapter.update table_name, id, serialize_attributes(attributes)
       end
 
@@ -50,11 +46,11 @@ module Superstore
     private
 
       def _create_record(attribute_names = self.attribute_names)
-        write :insert_record, attribute_names
+        write :_insert_record, attribute_names
       end
 
       def _update_record(attribute_names = self.attribute_names)
-        write :update_record, attribute_names
+        write :_update_record, attribute_names
       end
 
       def write(method, attribute_names)
