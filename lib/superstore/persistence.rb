@@ -1,13 +1,8 @@
 module Superstore
   module Persistence
     extend ActiveSupport::Concern
-    include ActiveRecord::Persistence
 
     module ClassMethods
-      def find_by_id(id)
-        find_by(id: id)
-      end
-
       def _insert_record(id, attributes)
         adapter.insert table_name, id, serialize_attributes(attributes)
       end

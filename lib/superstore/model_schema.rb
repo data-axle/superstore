@@ -2,12 +2,7 @@ module Superstore
   module ModelSchema
     extend ActiveSupport::Concern
 
-    included do
-      include ActiveRecord::ModelSchema
-      extend ClassOverrides
-    end
-
-    module ClassOverrides
+    module ClassMethods
       def attributes_builder # :nodoc:
         @attributes_builder ||= ActiveModel::AttributeSet::Builder.new(attribute_types, _default_attributes)
       end
