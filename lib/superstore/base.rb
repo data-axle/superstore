@@ -1,5 +1,4 @@
 require 'set'
-# require 'active_record/define_callbacks'
 require 'superstore/types'
 
 module Superstore

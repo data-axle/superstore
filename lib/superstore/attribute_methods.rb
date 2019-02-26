@@ -3,9 +3,6 @@ module Superstore
     extend ActiveSupport::Concern
 
     included do
-      # include ActiveRecord::AttributeMethods
-
-      # extend ClassOverrides
       include PrimaryKey
     end
   end
