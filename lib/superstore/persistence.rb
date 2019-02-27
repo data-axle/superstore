@@ -23,17 +23,8 @@ module Superstore
         if attributes[superstore_column].is_a?(String)
           attributes = JSON.parse(attributes[superstore_column]).merge('id' => attributes['id'])
         end
-        attributes = attributes_builder.build_from_database(attributes, column_types)
 
-        allocate.tap do |object|
-          object.instance_variable_set("@new_record", false)
-          object.instance_variable_set("@destroyed", false)
-
-          object.instance_variable_set("@attributes", attributes)
-          object.instance_variable_set("@association_cache", {})
-          object.instance_variable_set("@_start_transaction_state", {})
-          object.instance_variable_set("@transaction_state", nil)
-        end
+        super(attributes, column_types, &block)
       end
 
       def serialize_attributes(attributes)
