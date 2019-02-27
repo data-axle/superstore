@@ -7,18 +7,16 @@ module Superstore
 
       included do
         attribute :id, type: :string
-
-        extend ClassOverrides
-        include InstanceOverrides
+        include AttributeOverrides
       end
 
-      module ClassOverrides
+      module ClassMethods
         def primary_key
           'id'
         end
       end
 
-      module InstanceOverrides
+      module AttributeOverrides
         def id
           value = super
           if value.nil?

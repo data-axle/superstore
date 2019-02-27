@@ -17,6 +17,8 @@ module Superstore
         end
       end
 
+      def belongs_to?; true; end
+
       private
 
         def get_record

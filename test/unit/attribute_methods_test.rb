@@ -33,24 +33,15 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
   class ModelWithOverride < Superstore::Base
     attribute :title, type: :string
 
-    def title=(v)
+     def title=(v)
       super "#{v} lol"
     end
   end
 
-  test 'override' do
+   test 'override' do
     issue = ModelWithOverride.new(title: 'hey')
 
-    assert_equal 'hey lol', issue.title
-  end
-
-  class ReservedWord < Superstore::Base
-    attribute :system, type: :string
-  end
-
-  test 'reserved words' do
-    r = ReservedWord.new(system: 'hello')
-    assert_equal 'hello', r.system
+     assert_equal 'hey lol', issue.title
   end
 
   test 'has_attribute?' do
