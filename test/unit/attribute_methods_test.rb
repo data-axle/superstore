@@ -30,29 +30,6 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
     assert_equal 'foo', issue.description
   end
 
-  class ModelWithOverride < Superstore::Base
-    attribute :title, type: :string
-
-    def title=(v)
-      super "#{v} lol"
-    end
-  end
-
-  test 'override' do
-    issue = ModelWithOverride.new(title: 'hey')
-
-    assert_equal 'hey lol', issue.title
-  end
-
-  class ReservedWord < Superstore::Base
-    attribute :system, type: :string
-  end
-
-  test 'reserved words' do
-    r = ReservedWord.new(system: 'hello')
-    assert_equal 'hello', r.system
-  end
-
   test 'has_attribute?' do
     refute Issue.new.has_attribute?(:unknown)
     assert Issue.new.has_attribute?(:description)

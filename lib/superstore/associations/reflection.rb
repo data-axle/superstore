@@ -18,7 +18,7 @@ module Superstore
         when :has_one
           Superstore::Associations::HasOne
         end
-        
+
       end
 
       def instance_variable_name
@@ -45,6 +45,8 @@ module Superstore
         options[:polymorphic]
       end
 
+      def belongs_to?; false; end
+
       def class_name
         @class_name ||= (options[:class_name] || name.to_s.classify)
       end
@@ -54,7 +56,7 @@ module Superstore
       end
 
       private
-      
+
       def derive_foreign_key
         case macro
         when :has_many, :has_one

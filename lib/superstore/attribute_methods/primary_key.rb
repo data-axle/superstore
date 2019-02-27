@@ -7,6 +7,7 @@ module Superstore
 
       included do
         attribute :id, type: :string
+        include AttributeOverrides
       end
 
       module ClassMethods
@@ -15,17 +16,19 @@ module Superstore
         end
       end
 
-      def id
-        value = super
-        if value.nil?
-          value = self.class._generate_key(self)
-          self.id = value
+      module AttributeOverrides
+        def id
+          value = super
+          if value.nil?
+            value = self.class._generate_key(self)
+            self.id = value
+          end
+          value
         end
-        value
-      end
 
-      def attributes
-        super.update(self.class.primary_key => id)
+        def attributes
+          super.update(self.class.primary_key => id)
+        end
       end
     end
   end
