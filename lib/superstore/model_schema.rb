@@ -23,6 +23,10 @@ module Superstore
         end
       end
 
+      def attribute_names
+        attribute_types.keys
+      end
+
       def column_names
         attribute_names
       end
