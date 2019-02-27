@@ -3,6 +3,10 @@ module Superstore
     extend ActiveSupport::Concern
 
     module ClassMethods
+      def find_by_id(id)
+        find_by(id: id)
+      end
+
       def _insert_record(attributes)
         id = attributes.fetch(primary_key)
 

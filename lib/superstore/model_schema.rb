@@ -11,6 +11,18 @@ module Superstore
         @attributes_builder ||= ActiveModel::AttributeSet::Builder.new(attribute_types, _default_attributes)
       end
 
+      def load_schema! # :nodoc:
+        @columns_hash = {}
+
+        attributes_to_define_after_schema_loads.each do |name, (type, options)|
+          if type.is_a?(Symbol)
+            type = ActiveRecord::Type.lookup(type, **options.except(:default))
+          end
+
+          define_attribute(name, type, **options.slice(:default))
+        end
+      end
+
       def column_names
         attribute_names
       end
