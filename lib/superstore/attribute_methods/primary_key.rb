@@ -21,7 +21,7 @@ module Superstore
           value = super
           if value.nil?
             value = self.class._generate_key(self)
-            self.id = value
+            _write_attribute(self.class.primary_key, value)
           end
           value
         end
