@@ -33,7 +33,7 @@ class Superstore::AttributeMethodsTest < Superstore::TestCase
   class ModelWithOverride < Superstore::Base
     attribute :title, type: :string
 
-     def title=(v)
+    def title=(v)
       super "#{v} lol"
     end
   end
