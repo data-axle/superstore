@@ -19,14 +19,6 @@ module Superstore
         adapter.update table_name, id, serialize_attributes(attributes)
       end
 
-      def instantiate(attributes, column_types = {}, &block)
-        if attributes[superstore_column].is_a?(String)
-          attributes = JSON.parse(attributes[superstore_column]).merge('id' => attributes['id'])
-        end
-
-        super(attributes, column_types, &block)
-      end
-
       def serialize_attributes(attributes)
         serialized = {}
         attributes.each do |attr_name, value|
@@ -40,6 +32,14 @@ module Superstore
 
         def adapter
           @adapter ||= Superstore::Adapters::JsonbAdapter.new
+        end
+
+        def instantiate_instance_of(klass, attributes, column_types = {}, &block)
+          if attributes[superstore_column].is_a?(String)
+            attributes = JSON.parse(attributes[superstore_column]).merge('id' => attributes['id'])
+          end
+
+          super(klass, attributes, column_types, &block)
         end
 
     end
