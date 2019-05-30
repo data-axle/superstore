@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gemspec
 
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0.0.rc1'
 gem 'rake'
 
 group :test do
