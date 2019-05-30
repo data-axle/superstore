@@ -24,6 +24,7 @@ module Superstore
           if attributes[superstore_column].is_a?(String)
             attributes = JSON.parse(attributes[superstore_column]).merge('id' => attributes['id'])
           end
+          attributes.each_key { |k, v| attributes.delete(k) unless attribute_types.key?(k) }
 
           super(klass, attributes, column_types, &block)
         end

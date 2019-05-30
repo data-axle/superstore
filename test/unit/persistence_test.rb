@@ -5,7 +5,10 @@ require 'test_helper'
 
 class Superstore::PersistenceTest < Superstore::TestCase
   test 'instantiate with unknowns' do
-    assert_equal 'nooo', Issue.instantiate('id' => 'theid', 'document' => {'z' => 'nooo'}.to_json).attributes['z']
+    issue = Issue.instantiate('id' => 'theid', 'document' => {'z' => 'nooo', 'title' => 'Krazy'}.to_json)
+
+    refute issue.attributes.key?('z')
+    assert_equal 'Krazy', issue.attributes['title']
   end
 
   test 'persistence inquiries' do
