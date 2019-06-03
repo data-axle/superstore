@@ -40,6 +40,6 @@ class Superstore::CoreTest < Superstore::TestCase
 
   test 'inspect' do
     issue = Issue.create
-    assert issue.inspect =~ /^#<Issue id: \"\w+\", created_at: \".+\", updated_at: \".+\", description: \".+\">$/
+    assert issue.inspect =~ /^#<Issue id: \"\w+\", description: \".+\", created_at: \".+\", updated_at: \".+\">$/
   end
 end

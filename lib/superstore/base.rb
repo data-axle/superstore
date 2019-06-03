@@ -11,7 +11,6 @@ module Superstore
     include AttributeAssignment
     include Attributes
     include AttributeMethods
-    include Timestamp
     include Associations
 
     include Identity
