@@ -1,7 +1,11 @@
-class User < ActiveRecord::Base
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
 end
 
-class Label < ActiveRecord::Base
+class User < ApplicationRecord
+end
+
+class Label < ApplicationRecord
   belongs_to :issue
 end
 
