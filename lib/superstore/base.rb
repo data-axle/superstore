@@ -1,7 +1,7 @@
 require 'superstore/types'
 
 module Superstore
-  class Base < ApplicationRecord
+  class Base < ActiveRecord::Base
 
     self.connection_specification_name = 'primary'
     self.abstract_class                = true
