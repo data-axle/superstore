@@ -22,7 +22,7 @@ module Superstore
       end
 
       def cast_value(value)
-        if value.is_a?(Range) && value.begin < value.end
+        if value.is_a?(Range) && value.begin <= value.end
           value
         elsif value.is_a?(Array) && value.size == 2
           begin
