@@ -70,9 +70,9 @@ class Superstore::AttributesTest < Superstore::TestCase
 
   test 'integer_range' do
     issue = TestIssue.create! age_range: ['70', nil]
-    assert_equal 70..Float::INFINITY, issue.age_range
+    assert_equal 70.., issue.age_range
 
     issue = TestIssue.find issue.id
-    assert_equal 70..Float::INFINITY, issue.age_range
+    assert_equal 70.., issue.age_range
   end
 end

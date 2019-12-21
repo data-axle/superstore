@@ -16,13 +16,13 @@ class Superstore::Types::DateRangeTypeTest < Superstore::Types::TestCase
 
   test 'cast_value' do
     assert_equal Date.new(2004, 4, 25)..Date.new(2004, 5, 15), type.cast_value(Date.new(2004, 4, 25)..Date.new(2004, 5, 15))
-    assert_nil type.cast_value(Date.new(2004, 5, 15)..Date.new(2004, 4, 25))
     assert_equal Date.new(2004, 4, 25)..Date.new(2004, 5, 15), type.cast_value([Date.new(2004, 4, 25), Date.new(2004, 5, 15)])
-    assert_nil type.cast_value([Date.new(2004, 5, 15), Date.new(2004, 4, 25)])
     assert_equal Date.new(2004, 4, 25)..Date.new(2004, 5, 15), type.cast_value(["2004-04-25", "2004-05-15"])
     assert_equal Date.new(2004, 4, 25)..Date.new(2004, 4, 25), type.cast_value(["2004-04-25", "2004-04-25"])
+    assert_equal Date.new(2004, 4, 25)..,                      type.cast_value(["2004-04-25", nil])
 
-    assert_nil type.cast_value(["2004-04-25", nil])
+    assert_nil type.cast_value( Date.new(2004, 5, 15)..Date.new(2004, 4, 25))
+    assert_nil type.cast_value([Date.new(2004, 5, 15), Date.new(2004, 4, 25)])
     assert_nil type.cast_value([nil, "2004-05-15"])
     assert_nil type.cast_value(["xx", "2004-05-15"])
   end
