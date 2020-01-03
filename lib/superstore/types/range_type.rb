@@ -22,12 +22,12 @@ module Superstore
       end
 
       def cast_value(value)
-        if value.is_a?(Range) && value.begin <= value.end
+        if value.is_a?(Range) && (value.end.nil? || value.begin <= value.end)
           value
         elsif value.is_a?(Array) && value.size == 2
           begin
-            array = convert_min(:cast_value, value[0])..convert_max(:cast_value, value[1])
-            cast_value(array)
+            range = convert_min(:cast_value, value[0])..convert_max(:cast_value, value[1])
+            cast_value(range)
           rescue ArgumentError
           end
         end
