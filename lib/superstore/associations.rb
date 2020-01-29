@@ -18,27 +18,27 @@ module Superstore
       #   end
       #   class Truck < Superstore::Base
       #   end
-      def belongs_to(name, options = {})
+      def belongs_to(name, **options)
         if options.delete(:superstore)
-          Superstore::Associations::Builder::BelongsTo.build(self, name, **options)
+          Superstore::Associations::Builder::BelongsTo.build(self, name, options)
         else
-          super(name, **options)
+          super
         end
       end
 
-      def has_many(name, options = {})
+      def has_many(name, **options)
         if options.delete(:superstore)
-          Superstore::Associations::Builder::HasMany.build(self, name, **options)
+          Superstore::Associations::Builder::HasMany.build(self, name, options)
         else
-          super(name, **options)
+          super
         end
       end
 
-      def has_one(name, options = {})
+      def has_one(name, **options)
         if options.delete(:superstore)
-          Superstore::Associations::Builder::HasOne.build(self, name, **options)
+          Superstore::Associations::Builder::HasOne.build(self, name, options)
         else
-          super(name, **options)
+          super
         end
       end
 
