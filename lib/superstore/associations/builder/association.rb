@@ -1,11 +1,11 @@
 module Superstore::Associations::Builder
   class Association
-    def self.build(model, name, options)
-      new(model, name, options).build
+    def self.build(model, name, **options)
+      new(model, name, **options).build
     end
 
     attr_reader :model, :name, :options
-    def initialize(model, name, options)
+    def initialize(model, name, **options)
       @model, @name, @options = model, name, options
     end
 
