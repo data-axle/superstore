@@ -1,5 +1,7 @@
 language: ruby
-rvm: 2.6.3
+rvm:
+  - 2.6.3
+  - 2.7.0
 dist: xenial
 cache: bundler
 gemfile:
