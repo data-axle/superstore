@@ -1,10 +1,9 @@
 language: ruby
-rvm: 2.6.3
-dist: xenial
+rvm:
+  - 2.6.3
+  - 2.7.0
+dist: bionic
 cache: bundler
-gemfile:
-- Gemfile
-- Gemfile.rails6
 addons:
   postgresql: 9.6
 services:

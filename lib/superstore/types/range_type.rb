@@ -22,7 +22,9 @@ module Superstore
       end
 
       def cast_value(value)
-        if value.is_a?(Range) && (value.end.nil? || value.begin <= value.end)
+        if is_beginless_date_range?(value)
+          nil
+        elsif value.is_a?(Range) && (value.end.nil? || value.begin <= value.end)
           value
         elsif value.is_a?(Array) && value.size == 2
           begin
@@ -45,6 +47,11 @@ module Superstore
 
       def convert_max(method, value)
         subtype.send(method, value)
+      end
+
+      def is_beginless_date_range?(value)
+        (value.is_a?(Range) && value.begin.nil? && value.end.is_a?(Date)) ||
+        (value.is_a?(Array) && value[0].nil? && value[1].is_a?(Date))
       end
     end
   end
