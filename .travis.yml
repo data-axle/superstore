@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - 2.6.3
   - 2.7.0
-dist: xenial
+dist: bionic
 cache: bundler
 addons:
   postgresql: 9.6
