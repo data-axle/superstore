@@ -6,6 +6,7 @@ class Label < ActiveRecord::Base
 end
 
 class Issue < Superstore::Base
+  has_id
   attribute :description, type: :string
   attribute :title, type: :string
   attribute :parent_issue_id, type: :string

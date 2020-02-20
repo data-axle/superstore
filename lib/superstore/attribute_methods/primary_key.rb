@@ -5,11 +5,11 @@ module Superstore
     module PrimaryKey
       extend ActiveSupport::Concern
 
-      # included do
-      #   # attribute :id, type: :string
-      # end
-
       module ClassMethods
+        def has_id
+          attribute :id, type: :string
+        end
+
         def attribute(name, options)
           super
           if name == :id
