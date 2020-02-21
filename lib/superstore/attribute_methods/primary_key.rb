@@ -36,7 +36,7 @@ module Superstore
         end
 
         def attributes
-          super.update(self.class.primary_key => id)
+          { self.class.primary_key => id }.merge!(super)
         end
       end
     end
