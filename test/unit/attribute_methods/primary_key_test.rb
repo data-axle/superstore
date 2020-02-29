@@ -3,6 +3,7 @@ require 'test_helper'
 class Superstore::AttributeMethods::PrimaryKeyTest < Superstore::TestCase
   test 'get id' do
     model = temp_object do
+      has_id
       key do
         "foo"
       end

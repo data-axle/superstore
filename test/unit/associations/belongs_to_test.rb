@@ -3,6 +3,7 @@ require 'test_helper'
 class Superstore::Associations::BelongsTest < Superstore::TestCase
   class TestObject < Superstore::Base
     self.table_name = 'issues'
+    has_id
     attribute :user_id, type: :string
     belongs_to :user, primary_key: :special_id
   end

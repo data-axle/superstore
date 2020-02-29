@@ -18,6 +18,7 @@ module Superstore
     def temp_object(&block)
       Class.new(Superstore::Base) do
         self.table_name = 'issues'
+        has_id
         attribute :force_save, type: :string
         before_save { self.force_save = 'junk' }
 

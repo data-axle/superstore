@@ -4,6 +4,7 @@ class Superstore::AttributesTest < Superstore::TestCase
   class TestIssue < Superstore::Base
     self.table_name = 'issues'
 
+    has_id
     attribute :enabled, type: :boolean
     attribute :rating, type: :float
     attribute :price, type: :integer
