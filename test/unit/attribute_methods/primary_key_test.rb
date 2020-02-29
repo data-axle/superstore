@@ -24,4 +24,12 @@ class Superstore::AttributeMethods::PrimaryKeyTest < Superstore::TestCase
 
     assert_not_nil issue.attributes['id']
   end
+
+  test 'has_primary_key?' do
+    WithoutPrimaryKey = Class.new(Superstore::Base)
+    refute WithoutPrimaryKey.has_primary_key?
+
+    WithPrimaryKey = Class.new(Superstore::Base) { has_id }
+    assert WithPrimaryKey.has_primary_key?
+  end
 end
