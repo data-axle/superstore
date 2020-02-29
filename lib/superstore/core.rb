@@ -3,7 +3,8 @@ module Superstore
     extend ActiveSupport::Concern
 
     def inspect
-      inspection = ["#{self.class.primary_key}: #{id.inspect}"]
+      inspection = []
+      inspection << "#{self.class.primary_key}: #{id.inspect}" if self.class.has_primary_key?
 
       (self.class.attribute_names - [self.class.primary_key]).each do |name|
         value = send(name)

@@ -42,4 +42,10 @@ class Superstore::CoreTest < Superstore::TestCase
     issue = Issue.create
     assert issue.inspect =~ /^#<Issue id: \"\w+\", description: \".+\", created_at: \".+\", updated_at: \".+\">$/
   end
+
+  test 'inspect with on primary key' do
+    person = Person.new(name: 'John')
+
+    assert_equal '#<Person name: "John">', person.inspect
+  end
 end
