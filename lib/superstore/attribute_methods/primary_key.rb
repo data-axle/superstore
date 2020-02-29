@@ -6,11 +6,28 @@ module Superstore
       extend ActiveSupport::Concern
 
       included do
-        attribute :id, type: :string
         include AttributeOverrides
       end
 
       module ClassMethods
+        def has_id
+          attribute :id, type: :string
+        end
+
+        def has_primary_key?
+          attribute_names.include?(primary_key)
+        end
+
+        def attribute(name, options)
+          super
+          if name.to_sym == :id
+            include AttributeOverrides
+            extend PrimaryKeyOverrides
+          end
+        end
+      end
+
+      module PrimaryKeyOverrides
         def primary_key
           'id'
         end
@@ -19,7 +36,7 @@ module Superstore
       module AttributeOverrides
         def id
           value = super
-          if value.nil?
+          if value.nil? && self.class.has_primary_key?
             value = self.class._generate_key(self)
             @attributes.write_from_user(self.class.primary_key, value)
           end
@@ -27,7 +44,11 @@ module Superstore
         end
 
         def attributes
-          super.update(self.class.primary_key => id)
+          if self.class.has_primary_key?
+            super.update(self.class.primary_key => id)
+          else
+            super
+          end
         end
       end
     end
