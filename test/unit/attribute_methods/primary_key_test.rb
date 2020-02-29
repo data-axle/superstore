@@ -13,12 +13,9 @@ class Superstore::AttributeMethods::PrimaryKeyTest < Superstore::TestCase
   end
 
   test 'get id without primary key' do
-    model = Class.new(Superstore::Base) do
-      attribute :name, type: :string
-    end
-    record = model.new(name: 'John')
+    person = Person.new(name: 'John')
 
-    assert_nil record.id
+    assert_nil person.id
   end
 
   test 'set id' do
@@ -28,12 +25,8 @@ class Superstore::AttributeMethods::PrimaryKeyTest < Superstore::TestCase
   end
 
   test 'set id without primary key' do
-    model = Class.new(Superstore::Base) do
-      attribute :name, type: :string
-    end
-
     assert_raises ActiveModel::MissingAttributeError do
-      model.new(id: 'id')
+      Person.new(id: 'id')
     end
   end
 
@@ -44,19 +37,13 @@ class Superstore::AttributeMethods::PrimaryKeyTest < Superstore::TestCase
   end
 
   test 'attributes without primary key' do
-    model = Class.new(Superstore::Base) do
-      attribute :name, type: :string
-    end
-    record = model.new(name: 'John')
+    person = Person.new(name: 'John')
 
-    assert_nil record.attributes['id']
+    assert_nil person.attributes['id']
   end
 
   test 'has_primary_key?' do
-    WithoutPrimaryKey = Class.new(Superstore::Base)
-    refute WithoutPrimaryKey.has_primary_key?
-
-    WithPrimaryKey = Class.new(Superstore::Base) { has_id }
-    assert WithPrimaryKey.has_primary_key?
+    assert Issue.has_primary_key?
+    refute Person.has_primary_key?
   end
 end

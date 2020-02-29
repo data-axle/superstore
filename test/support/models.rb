@@ -24,3 +24,7 @@ class Issue < Superstore::Base
     where_ids(key)
   end
 end
+
+class Person < Superstore::Base
+  attribute :name, type: :string
+end
