@@ -29,6 +29,12 @@ class Superstore::PersistenceTest < Superstore::TestCase
     assert_kind_of Child, child
   end
 
+  test 'instantiate when an inheritance column is expected but is nil' do
+    child = Parent.instantiate('id' => 'theid', 'document' => { }.to_json)
+
+    assert_kind_of Child, child
+  end
+
   test 'persistence inquiries' do
     issue = Issue.new
     assert issue.new_record?

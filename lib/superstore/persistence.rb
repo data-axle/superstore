@@ -36,7 +36,7 @@ module Superstore
           end
           attributes.each_key { |k, v| attributes.delete(k) unless attribute_types.key?(k) }
 
-          if attributes[inheritance_column]
+          if inheritance_column && attribute_types.key?(inheritance_column)
             klass = find_sti_class(attributes[inheritance_column])
           end
 
