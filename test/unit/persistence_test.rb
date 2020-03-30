@@ -4,11 +4,35 @@
 require 'test_helper'
 
 class Superstore::PersistenceTest < Superstore::TestCase
+  class Parent < Superstore::Base
+    self.inheritance_column = 'document_type'
+    attribute :document_type, type: :string
+
+    def self.find_sti_class(type)
+      Child
+    end
+  end
+
+  class Child < Parent
+  end
+
   test 'instantiate with unknowns' do
     issue = Issue.instantiate('id' => 'theid', 'document' => {'z' => 'nooo', 'title' => 'Krazy'}.to_json)
 
     refute issue.attributes.key?('z')
     assert_equal 'Krazy', issue.attributes['title']
+  end
+
+  test 'instantiate with an inheritance column' do
+    child = Parent.instantiate('id' => 'theid', 'document' => {'document_type' => 'child'}.to_json)
+
+    assert_kind_of Child, child
+  end
+
+  test 'instantiate when an inheritance column is expected but is nil' do
+    child = Parent.instantiate('id' => 'theid', 'document' => { }.to_json)
+
+    assert_kind_of Child, child
   end
 
   test 'persistence inquiries' do
