@@ -14,6 +14,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
   end
 
   class Child < Parent
+    attribute :eye_color, type: :string
   end
 
   test 'instantiate with unknowns' do
@@ -24,9 +25,10 @@ class Superstore::PersistenceTest < Superstore::TestCase
   end
 
   test 'instantiate with an inheritance column' do
-    child = Parent.instantiate('id' => 'theid', 'document' => {'document_type' => 'child'}.to_json)
+    child = Parent.instantiate('id' => 'theid', 'document' => {'document_type' => 'child', 'eye_color' => 'blue'}.to_json)
 
     assert_kind_of Child, child
+    assert_equal 'blue', child.eye_color
   end
 
   test 'instantiate when an inheritance column is expected but is nil' do

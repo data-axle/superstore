@@ -34,11 +34,12 @@ module Superstore
           if attributes[superstore_column].is_a?(String)
             attributes = JSON.parse(attributes[superstore_column]).merge('id' => attributes['id'])
           end
-          attributes.each_key { |k, v| attributes.delete(k) unless attribute_types.key?(k) }
 
           if inheritance_column && attribute_types.key?(inheritance_column)
             klass = find_sti_class(attributes[inheritance_column])
           end
+
+          attributes.each_key { |k, v| attributes.delete(k) unless klass.attribute_types.key?(k) }
 
           super(klass, attributes, column_types, &block)
         end
