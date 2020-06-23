@@ -2,7 +2,7 @@
 
 module Superstore
   module Types
-    class GeoPointType < ActiveModel::Type::Value
+    class GeoPointType < Base
       def deserialize(value)
         {lat: value[:lat] || value['lat'], lon: value[:lon] || value['lon']} if value
       end

@@ -1,6 +1,6 @@
 module Superstore
   module Types
-    class StringType < ActiveModel::Type::Value
+    class StringType < Base
       def serialize(str)
         return if str.nil?
 

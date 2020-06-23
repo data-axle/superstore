@@ -1,6 +1,6 @@
 module Superstore
   module Types
-    class DateType < ActiveModel::Type::Value
+    class DateType < Base
       FORMAT = '%Y-%m-%d'
 
       def serialize(value)

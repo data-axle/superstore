@@ -1,6 +1,6 @@
 module Superstore
   module Types
-    class BooleanType < ActiveModel::Type::Value
+    class BooleanType < Base
       TRUE_VALS = [true, 'true', '1']
       FALSE_VALS = [false, 'false', '0']
 

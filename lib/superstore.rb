@@ -62,6 +62,7 @@ module Superstore
   module Types
     extend ActiveSupport::Autoload
 
+    autoload :Base
     autoload :ArrayType
     autoload :BooleanType
     autoload :DateType

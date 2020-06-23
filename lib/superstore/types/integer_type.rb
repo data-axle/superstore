@@ -1,6 +1,6 @@
 module Superstore
   module Types
-    class IntegerType < ActiveModel::Type::Value
+    class IntegerType < Base
       def cast_value(value)
         if value.is_a?(String)
           Integer(value, 10)

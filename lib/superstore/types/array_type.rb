@@ -1,6 +1,6 @@
 module Superstore
   module Types
-    class ArrayType < ActiveModel::Type::Value
+    class ArrayType < Base
       def cast_value(value)
         Array(value)
       end

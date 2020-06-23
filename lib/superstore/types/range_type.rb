@@ -1,6 +1,6 @@
 module Superstore
   module Types
-    class RangeType < ActiveModel::Type::Value
+    class RangeType < Base
       class_attribute :subtype
 
       def serialize(range)

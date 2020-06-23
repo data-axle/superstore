@@ -1,6 +1,6 @@
 module Superstore
   module Types
-    class TimeType < ActiveModel::Type::Value
+    class TimeType < Base
       def serialize(time)
         time.utc.xmlschema(6) if time
       end

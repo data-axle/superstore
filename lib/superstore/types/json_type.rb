@@ -1,6 +1,6 @@
 module Superstore
   module Types
-    class JsonType < ActiveModel::Type::Value
+    class JsonType < Base
     end
   end
 end
