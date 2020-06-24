@@ -21,4 +21,8 @@ class Superstore::Types::GeoPointTypeTest < Superstore::Types::TestCase
     assert_nil type.cast_value([])
     assert_nil type.cast_value('invalid')
   end
+
+  test 'type' do
+    assert_equal 'geo_point', type.type
+  end
 end
