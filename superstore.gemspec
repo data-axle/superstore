@@ -10,16 +10,16 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/data-axle/superstore'
   s.licenses = %w(ISC MIT)
 
-  s.required_ruby_version     = '>= 2.0.0'
-  s.required_rubygems_version = '>= 1.3.5'
+  s.required_ruby_version     = '>= 3.0.0'
+  s.required_rubygems_version = '>= 3.2.0'
 
   s.extra_rdoc_files = ['README.md']
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test}/*`.split("\n")
   s.require_paths = ['lib']
 
-  s.add_runtime_dependency('activemodel', '>= 5.2')
-  s.add_runtime_dependency('activerecord', '>= 5.2')
+  s.add_runtime_dependency('activemodel', '>= 6.1')
+  s.add_runtime_dependency('activerecord', '>= 6.1')
   s.add_runtime_dependency('globalid')
 
   s.add_development_dependency('bundler')

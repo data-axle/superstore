@@ -1,3 +1,4 @@
+ENV['RAILS_ENV'] = 'test'
 require 'rails'
 
 I18n.config.enforce_available_locales = false
@@ -5,7 +6,7 @@ ActiveSupport::TestCase.test_order = :random
 
 require 'active_record'
 require 'rails/test_help'
-require 'mocha/setup'
+require 'mocha/api'
 
 require 'superstore'
 
