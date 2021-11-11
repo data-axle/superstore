@@ -5,6 +5,7 @@ ActiveRecord::Type.register(:superstore_date_range,     Superstore::Types::DateR
 ActiveRecord::Type.register(:superstore_float,          Superstore::Types::FloatType)
 ActiveRecord::Type.register(:superstore_geo_point,      Superstore::Types::GeoPointType)
 ActiveRecord::Type.register(:superstore_integer,        Superstore::Types::IntegerType)
+ActiveRecord::Type.register(:superstore_byte,           Superstore::Types::IntegerType)
 ActiveRecord::Type.register(:superstore_integer_range,  Superstore::Types::IntegerRangeType)
 ActiveRecord::Type.register(:superstore_json,           Superstore::Types::JsonType)
 ActiveRecord::Type.register(:superstore_time,           Superstore::Types::TimeType)
