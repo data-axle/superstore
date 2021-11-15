@@ -1,5 +1,6 @@
 ActiveRecord::Type.register(:superstore_array,          Superstore::Types::ArrayType)
 ActiveRecord::Type.register(:superstore_boolean,        Superstore::Types::BooleanType)
+ActiveRecord::Type.register(:superstore_byte,           Superstore::Types::IntegerType)
 ActiveRecord::Type.register(:superstore_date,           Superstore::Types::DateType)
 ActiveRecord::Type.register(:superstore_date_range,     Superstore::Types::DateRangeType)
 ActiveRecord::Type.register(:superstore_float,          Superstore::Types::FloatType)
