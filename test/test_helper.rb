@@ -1,4 +1,6 @@
 ENV['RAILS_ENV'] = 'test'
+require 'simplecov'
+
 require 'rails'
 
 I18n.config.enforce_available_locales = false
@@ -34,6 +36,7 @@ module Superstore
   module Types
     class TestCase < Superstore::TestCase
       attr_accessor :type
+
       setup do
         @type = self.class.name.sub(/Test$/, '').constantize.new
       end

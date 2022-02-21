@@ -1,5 +1,3 @@
-# -*- encoding: utf-8 -*-
-
 Gem::Specification.new do |s|
   s.name = 'superstore'
   s.version = '2.5.0'
@@ -8,7 +6,7 @@ Gem::Specification.new do |s|
   s.authors = ['Michael Koziarski', 'Infogroup']
   s.email = 'developer@matthewhiggins.com'
   s.homepage = 'http://github.com/data-axle/superstore'
-  s.licenses = %w(ISC MIT)
+  s.licenses = %w[ISC MIT]
 
   s.required_ruby_version     = '>= 3.0.0'
   s.required_rubygems_version = '>= 3.2.0'
@@ -23,5 +21,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('globalid')
 
   s.add_development_dependency('bundler')
-  s.add_development_dependency('rails')
+  s.add_development_dependency('rails', '~> 6.1')
 end
