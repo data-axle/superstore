@@ -11,7 +11,6 @@ jobs:
       matrix:
         ruby: ['3.1']
     env:
-      BUNDLE_WITHOUT: "production:qa:sandbox"
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
     services:
       postgres:
