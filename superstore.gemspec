@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('activemodel', '>= 6.1')
   s.add_runtime_dependency('activerecord', '>= 6.1')
-  s.add_runtime_dependency('globalid')
 
   s.add_development_dependency('bundler')
   s.add_development_dependency('rails', '~> 6.1')

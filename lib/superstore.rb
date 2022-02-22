@@ -1,7 +1,6 @@
 require 'active_support/all'
 require 'active_model'
 require 'active_record'
-require 'global_id/identification'
 
 module Superstore
   extend ActiveSupport::Autoload
