@@ -11,8 +11,6 @@ jobs:
       matrix:
         ruby: ['3.1']
     env:
-      BUNDLE_GITHUB__COM: "${{ secrets.BUNDLE_GITHUB__COM }}"
-      BUNDLE_GEMS__CONTRIBSYS__COM: "${{ secrets.BUNDLE_GEMS__CONTRIBSYS__COM }}"
       BUNDLE_WITHOUT: "production:qa:sandbox"
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
     services:
