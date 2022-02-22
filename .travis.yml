@@ -1,9 +1,0 @@
-language: ruby
-rvm:
-  - 3.0.0
-dist: bionic
-cache: bundler
-addons:
-  postgresql: 9.6
-services:
-- postgresql

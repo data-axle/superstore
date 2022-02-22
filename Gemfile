@@ -6,4 +6,5 @@ gem 'rake'
 group :test do
   gem 'pg'
   gem 'mocha', require: false
+  gem 'simplecov'
 end
