@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name = 'superstore'
-  s.version = '2.5.0'
+  s.version = '3.0.0'
   s.description = 'ActiveModel-based JSONB document store'
   s.summary = 'ActiveModel for JSONB documents'
-  s.authors = ['Michael Koziarski', 'Infogroup']
+  s.authors = ['Michael Koziarski', 'Data Axle']
   s.email = 'developer@matthewhiggins.com'
   s.homepage = 'http://github.com/data-axle/superstore'
   s.licenses = %w[ISC MIT]
