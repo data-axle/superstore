@@ -4,6 +4,12 @@ require 'pg'
 module Superstore
   module Adapters
     class JsonbAdapter < AbstractAdapter
+      attr_reader :superstore_column
+
+      def initialize(superstore_column:)
+        @superstore_column = superstore_column
+      end
+
       PRIMARY_KEY_COLUMN = 'id'.freeze
       def primary_key_column
         PRIMARY_KEY_COLUMN
@@ -27,7 +33,7 @@ module Superstore
 
       def insert(table, id, attributes)
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
-        statement = "INSERT INTO #{table} (#{primary_key_column}, document) VALUES (#{quote(id)}, #{to_quoted_jsonb(not_nil_attributes)})"
+        statement = "INSERT INTO #{table} (#{primary_key_column}, #{superstore_column}) VALUES (#{quote(id)}, #{to_quoted_jsonb(not_nil_attributes)})"
         execute statement
       end
 
@@ -37,7 +43,7 @@ module Superstore
         nil_properties = attributes.each_key.select { |k| attributes[k].nil? }
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
 
-        value_update = "document"
+        value_update = superstore_column
         nil_properties.each do |property|
           value_update = "(#{value_update} - '#{property}')"
         end
@@ -46,7 +52,7 @@ module Superstore
           value_update = "(#{value_update} || #{to_quoted_jsonb(not_nil_attributes)})"
         end
 
-        statement = "UPDATE #{table} SET document = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
+        statement = "UPDATE #{table} SET #{superstore_column} = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
 
         execute statement
       end

@@ -45,7 +45,7 @@ module Superstore
         end
 
         def adapter
-          @adapter ||= Superstore::Adapters::JsonbAdapter.new
+          @adapter ||= Superstore::Adapters::JsonbAdapter.new(superstore_column: superstore_column)
         end
     end
   end
