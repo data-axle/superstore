@@ -4,6 +4,7 @@ require 'pg'
 module Superstore
   module Adapters
     class JsonbAdapter < AbstractAdapter
+      Column = Struct.new(:name)
       attr_reader :superstore_column
 
       def initialize(superstore_column:)
@@ -33,8 +34,12 @@ module Superstore
 
       def insert(table, id, attributes)
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
-        statement = "INSERT INTO #{table} (#{primary_key_column}, #{superstore_column}) VALUES (#{quote(id)}, #{to_quoted_jsonb(not_nil_attributes)})"
-        execute statement
+
+        statement = Arel::InsertManager.new
+        statement.into(Arel::Table.new(table))
+        statement.values = Arel::Nodes::ValuesList.new([[id, to_quoted_jsonb(not_nil_attributes)]])
+
+        execute statement.to_sql
       end
 
       def update(table, id, attributes)
@@ -43,48 +48,38 @@ module Superstore
         nil_properties = attributes.each_key.select { |k| attributes[k].nil? }
         not_nil_attributes = attributes.reject { |key, value| value.nil? }
 
+        statement = Arel::UpdateManager.new
+        statement.table(Arel::Table.new(table))
+        statement.where(Arel::Nodes::SqlLiteral.new(primary_key_column).eq(id))
+
         value_update = superstore_column
         nil_properties.each do |property|
           value_update = "(#{value_update} - '#{property}')"
         end
 
         if not_nil_attributes.any?
-          value_update = "(#{value_update} || #{to_quoted_jsonb(not_nil_attributes)})"
+          value_update = "(#{value_update} || #{quote(to_quoted_jsonb(not_nil_attributes))})"
         end
 
-        statement = "UPDATE #{table} SET #{superstore_column} = #{value_update} WHERE #{primary_key_column} = #{quote(id)}"
+        statement.set(Column.new(superstore_column) => Arel::Nodes::SqlLiteral.new(value_update))
 
-        execute statement
+        execute statement.to_sql
       end
 
       def delete(table, ids)
-        statement = "DELETE FROM #{table} WHERE #{create_ids_where_clause(ids)}"
+        statement = Arel::DeleteManager.new
+        statement.from(Arel::Table.new(table))
+        statement.where(Arel::Nodes::SqlLiteral.new(primary_key_column).in(Array.wrap(id)))
 
-        execute statement
-      end
-
-      def create_ids_where_clause(ids)
-        ids = ids.first if ids.is_a?(Array) && ids.one?
-
-        if ids.is_a?(Array)
-          id_list = ids.map { |id| quote(id) }.join(',')
-          "#{primary_key_column} IN (#{id_list})"
-        else
-          "#{primary_key_column} = #{quote(ids)}"
-        end
+        execute statement.to_sql
       end
 
       def quote(value)
         connection.quote(value)
       end
 
-      def fields_to_postgres_array(fields)
-        quoted_fields = fields.map { |field| quote(field) }.join(',')
-        "ARRAY[#{quoted_fields}]"
-      end
-
       def to_quoted_jsonb(data)
-        "#{quote(JSON.generate(data))}::JSONB"
+        ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Jsonb.new.serialize(data)
       end
     end
   end
