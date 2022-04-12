@@ -12,7 +12,13 @@ module Superstore
       end
 
       def load_schema! # :nodoc:
-        @columns_hash = {}
+        if table_exists?
+          @ignored_columns = [primary_key, superstore_column].freeze
+          super
+          @ignored_columns = [].freeze
+        else
+          @columns_hash = {}
+        end
 
         attributes_to_define_after_schema_loads.each do |name, (type, options)|
           if type.is_a?(Symbol)

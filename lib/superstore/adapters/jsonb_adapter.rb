@@ -32,36 +32,43 @@ module Superstore
         connection.execute statement
       end
 
-      def insert(table, id, attributes)
-        not_nil_attributes = attributes.reject { |key, value| value.nil? }
+      def insert(table, id, superstore_attributes, column_attributes)
+        not_nil_superstore_attributes = superstore_attributes.reject { |key, value| value.nil? }
 
         statement = Arel::InsertManager.new
         statement.into(Arel::Table.new(table))
-        statement.values = Arel::Nodes::ValuesList.new([[id, to_jsonb(not_nil_attributes)]])
+        statement.values = Arel::Nodes::ValuesList.new([[
+          id,
+          to_jsonb(not_nil_superstore_attributes),
+          *column_attributes.values
+        ]])
 
         execute statement.to_sql
       end
 
-      def update(table, id, attributes)
-        return if attributes.empty?
+      def update(table, id, superstore_attributes, column_attributes)
+        return if superstore_attributes.empty? && column_attributes.empty?
 
-        nil_properties = attributes.each_key.select { |k| attributes[k].nil? }
-        not_nil_attributes = attributes.reject { |key, value| value.nil? }
+        nil_superstore_properties = superstore_attributes.each_key.select { |k| superstore_attributes[k].nil? }
+        not_nil_superstore_attributes = superstore_attributes.reject { |key, value| value.nil? }
 
         statement = Arel::UpdateManager.new
         statement.table(Arel::Table.new(table))
         statement.where(Arel::Nodes::SqlLiteral.new(primary_key_column).eq(id))
 
         value_update = superstore_column
-        nil_properties.each do |property|
+        nil_superstore_properties.each do |property|
           value_update = "(#{value_update} - '#{property}')"
         end
 
-        if not_nil_attributes.any?
-          value_update = "(#{value_update} || #{quote(to_jsonb(not_nil_attributes))})"
+        if not_nil_superstore_attributes.any?
+          value_update = "(#{value_update} || #{quote(to_jsonb(not_nil_superstore_attributes))})"
         end
 
-        statement.set(Column.new(superstore_column) => Arel::Nodes::SqlLiteral.new(value_update))
+        values = column_attributes.merge(superstore_column => value_update)
+        values.transform_keys! { |k| Column.new(k) }
+        values.transform_values! { |v| Arel::Nodes::SqlLiteral.new(v) }
+        statement.set(values)
 
         execute statement.to_sql
       end

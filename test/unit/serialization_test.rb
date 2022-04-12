@@ -4,6 +4,7 @@ class Superstore::SerializationTest < Superstore::TestCase
   test 'as_json' do
     issue = Issue.new
     expected = {
+      "widget_id"   => nil,
       "id"          => issue.id,
       "created_at"  => nil,
       "updated_at"  => nil,

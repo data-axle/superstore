@@ -202,4 +202,22 @@ class Superstore::PersistenceTest < Superstore::TestCase
 
     assert_nil Issue.find_by_id('what')
   end
+
+  test 'saves non-superstore column' do
+    i = Issue.new
+    i.widget_id = 100
+    i.description = 'Abraham Lincoln'
+    i.save!
+
+    saved_record = ActiveRecord::Base.connection.select_one("SELECT * FROM #{Issue.table_name} WHERE #{Issue.primary_key} = '#{i.id}'")
+    assert_equal i.id, saved_record['id']
+    json = JSON.parse(saved_record['document'])
+    assert_equal %w(created_at description updated_at), json.keys.sort
+    assert_equal 100, saved_record['widget_id']
+
+    saved_record = Issue.find(i.id)
+    assert_equal i.id, saved_record.id
+    assert_equal 'Abraham Lincoln', saved_record.description
+    assert_equal 100, saved_record.widget_id
+  end
 end
