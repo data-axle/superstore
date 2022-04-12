@@ -37,7 +37,7 @@ module Superstore
 
         statement = Arel::InsertManager.new
         statement.into(Arel::Table.new(table))
-        statement.values = Arel::Nodes::ValuesList.new([[id, to_quoted_jsonb(not_nil_attributes)]])
+        statement.values = Arel::Nodes::ValuesList.new([[id, to_jsonb(not_nil_attributes)]])
 
         execute statement.to_sql
       end
@@ -58,7 +58,7 @@ module Superstore
         end
 
         if not_nil_attributes.any?
-          value_update = "(#{value_update} || #{quote(to_quoted_jsonb(not_nil_attributes))})"
+          value_update = "(#{value_update} || #{quote(to_jsonb(not_nil_attributes))})"
         end
 
         statement.set(Column.new(superstore_column) => Arel::Nodes::SqlLiteral.new(value_update))
@@ -71,7 +71,7 @@ module Superstore
         connection.quote(value)
       end
 
-      def to_quoted_jsonb(data)
+      def to_jsonb(data)
         ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Jsonb.new.serialize(data)
       end
     end
