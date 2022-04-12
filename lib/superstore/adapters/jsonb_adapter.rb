@@ -66,13 +66,6 @@ module Superstore
         execute statement.to_sql
       end
 
-      def delete(table, ids)
-        statement = Arel::DeleteManager.new
-        statement.from(Arel::Table.new(table))
-        statement.where(Arel::Nodes::SqlLiteral.new(primary_key_column).in(Array.wrap(id)))
-
-        execute statement.to_sql
-      end
 
       def quote(value)
         connection.quote(value)
