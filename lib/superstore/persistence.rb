@@ -8,17 +8,11 @@ module Superstore
       end
 
       def _insert_record(attributes)
-        id = attributes.fetch(primary_key)
-
-        superstore_attributes = serialize_attributes(attributes)
-        adapter.insert table_name, id, superstore_attributes, attributes.except(primary_key, *superstore_attributes.keys)
+        adapter.insert(*attributes_for_upsert(attributes.fetch(primary_key), attributes))
       end
 
       def _update_record(attributes, constraints)
-        id = constraints.fetch(primary_key)
-
-        superstore_attributes = serialize_attributes(attributes)
-        adapter.update table_name, id, superstore_attributes, attributes.except(primary_key, *superstore_attributes.keys)
+        adapter.update(*attributes_for_upsert(constraints.fetch(primary_key), attributes))
       end
 
       def serialize_attributes(attributes)
@@ -33,6 +27,11 @@ module Superstore
       end
 
       private
+
+        def attributes_for_upsert(id, attributes)
+          superstore_attributes = serialize_attributes(attributes)
+          [table_name, id, superstore_attributes, attributes.except(primary_key, *superstore_attributes.keys)]
+        end
 
         def instantiate_instance_of(klass, attributes, column_types = {}, &block)
           if attributes[superstore_column].is_a?(String)
