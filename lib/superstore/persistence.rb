@@ -10,20 +10,24 @@ module Superstore
       def _insert_record(attributes)
         id = attributes.fetch(primary_key)
 
-        adapter.insert table_name, id, serialize_attributes(attributes)
+        superstore_attributes = serialize_attributes(attributes)
+        adapter.insert table_name, id, superstore_attributes, attributes.except(primary_key, *superstore_attributes.keys)
       end
 
       def _update_record(attributes, constraints)
         id = constraints.fetch(primary_key)
 
-        adapter.update table_name, id, serialize_attributes(attributes)
+        superstore_attributes = serialize_attributes(attributes)
+        adapter.update table_name, id, superstore_attributes, attributes.except(primary_key, *superstore_attributes.keys)
       end
 
       def serialize_attributes(attributes)
         serialized = {}
-        attributes.each do |attr_name, value|
-          next if attr_name == primary_key
-          serialized[attr_name] = attribute_types[attr_name].serialize(value)
+        attributes.except(primary_key).each do |attr_name, value|
+          attribute_type = attribute_types[attr_name]
+          next unless attribute_type.is_a?(Superstore::Types::Base)
+
+          serialized[attr_name] = attribute_type.serialize(value)
         end
         serialized
       end
@@ -32,7 +36,7 @@ module Superstore
 
         def instantiate_instance_of(klass, attributes, column_types = {}, &block)
           if attributes[superstore_column].is_a?(String)
-            attributes = JSON.parse(attributes[superstore_column]).merge('id' => attributes['id'])
+            attributes.merge!(JSON.parse(attributes.delete(superstore_column)))
           end
 
           if inheritance_column && attribute_types.key?(inheritance_column)
