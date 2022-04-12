@@ -54,7 +54,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
   end
 
   test 'read and write UTF' do
-    utf = "\ucba1\ucba2\ucba3 ƒ´∑ƒ©√åµ≈√ˆअनुच्छेद´µøµø¬≤ 汉语漢語".force_encoding(Encoding::UTF_8)
+    utf = "\ucba1\ucba2\ucba3 ƒ´∑ƒ©√åµ≈√ˆअनुच्छेद´µøµø¬≤ 汉语漢語'".force_encoding(Encoding::UTF_8)
 
     issue = Issue.create { |i| i.description = utf }
     assert_equal utf, issue.description
@@ -125,7 +125,7 @@ class Superstore::PersistenceTest < Superstore::TestCase
   end
 
   test 'update nil attributes' do
-    issue = Issue.create(title: 'I rule', description: 'lololol')
+    issue = Issue.create(title: "It's not fair!'", description: 'lololol')
 
     issue.update title: nil
 
@@ -154,10 +154,10 @@ class Superstore::PersistenceTest < Superstore::TestCase
   test 'reload' do
     persisted_issue = Issue.create
     fresh_issue = Issue.find(persisted_issue.id)
-    fresh_issue.update_attribute(:description, 'say what')
+    fresh_issue.update_attribute(:description, "It's not fair!")
 
     reloaded_issue = persisted_issue.reload
-    assert_equal 'say what', persisted_issue.description
+    assert_equal "It's not fair!", persisted_issue.description
     assert_equal persisted_issue, reloaded_issue
   end
 
