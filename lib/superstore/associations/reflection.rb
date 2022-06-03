@@ -56,7 +56,6 @@ module Superstore
       end
 
       def parent_reflection
-        nil
       end
 
       private
