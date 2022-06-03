@@ -55,6 +55,10 @@ module Superstore
         options[:inverse_of]
       end
 
+      def parent_reflection
+        nil
+      end
+
       private
 
       def derive_foreign_key
