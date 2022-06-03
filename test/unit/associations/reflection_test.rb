@@ -1,13 +1,11 @@
 require 'test_helper'
 
 class Superstore::Associations::ReflectionTest < Superstore::TestCase
-  # class ::Status < Superstore::Base; end
-  # class ::Job < Superstore::Base
-  #   self.table_name = 'issues'
-  #   belongs_to :status
-  # end
-  #
-  # test 'class_name' do
-  #   assert_equal 'Status', Job.new.association_reflections[:status].class_name
-  # end
+  test 'reflect_on_associations' do
+    assert_equal %i(labels children_issues parent_issue), Issue.reflect_on_all_associations.map(&:name)
+  end
+
+  test 'reflections' do
+    assert_instance_of ActiveRecord::Reflection::HasManyReflection, Issue.reflections['labels']
+  end
 end
