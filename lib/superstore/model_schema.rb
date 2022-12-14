@@ -20,12 +20,8 @@ module Superstore
           @columns_hash = {}
         end
 
-        attributes_to_define_after_schema_loads.each do |name, (type, options)|
-          if type.is_a?(Symbol)
-            type = ActiveRecord::Type.lookup(type, **options.except(:default))
-          end
-
-          define_attribute(name, type, **options.slice(:default))
+        attributes_to_define_after_schema_loads.each do |name, (cast_type, default)|
+          define_attribute(name, cast_type, default: default)
         end
       end
 

@@ -35,12 +35,11 @@ module Superstore
       def insert(table, id, superstore_attributes, column_attributes)
         not_nil_superstore_attributes = superstore_attributes.reject { |key, value| value.nil? }
 
-        statement = Arel::InsertManager.new
-        statement.into(Arel::Table.new(table))
+        statement = Arel::InsertManager.new(Arel::Table.new(table))
         statement.values = Arel::Nodes::ValuesList.new([[
-          id,
+          id.value,
           to_jsonb(not_nil_superstore_attributes),
-          *column_attributes.values
+          *column_attributes.values.map(&:value)
         ]])
 
         execute statement.to_sql
