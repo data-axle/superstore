@@ -21,7 +21,7 @@ module Superstore
           attribute_type = attribute_types[attr_name]
           next unless attribute_type.is_a?(Superstore::Types::Base)
 
-          serialized[attr_name] = attribute_type.serialize(value)
+          serialized[attr_name] = attribute_type.serialize(value.value)
         end
         serialized
       end
