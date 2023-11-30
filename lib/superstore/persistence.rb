@@ -7,7 +7,7 @@ module Superstore
         find_by(id: id)
       end
 
-      def _insert_record(attributes)
+      def _insert_record(attributes, _returning = nil)
         adapter.insert(*attributes_for_upsert(attributes.fetch(primary_key), attributes))
       end
 
