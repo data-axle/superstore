@@ -5,5 +5,6 @@ class Superstore::Types::ArrayTypeTest < Superstore::Types::TestCase
     assert_equal ['x', 'y'], type.cast_value(['x', 'y'].to_set)
     assert_equal ['x'], type.cast_value('x')
     assert_nil type.cast_value(nil)
+    assert_nil type.cast_value([])
   end
 end
