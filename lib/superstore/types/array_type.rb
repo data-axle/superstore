@@ -1,8 +1,12 @@
 module Superstore
   module Types
     class ArrayType < Base
+      def serialize(value)
+        value if value.present?
+      end
+
       def cast_value(value)
-        value.present? ? Array(value) : nil
+        Array(value)
       end
     end
   end
