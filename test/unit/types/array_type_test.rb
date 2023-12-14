@@ -8,7 +8,7 @@ class Superstore::Types::ArrayTypeTest < Superstore::Types::TestCase
     assert_equal [], type.cast_value(nil)
   end
 
-  test 'persistence' do
+  test 'serializes empty array to nil' do
     tags   = %w(foo bar)
     issue1 = Issue.new(tags:)
     issue2 = Issue.new(tags: [])
