@@ -10,6 +10,7 @@ class Issue < Superstore::Base
   attribute :title, type: :string
   attribute :parent_issue_id, type: :string
   attribute :comments, type: :json
+  attribute :tags, type: :array
   attribute :created_at, type: :time
   attribute :updated_at, type: :time
 

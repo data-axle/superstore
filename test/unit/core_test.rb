@@ -44,7 +44,7 @@ class Superstore::CoreTest < Superstore::TestCase
   end
 
   test 'inspect class' do
-    expected = "Issue(widget_id: integer, id: string, description: string, title: string, parent_issue_id: string, comments: json, created_at: time, updated_at: time)"
+    expected = "Issue(widget_id: integer, id: string, description: string, title: string, parent_issue_id: string, comments: json, tags: array, created_at: time, updated_at: time)"
     assert_equal expected, Issue.inspect
   end
 end

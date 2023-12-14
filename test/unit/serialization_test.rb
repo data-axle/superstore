@@ -9,6 +9,7 @@ class Superstore::SerializationTest < Superstore::TestCase
       "created_at"  => nil,
       "updated_at"  => nil,
       "description" => nil,
+      "tags"        => nil,
       "title"       => nil,
       "parent_issue_id" => nil,
       "comments"    => nil
