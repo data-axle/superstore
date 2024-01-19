@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Superstore::Types::JsonTypeTest < Superstore::Types::TestCase
-  test 'serializes empty array to nil' do
+  test 'serializes empty json to nil' do
     comments = { 'foo' => 'bar' }
     issue1   = Issue.new(comments:)
     issue2   = Issue.new(comments: [])
@@ -11,10 +11,10 @@ class Superstore::Types::JsonTypeTest < Superstore::Types::TestCase
     assert_equal [], issue2.comments
     assert_equal({}, issue3.comments)
 
-    [issue1, issue2].each(&:save!).each(&:reload)
+    [issue1, issue2, issue3].each(&:save!).each(&:reload)
 
     assert_equal comments, issue1.comments
     assert_nil issue2.comments
-    assert_equal({}, issue3.comments)
+    assert_nil issue3.comments
   end
 end
