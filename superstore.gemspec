@@ -20,5 +20,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('activerecord', '>= 7.0')
 
   s.add_development_dependency('bundler')
-  s.add_development_dependency('rails', '~> 7.1.0')
+  s.add_development_dependency('rails', '~> 7.0.0')
 end
