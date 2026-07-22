@@ -1,7 +1,9 @@
 module Superstore
   module Types
     class TimeType < Base
-      def serialize(time)
+      def serialize(value)
+        time = value.is_a?(Date) ? value.to_time : value
+
         time.utc.xmlschema(6) if time
       end
 
