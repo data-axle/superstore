@@ -20,8 +20,10 @@ module Superstore
           @columns_hash = {}
         end
 
-        attributes_to_define_after_schema_loads.each do |name, (cast_type, default)|
-          define_attribute(name, cast_type, default: default)
+        if respond_to?(:attributes_to_define_after_schema_loads, true)
+          attributes_to_define_after_schema_loads.each do |name, (cast_type, default)|
+            define_attribute(name, cast_type, default: default)
+          end
         end
       end
 
