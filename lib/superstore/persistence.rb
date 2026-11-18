@@ -7,7 +7,8 @@ module Superstore
         find_by(id: id)
       end
 
-      def _insert_record(attributes, _returning = nil)
+      def _insert_record(*args)
+        attributes = args.length == 3 ? args[1] : args[0]
         adapter.insert(*attributes_for_upsert(attributes.fetch(primary_key), attributes))
       end
 
@@ -34,6 +35,8 @@ module Superstore
         end
 
         def instantiate_instance_of(klass, attributes, column_types = {}, &block)
+          attributes = attributes.to_h
+
           if attributes[superstore_column].is_a?(String)
             attributes.merge!(JSON.parse(attributes.delete(superstore_column)))
           end
